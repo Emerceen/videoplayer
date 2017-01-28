@@ -1,7 +1,7 @@
 <section class="main">
-  <div class="video-wrapper">
-    <video>
-      <source src="" type="">
+  <div *ngIf="currentVideo" class="video-wrapper">
+    <video autoplay>
+      <source [src]="currentVideo.safeUrl" [type]="currentVideo.type">
       Your browser does not support the video tag.
     </video>
   </div>
