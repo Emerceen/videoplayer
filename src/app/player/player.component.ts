@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+
+import { DomSanitizer } from '@angular/platform-browser';
+
+import { Video } from '../entities/video';
+
 import { Communication } from '../services/communication';
 
 @Component({
@@ -8,17 +13,29 @@ import { Communication } from '../services/communication';
 })
 
 export class PlayerComponent implements OnInit {
+  public currentVideo: Video;
+  public videos: Array<Video>;
 
   constructor(
-    private _cm: Communication
+    private _cm: Communication,
+    private _sanitizer: DomSanitizer
   ) {}
 
-  ngOnInit(): boolean {
+  ngOnInit(): void {
+    this.getVideoUrls();
+  }
+
+  getVideoUrls(): void {
     this._cm.videoService.getVideoUrls().subscribe(
       res => {
-        return res;
+        this.videos = res.videos;
+        this.setCurrentVideo();
       }
     );
-    return true;
+  }
+
+  setCurrentVideo(index = 0): void {
+    this.videos[index].safeUrl = this._sanitizer.bypassSecurityTrustUrl(this.videos[index].url);
+    this.currentVideo = this.videos[index];
   }
 }
