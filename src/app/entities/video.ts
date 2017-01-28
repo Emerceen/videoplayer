@@ -1,3 +1,5 @@
+import { SafeUrl } from '@angular/platform-browser';
+
 export interface VideoInterface {
   Name: string;
   Url: string;
@@ -12,6 +14,7 @@ export class Video {
   constructor(
     public name: string,
     public url: string,
-    public type: string
+    public type: string,
+    public safeUrl?: SafeUrl
   ) { }
 }
