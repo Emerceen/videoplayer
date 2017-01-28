@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { Communication } from '../services/communication';
 
 @Component({
   moduleId: module.id,
@@ -9,7 +9,16 @@ import { Component, OnInit } from '@angular/core';
 
 export class PlayerComponent implements OnInit {
 
+  constructor(
+    private _cm: Communication
+  ) {}
+
   ngOnInit(): boolean {
+    this._cm.videoService.getVideoUrls().subscribe(
+      res => {
+        return res;
+      }
+    );
     return true;
   }
 }
