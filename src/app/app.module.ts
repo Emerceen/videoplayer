@@ -5,6 +5,8 @@ import { APP_PROVIDERS } from './app.providers';
 import { AppComponent } from './app.component';
 import { appRoutingProviders, routing } from './app.routing';
 
+import { PlayerModule } from './player/player.module';
+
 
 @NgModule({
     declarations: [
@@ -12,6 +14,7 @@ import { appRoutingProviders, routing } from './app.routing';
     ],
     imports: [
         BrowserModule,
+        PlayerModule,
         routing
     ],
     providers: [ APP_PROVIDERS, appRoutingProviders ],
