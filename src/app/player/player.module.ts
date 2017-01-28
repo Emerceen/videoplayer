@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 
 import { PlayerComponent } from './index';
-
+import { Communication } from '../services/communication';
 
 @NgModule({
   exports: [
@@ -9,6 +9,9 @@ import { PlayerComponent } from './index';
   ],
   declarations: [
     PlayerComponent
+  ],
+  providers: [
+    Communication
   ]
 })
 
