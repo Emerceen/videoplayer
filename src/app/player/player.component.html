@@ -1,8 +1,20 @@
 <section class="main">
-  <div *ngIf="currentVideo" class="video-wrapper">
-    <video (ended)="endedEventHandler($event)">
+  <div *ngIf="currentVideo" id="video-wrapper">
+    <video 
+      (ended)="endedEventHandler($event)"
+      id="main-video" #mainVideo>
       <source [src]="currentVideo.safeUrl" [type]="currentVideo.type">
       Your browser does not support the video tag.
     </video>
+    <div id="video-controls">
+      <i *ngIf="!isPlaying" (click)="playVideo()" class="fa fa-play" aria-hidden="true"></i>
+      <i *ngIf="isPlaying" (click)="pauseVideo()" class="fa fa-pause" aria-hidden="true"></i>
+      <i (click)="stopVideo()" class="fa fa-stop" aria-hidden="true"></i>
+    </div>
+     <div id="video-state">
+      <i *ngIf="isPlaying && !isStopped" class="fa fa-play" aria-hidden="true"></i>
+      <i *ngIf="!isPlaying && !isStopped" class="fa fa-pause" aria-hidden="true"></i>
+      <i *ngIf="isStopped" class="fa fa-stop" aria-hidden="true"></i>
+    </div>
   </div>
 </section>

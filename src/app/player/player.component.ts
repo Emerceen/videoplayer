@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -13,8 +13,11 @@ import { Communication } from '../services/communication';
 })
 
 export class PlayerComponent implements OnInit {
+  @ViewChild('mainVideo') videoElement: any;
   public currentVideo: Video;
   public videos: Array<Video>;
+  public isStopped: boolean = true;
+  public isPlaying: boolean = false;
 
   constructor(
     private _cm: Communication,
@@ -44,11 +47,31 @@ export class PlayerComponent implements OnInit {
     event.preventDefault();
     if (index < this.videos.length) {
       this.setCurrentVideo(index);
-      event.path[0].load();
-      event.path[0].play();
+      this.videoElement.nativeElement.load();
+      this.videoElement.nativeElement.play();
     } else {
-      this.setCurrentVideo();
-      event.path[0].load();
+      this.videoElement.nativeElement.load();
+      this.stopVideo();
+
     }
+  }
+
+  playVideo() {
+    this.isStopped = false;
+    this.isPlaying = true;
+    this.videoElement.nativeElement.play();
+  }
+
+  pauseVideo() {
+    this.isStopped = false;
+    this.isPlaying = false;
+    this.videoElement.nativeElement.pause();
+  }
+
+  stopVideo() {
+    this.setCurrentVideo();
+    this.videoElement.nativeElement.load();
+    this.isStopped = true;
+    this.isPlaying = false;
   }
 }
