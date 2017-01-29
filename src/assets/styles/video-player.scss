@@ -1,15 +1,39 @@
 #video-wrapper {
   display: inline-block;
   position: relative;
+
   #video-controls {
     background-color: #f1f1f1;
     padding: 3px 5px;
   }
+
   #video-state {
     position: absolute;
     right: 10;
     top: 10;
     color: #fff;
+  }
+
+  #main-video {
+    max-width: 480px;
+    object-fit: cover;
+    background: transparent url('http://img.ffffound.com/static-data/assets/6/77443320c6509d6b500e288695ee953502ecbd6d_m.gif') no-repeat 0 0;
+    background-size: cover;
+  }
+}
+
+@media all and (max-width: 768px) {
+  #main-video {
+    width: 100%;
+  }
+
+  #video-controls {
+    display: flex;
+    justify-content: center;
+    i {
+      padding: 5px;
+      font-size: 2.5em;
+    }
   }
 }
 
