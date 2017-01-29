@@ -2,9 +2,8 @@
 Simple player app
 
 ## Installation
-Download the starter from [releases page](https://github.com/antonybudianto/angular2-starter/releases)
 
-Go to the starter directory and install the packages:
+Go to the videoplayer directory and install the packages:
 ```bash
 npm install
 ```
@@ -15,7 +14,7 @@ Let's start up the server, run:
 npm start
 ```
 
-and done! The browser will popup and you can start trying Angular 2!
+and done! The browser will popup and you can start trying videoplayer!
 Every changes to the file will refresh the browser automatically
 and it'll also compile your changed TypeScripts files to Javascript files.
 
