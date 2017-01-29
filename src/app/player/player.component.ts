@@ -18,6 +18,7 @@ export class PlayerComponent implements OnInit {
   public videos: Array<Video>;
   public isStopped: boolean = true;
   public isPlaying: boolean = false;
+  public posterUrl: string = 'https://images.pexels.com/photos/296878/pexels-photo-296878.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb';
 
   constructor(
     private _cm: Communication,
@@ -60,6 +61,7 @@ export class PlayerComponent implements OnInit {
     this.isStopped = false;
     this.isPlaying = true;
     this.videoElement.nativeElement.play();
+    this.videoElement.nativeElement.poster = undefined;
   }
 
   pauseVideo() {
@@ -69,6 +71,7 @@ export class PlayerComponent implements OnInit {
   }
 
   stopVideo() {
+    this.videoElement.nativeElement.poster = this.posterUrl;
     this.setCurrentVideo();
     this.videoElement.nativeElement.load();
     this.isStopped = true;
