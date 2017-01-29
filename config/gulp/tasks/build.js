@@ -16,7 +16,7 @@ var envVars = require('../utils/env-vars');
 require('@ngstarter/systemjs-extension')(config);
 
 gulp.task('build', function (done) {
-    runSequence('test', 'build-systemjs', 'build-assets', done);
+    runSequence('build-systemjs', 'build-assets', done);
 });
 
 /* Concat and minify/uglify all css, js, and copy fonts */
@@ -31,7 +31,7 @@ gulp.task('build-assets', function (done) {
         .pipe(flatten())
         .pipe(gulp.dest(config.build.path));
 
-        gulp.src(config.src + 'favicon.ico')
+        gulp.src(config.src + 'videos-mock.json')
         .pipe(gulp.dest(config.build.path));
 
         gulp.src(config.assetsPath.images + '**/*.*', {
