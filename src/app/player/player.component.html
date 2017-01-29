@@ -1,8 +1,10 @@
 <section class="main">
   <div *ngIf="currentVideo" id="video-wrapper">
-    <video 
+    <video
       (ended)="endedEventHandler($event)"
-      id="main-video" #mainVideo>
+      id="main-video" 
+      #mainVideo
+      [poster]="posterUrl">
       <source [src]="currentVideo.safeUrl" [type]="currentVideo.type">
       Your browser does not support the video tag.
     </video>
