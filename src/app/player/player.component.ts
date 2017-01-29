@@ -38,4 +38,17 @@ export class PlayerComponent implements OnInit {
     this.videos[index].safeUrl = this._sanitizer.bypassSecurityTrustUrl(this.videos[index].url);
     this.currentVideo = this.videos[index];
   }
+
+  endedEventHandler(event: any): void {
+    let index = this.videos.indexOf(this.currentVideo) + 1;
+    event.preventDefault();
+    if (index < this.videos.length) {
+      this.setCurrentVideo(index);
+      event.path[0].load();
+      event.path[0].play();
+    } else {
+      this.setCurrentVideo();
+      event.path[0].load();
+    }
+  }
 }

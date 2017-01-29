@@ -1,6 +1,6 @@
 <section class="main">
   <div *ngIf="currentVideo" class="video-wrapper">
-    <video autoplay>
+    <video (ended)="endedEventHandler($event)">
       <source [src]="currentVideo.safeUrl" [type]="currentVideo.type">
       Your browser does not support the video tag.
     </video>
