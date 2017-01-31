@@ -8,7 +8,8 @@ import { appRoutingProviders, routing } from './app.routing';
 
 import { VideoService } from './services/video.service';
 
-import { PlayerModule } from './player/player.module';
+import { PlayerModule } from './player/index';
+import { HomeModule } from './home/index';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { PlayerModule } from './player/player.module';
     imports: [
         BrowserModule,
         PlayerModule,
+        HomeModule,
         HttpModule,
         routing
     ],
