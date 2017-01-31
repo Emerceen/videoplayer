@@ -42,7 +42,7 @@ describe('AppComponent', () => {
         });
     });
 
-    it('should have title Hello world', async(() => {
+    it('should be defined', async(() => {
         TestBed.compileComponents().then(() => {
             fixture = TestBed.createComponent(AppComponent);
             comp = fixture.componentInstance;
