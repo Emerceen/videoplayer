@@ -11,12 +11,16 @@ import { Component } from '@angular/core';
 
 import { AppComponent } from './app.component';
 
+
 @Component({
-    selector: 'as-test-cmp',
-    template: '<div class="title">Hello test</div>'
+    selector: 'as-test',
+    template: ''
 })
 class TestRouterComponent {
 }
+
+let comp: AppComponent;
+let fixture: ComponentFixture<AppComponent>;
 
 let config: Routes = [
     {
@@ -32,20 +36,18 @@ describe('AppComponent', () => {
                 AppComponent
             ],
             imports: [ RouterTestingModule, RouterModule ],
-            providers: [ provideRoutes(config) ]
+            providers: [
+                provideRoutes(config)
+            ]
         });
     });
 
-    it('should have title Hello world', async(() => {
+    it('should be defined', async(() => {
         TestBed.compileComponents().then(() => {
-            let fixture: ComponentFixture<AppComponent>;
             fixture = TestBed.createComponent(AppComponent);
-            fixture.detectChanges();
+            comp = fixture.componentInstance;
 
-            let compiled = fixture.debugElement.nativeElement;
-            expect(compiled).toBeDefined();
-            // TODO: find a way to compile the routed component
-            // expect(compiled.querySelector('div.title')).toMatch('Hello world');
+            expect(comp).toBeDefined();
         });
     }));
 });
