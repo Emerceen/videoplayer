@@ -5,6 +5,7 @@ import { Component } from '@angular/core';
   selector: 'as-home',
   templateUrl: 'home.component.html'
 })
+
 export class HomeComponent {
 
 }
