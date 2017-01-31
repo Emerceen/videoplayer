@@ -43,7 +43,7 @@ export class PlayerComponent implements OnInit {
     this.currentVideo = this.videos[index];
   }
 
-  endedEventHandler(event: any): void {
+  endedEventHandler(event: Event): void {
     let index = this.videos.indexOf(this.currentVideo) + 1;
     event.preventDefault();
     if (index < this.videos.length) {
