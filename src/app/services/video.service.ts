@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/map';
@@ -8,6 +9,7 @@ import { apiUrl } from '../commons/api-url';
 
 import { VideoArray } from '../entities/video-array';
 
+@Injectable()
 
 export class VideoService {
   public url: string;
