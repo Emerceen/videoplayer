@@ -34,6 +34,9 @@ export class PlayerComponent implements OnInit {
       res => {
         this.videos = res.videos;
         this.setCurrentVideo();
+      },
+      () => {
+        return false;
       }
     );
   }

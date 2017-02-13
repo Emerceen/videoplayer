@@ -85,12 +85,18 @@ describe('PlayerComponent', () => {
 
     afterEach(() => {
       comp.videos = undefined;
+      communication.videoService.videoUrlsError = false;
     });
 
-    it('get videos and call setCurrentVideo', () => {
+    it('get videos and call setCurrentVideo when response is success', () => {
       comp.getVideoUrls();
       expect(comp.videos).toBe(communication.videoService.videoUrlsMock.videos);
       expect(comp.setCurrentVideo).toHaveBeenCalled();
+    });
+
+    it('return false when response is error', () => {
+      communication.videoService.videoUrlsError = true;
+      expect(comp.getVideoUrls()).toBeFalsy();
     });
   });
 
