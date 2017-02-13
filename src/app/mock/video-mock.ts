@@ -25,3 +25,23 @@ export class VideoMock {
     }
   ];
 }
+
+export class VideoMockPascalCase {
+  public Videos = [
+    {
+      Name: 'VIDEO 2',
+      Url: 'http://testwebapplication.cba.pl/675076297.mp4',
+      Type: 'video/mp4'
+    },
+    {
+      Name: 'VIDEO 3',
+      Url: 'http://testwebapplication.cba.pl/675076800.mp4',
+      Type: 'video/mp4'
+    },
+    {
+      Name: 'VIDEO 4',
+      Url: 'http://testwebapplication.cba.pl/675077654.mp4',
+      Type: 'video/mp4'
+    }
+  ];
+}
