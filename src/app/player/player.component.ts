@@ -58,7 +58,6 @@ export class PlayerComponent implements OnInit {
 
   endedEventHandler(): void {
     let index = this.videos.indexOf(this.currentVideo) + 1;
-    // event.preventDefault();
     if (index < this.videos.length) {
       this.setCurrentVideo(index);
       this._videoElement.nativeElement.load();
@@ -70,7 +69,6 @@ export class PlayerComponent implements OnInit {
   }
 
   endedRepeatedCurrentVideoEventHandler(): void {
-    // event.preventDefault();
     this._videoElement.nativeElement.play();
   }
 

@@ -15,12 +15,6 @@ class SanitizerStub {
   }
 }
 
-// class EventStub {
-//   public preventDefault(): void {
-//     return;
-//   }
-// }
-
 class ElementStub {
   nativeElement: Object = {
     poster: undefined,
@@ -49,7 +43,6 @@ let comp: PlayerComponent;
 let fixture: ComponentFixture<PlayerComponent>;
 let communication: MockCommunication;
 let sanitizer: DomSanitizer;
-// let eventStub = new EventStub();
 let element = new ElementStub();
 let mediaStreamErrorEvent: MediaStreamErrorEvent = undefined;
 
@@ -173,7 +166,6 @@ describe('PlayerComponent', () => {
       it('setCurrentVideo, load, play when index currentVideo of videos is 0', () => {
         comp.currentVideo = communication.videoService.videoUrlsMock.videos[0];
         comp.endedEventHandler();
-        // expect(eventStub.preventDefault).toHaveBeenCalled();
         expect(comp.setCurrentVideo).toHaveBeenCalledWith(1);
         expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
         expect(comp.playVideo).toHaveBeenCalled();
@@ -182,7 +174,6 @@ describe('PlayerComponent', () => {
       it('load, stopVideo when index currentVideo of videos is 3', () => {
         comp.currentVideo = communication.videoService.videoUrlsMock.videos[3];
         comp.endedEventHandler();
-        // expect(eventStub.preventDefault).toHaveBeenCalled();
         expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
         expect(comp.stopVideo).toHaveBeenCalled();
       });
@@ -191,13 +182,11 @@ describe('PlayerComponent', () => {
 
   describe('endedRepeatedCurrentVideoEventHandler should', () => {
     beforeEach(() => {
-      // spyOn(eventStub, 'preventDefault');
       spyOn(comp.videoElement.nativeElement, 'play');
     });
 
     it('call event.preventDefault() and videoElement.nativeElement.play()', () => {
       comp.endedRepeatedCurrentVideoEventHandler();
-      // expect(eventStub.preventDefault).toHaveBeenCalled();
     });
 
     it('call videoElement.nativeElement.play()', () => {
