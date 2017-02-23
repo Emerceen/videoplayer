@@ -4,10 +4,14 @@ import {
   ComponentFixture
 } from '@angular/core/testing';
 import { Component } from '@angular/core';
+
 import { DomSanitizer } from '@angular/platform-browser';
+
 import { Communication } from '../services/communication';
 import { MockCommunication } from '../services/mock-communication';
+
 import { PlayerComponent, PlayerModule } from './index';
+
 
 class SanitizerStub {
   public bypassSecurityTrustUrl(url: string): string {

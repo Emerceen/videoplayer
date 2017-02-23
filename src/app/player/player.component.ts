@@ -12,6 +12,7 @@ import { Communication } from '../services/communication';
   templateUrl: 'player.component.html'
 })
 
+
 export class PlayerComponent implements OnInit {
   @ViewChild('mainVideo') videoElement: any;
   public currentVideo: Video;
