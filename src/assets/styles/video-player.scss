@@ -1,6 +1,9 @@
 #video-wrapper {
   display: inline-block;
   position: relative;
+  #player-wrapper {
+    position: relative;
+  }
 
   #video-controls {
     background-color: #f1f1f1;
@@ -15,7 +18,7 @@
   }
 
   #main-video {
-    max-width: 480px;
+    max-width: 640px;
     object-fit: cover;
     background: transparent url('http://img.ffffound.com/static-data/assets/6/77443320c6509d6b500e288695ee953502ecbd6d_m.gif') no-repeat 0 0;
     background-size: cover;
