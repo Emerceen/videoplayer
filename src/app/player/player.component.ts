@@ -14,12 +14,22 @@ import { Communication } from '../services/communication';
 
 
 export class PlayerComponent implements OnInit {
-  @ViewChild('mainVideo') videoElement: any;
+  @ViewChild('mainVideo') set videoElement(element: { nativeElement: HTMLVideoElement }) {
+    if (element) {
+      this._videoElement = element;
+      this._videoElement.nativeElement.onended = () => this.endedEventHandler();
+    }
+  }
+
+  get videoElement(): { nativeElement: HTMLVideoElement } {
+    return this._videoElement;
+  };
+
   public currentVideo: Video;
   public videos: Array<Video>;
-  public isStopped: boolean = true;
-  public isPlaying: boolean = false;
   public posterUrl: string = 'https://images.pexels.com/photos/296878/pexels-photo-296878.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb';
+
+  private _videoElement: { nativeElement: HTMLVideoElement };
 
   constructor(
     private _cm: Communication,
@@ -47,38 +57,49 @@ export class PlayerComponent implements OnInit {
     this.currentVideo = this.videos[index];
   }
 
-  endedEventHandler(event: Event): void {
+  endedEventHandler(): void {
     let index = this.videos.indexOf(this.currentVideo) + 1;
-    event.preventDefault();
     if (index < this.videos.length) {
       this.setCurrentVideo(index);
-      this.videoElement.nativeElement.load();
-      this.videoElement.nativeElement.play();
+      this._videoElement.nativeElement.load();
+      this.playVideo();
     } else {
-      this.videoElement.nativeElement.load();
+      this._videoElement.nativeElement.load();
       this.stopVideo();
-
     }
   }
 
+  endedRepeatedCurrentVideoEventHandler(): void {
+    this._videoElement.nativeElement.play();
+  }
+
   playVideo() {
-    this.isStopped = false;
-    this.isPlaying = true;
-    this.videoElement.nativeElement.play();
-    this.videoElement.nativeElement.poster = undefined;
+    this.currentVideo.controls.stopped = false;
+    this.currentVideo.controls.played = true;
+    this._videoElement.nativeElement.play();
+    this._videoElement.nativeElement.poster = undefined;
   }
 
   pauseVideo() {
-    this.isStopped = false;
-    this.isPlaying = false;
-    this.videoElement.nativeElement.pause();
+    this.currentVideo.controls.stopped = false;
+    this.currentVideo.controls.played = false;
+    this._videoElement.nativeElement.pause();
   }
 
   stopVideo() {
-    this.videoElement.nativeElement.poster = this.posterUrl;
+    this._videoElement.nativeElement.poster = this.posterUrl;
     this.setCurrentVideo();
-    this.videoElement.nativeElement.load();
-    this.isStopped = true;
-    this.isPlaying = false;
+    this._videoElement.nativeElement.load();
+    this.currentVideo.controls.stopped = true;
+    this.currentVideo.controls.played = false;
+  }
+
+  repeatCurrentVideo() {
+    if (!this.currentVideo.controls.repeated) {
+      this._videoElement.nativeElement.onended = () => this.endedRepeatedCurrentVideoEventHandler();
+    } else {
+      this._videoElement.nativeElement.onended = () => this.endedEventHandler();
+    }
+    this.currentVideo.controls.repeated = !this.currentVideo.controls.repeated;
   }
 }
