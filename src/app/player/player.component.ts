@@ -103,7 +103,7 @@ export class PlayerComponent implements OnInit {
     this.currentVideo.controls.repeated = !this.currentVideo.controls.repeated;
   }
 
-  enableVideoSettings() {
+  changeStatePlayerSettings() {
     this.playerSettings = !this.playerSettings;
   }
 }
