@@ -21,7 +21,7 @@ class SanitizerStub {
 
 class ElementStub {
   nativeElement: Object = {
-    poster: undefined,
+    poster: '',
     load(): void {
       return;
     },
@@ -211,7 +211,7 @@ describe('PlayerComponent', () => {
     });
 
     afterEach(() => {
-      comp.videoElement.nativeElement.poster = undefined;
+      comp.videoElement.nativeElement.poster = '';
       comp.currentVideo.controls.stopped = true;
       comp.currentVideo.controls.played = false;
       comp.currentVideo.controls.repeated = false;
@@ -223,7 +223,7 @@ describe('PlayerComponent', () => {
       expect(comp.currentVideo.controls.stopped).toBeFalsy();
       expect(comp.currentVideo.controls.played).toBeTruthy();
       expect(comp.videoElement.nativeElement.play).toHaveBeenCalled();
-      expect(comp.videoElement.nativeElement.poster).toBeUndefined();
+      expect(comp.videoElement.nativeElement.poster).toBe('');
     });
 
     it('in method pauseVideo', () => {
