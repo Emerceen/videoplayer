@@ -258,5 +258,19 @@ describe('PlayerComponent', () => {
         expect(comp.currentVideo.controls.repeated).toBeFalsy();
       });
     });
+
+    describe('changeStatePlayerSettings() should set playerSettings as its opposite', () => {
+      it('true to false', () => {
+        comp.playerSettings = true;
+        comp.changeStatePlayerSettings();
+        expect(comp.playerSettings).toBeFalsy();
+      });
+
+      it('false to true', () => {
+        comp.playerSettings = false;
+        comp.changeStatePlayerSettings();
+        expect(comp.playerSettings).toBeTruthy();
+      });
+    });
   });
 });
