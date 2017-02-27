@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 
 @Component({
@@ -12,18 +12,27 @@ import { FormControl, FormGroup } from '@angular/forms';
 export class PlayerSettingsComponent implements OnInit {
   public playerSettingsForm: FormGroup;
 
-  public repeatVideo: FormControl = new FormControl(false);
+  public repeatVideoLiteral: string = 'repeatVideo';
+  public repeatPlaylistLiteral: string = 'repeatPlaylist';
 
   @Input() playerSettings: boolean;
-  @Output() repeatClickEventHandler = new EventEmitter();
+  @Output() repeatVideoClickEventHandler = new EventEmitter();
+  @Output() repeatPlaylistClickEventHandler = new EventEmitter();
 
-  constructor() {
-    this.playerSettingsForm = new FormGroup({
-      repeatVideo: this.repeatVideo
+  constructor(
+    private _formBuilder: FormBuilder
+  ) {
+    this.playerSettingsForm = this._formBuilder.group({
+      repeatVideo: false,
+      repeatPlaylist: false
     });
 
-    this.repeatVideo.valueChanges.subscribe(() => {
-      this.repeatClickEventHandler.emit();
+    this.playerSettingsForm.controls[this.repeatVideoLiteral].valueChanges.subscribe(() => {
+      this.repeatVideoClickEventHandler.emit();
+    });
+
+     this.playerSettingsForm.controls[this.repeatPlaylistLiteral].valueChanges.subscribe(() => {
+      this.repeatPlaylistClickEventHandler.emit();
     });
   }
 
