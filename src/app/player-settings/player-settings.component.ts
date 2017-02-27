@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
-import { Video } from '../entities/video';
 
 @Component({
   moduleId: module.id,
@@ -17,7 +16,6 @@ export class PlayerSettingsComponent implements OnInit {
   public repeatVideo: FormControl = new FormControl(false);
 
   @Input() playerSettings: boolean;
-  @Input() currentVideo: Video;
   @Output() repeatClickEventHandler = new EventEmitter();
 
   constructor() {
