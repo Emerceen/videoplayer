@@ -3,11 +3,15 @@ import {
   TestBed,
   ComponentFixture
 } from '@angular/core/testing';
+
 import { Component, ElementRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+
 import { Communication } from '../services/communication';
 import { MockCommunication } from '../services/mock-communication';
+
 import { PlayerComponent, PlayerModule } from './index';
+
 
 class SanitizerStub {
   public bypassSecurityTrustUrl(url: string): string {
@@ -17,7 +21,7 @@ class SanitizerStub {
 
 class ElementStub {
   nativeElement: Object = {
-    poster: undefined,
+    poster: '',
     load(): void {
       return;
     },
@@ -207,7 +211,7 @@ describe('PlayerComponent', () => {
     });
 
     afterEach(() => {
-      comp.videoElement.nativeElement.poster = undefined;
+      comp.videoElement.nativeElement.poster = '';
       comp.currentVideo.controls.stopped = true;
       comp.currentVideo.controls.played = false;
       comp.currentVideo.controls.repeated = false;
@@ -219,7 +223,7 @@ describe('PlayerComponent', () => {
       expect(comp.currentVideo.controls.stopped).toBeFalsy();
       expect(comp.currentVideo.controls.played).toBeTruthy();
       expect(comp.videoElement.nativeElement.play).toHaveBeenCalled();
-      expect(comp.videoElement.nativeElement.poster).toBeUndefined();
+      expect(comp.videoElement.nativeElement.poster).toBe('');
     });
 
     it('in method pauseVideo', () => {
@@ -252,6 +256,20 @@ describe('PlayerComponent', () => {
         comp.videoElement.nativeElement.onended(mediaStreamErrorEvent);
         expect(comp.endedEventHandler).toHaveBeenCalled();
         expect(comp.currentVideo.controls.repeated).toBeFalsy();
+      });
+    });
+
+    describe('changeStatePlayerSettings() should set playerSettings as its opposite', () => {
+      it('true to false', () => {
+        comp.playerSettings = true;
+        comp.changeStatePlayerSettings();
+        expect(comp.playerSettings).toBeFalsy();
+      });
+
+      it('false to true', () => {
+        comp.playerSettings = false;
+        comp.changeStatePlayerSettings();
+        expect(comp.playerSettings).toBeTruthy();
       });
     });
   });

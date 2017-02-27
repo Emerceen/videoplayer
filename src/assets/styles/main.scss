@@ -6,9 +6,13 @@
 @import 'overrides';
 @import 'module';
 @import 'video-player';
+@import 'player-settings';
+@import 'materialize-colors';
+
 
 .container {
   width: 100%;
+  max-width: 100%;
   margin: 0;
   padding: 0;
 }

@@ -80,6 +80,7 @@
     "karma-phantomjs-launcher": "~1.0.2",
     "karma-sourcemap-loader": "^0.3.7",
     "lodash": "^4.17.4",
+    "ng2-materialize": "^1.1.1",
     "phantomjs-prebuilt": "^2.1.14",
     "remap-istanbul": "~0.6.4",
     "require-dir": "~0.3.1",

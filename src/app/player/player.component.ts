@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { Video } from '../entities/video';
@@ -11,6 +10,7 @@ import { Communication } from '../services/communication';
   selector: 'as-player',
   templateUrl: 'player.component.html'
 })
+
 
 export class PlayerComponent implements OnInit {
   @ViewChild('mainVideo') set videoElement(element: { nativeElement: HTMLVideoElement }) {
@@ -27,6 +27,7 @@ export class PlayerComponent implements OnInit {
   public currentVideo: Video;
   public videos: Array<Video>;
   public posterUrl: string = 'https://images.pexels.com/photos/296878/pexels-photo-296878.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb';
+  public playerSettings: boolean = false;
 
   private _videoElement: { nativeElement: HTMLVideoElement };
 
@@ -76,7 +77,7 @@ export class PlayerComponent implements OnInit {
     this.currentVideo.controls.stopped = false;
     this.currentVideo.controls.played = true;
     this._videoElement.nativeElement.play();
-    this._videoElement.nativeElement.poster = undefined;
+    this._videoElement.nativeElement.poster = '';
   }
 
   pauseVideo() {
@@ -100,5 +101,9 @@ export class PlayerComponent implements OnInit {
       this._videoElement.nativeElement.onended = () => this.endedEventHandler();
     }
     this.currentVideo.controls.repeated = !this.currentVideo.controls.repeated;
+  }
+
+  changeStatePlayerSettings() {
+    this.playerSettings = !this.playerSettings;
   }
 }
