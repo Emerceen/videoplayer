@@ -5,8 +5,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 @Component({
   moduleId: module.id,
   selector: 'as-player-settings',
-  templateUrl: 'player-settings.component.html',
-  styleUrls: ['player-settings.css']
+  templateUrl: 'player-settings.component.html'
 })
 
 
