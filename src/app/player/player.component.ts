@@ -77,7 +77,7 @@ export class PlayerComponent implements OnInit {
     this.currentVideo.controls.stopped = false;
     this.currentVideo.controls.played = true;
     this._videoElement.nativeElement.play();
-    this._videoElement.nativeElement.poster = undefined;
+    this._videoElement.nativeElement.poster = '';
   }
 
   pauseVideo() {
