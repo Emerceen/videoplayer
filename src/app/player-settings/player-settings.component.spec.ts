@@ -23,7 +23,8 @@ class TestComponent {
 let comp: PlayerSettingsComponent;
 let fixture: ComponentFixture<PlayerSettingsComponent>;
 let de: DebugElement;
-let repeatVideoStringLiteral = 'repeatVideo';
+let repeatVideoLiteral = 'repeatVideo';
+let repeatPlaylistLiteral = 'repeatPlaylist';
 
 describe('PlayerSettingsComponent', () => {
   beforeEach(async(() => {
@@ -41,7 +42,8 @@ describe('PlayerSettingsComponent', () => {
 
   it('constructor() should create FormGroup', () => {
     expect(comp.playerSettingsForm instanceof FormGroup).toBeTruthy();
-    expect(comp.playerSettingsForm.controls[repeatVideoStringLiteral]).toBe(comp.repeatVideo);
+    expect(comp.playerSettingsForm.controls[repeatVideoLiteral]).toBeDefined;
+    expect(comp.playerSettingsForm.controls[repeatPlaylistLiteral]).toBeDefined;
   });
 
   describe('when playerSettings input is', () => {
@@ -70,12 +72,23 @@ describe('PlayerSettingsComponent', () => {
 
   describe('when repeatVideo FormControl value is changed', () => {
     beforeEach(() => {
-      spyOn(comp.repeatClickEventHandler, 'emit');
+      spyOn(comp.repeatVideoClickEventHandler, 'emit');
     });
 
-    it('then emit() method of repeatClickEventHandler Output should call', () => {
-      comp.repeatVideo.setValue(true);
-      expect(comp.repeatClickEventHandler.emit).toHaveBeenCalled();
+    it('then emit() method of repeatVideoClickEventHandler Output should call', () => {
+      comp.playerSettingsForm.controls[repeatVideoLiteral].setValue(true);
+      expect(comp.repeatVideoClickEventHandler.emit).toHaveBeenCalled();
+    });
+  });
+
+  describe('when repeatPlaylist FormControl value is changed', () => {
+    beforeEach(() => {
+      spyOn(comp.repeatPlaylistClickEventHandler, 'emit');
+    });
+
+    it('then emit() method of repeatPlaylistClickEventHandler Output should call', () => {
+      comp.playerSettingsForm.controls[repeatPlaylistLiteral].setValue(true);
+      expect(comp.repeatPlaylistClickEventHandler.emit).toHaveBeenCalled();
     });
   });
 });

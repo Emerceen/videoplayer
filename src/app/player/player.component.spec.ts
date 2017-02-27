@@ -150,52 +150,74 @@ describe('PlayerComponent', () => {
     });
   });
 
-  describe('endedEventHandler should ', () => {
-    describe('call event.preventDefault and call', () => {
-      beforeEach(() => {
-        spyOn(comp, 'setCurrentVideo');
-        spyOn(comp, 'stopVideo');
-        spyOn(comp, 'playVideo');
-        // spyOn(eventStub, 'preventDefault');
-        spyOn(comp.videoElement.nativeElement, 'load');
-        spyOn(comp.videoElement.nativeElement, 'play');
-        comp.videos = communication.videoService.videoUrlsMock.videos;
-      });
+  describe('endedEventHandler should call event.preventDefault and call', () => {
+    beforeEach(() => {
+      spyOn(comp, 'setCurrentVideo');
+      spyOn(comp, 'stopVideo');
+      spyOn(comp, 'playVideo');
+      spyOn(comp.videoElement.nativeElement, 'load');
+      comp.videos = communication.videoService.videoUrlsMock.videos;
+    });
 
-      afterAll(() => {
-        comp.currentVideo = undefined;
-        comp.videos = undefined;
-      });
+    afterAll(() => {
+      comp.currentVideo = undefined;
+      comp.videos = undefined;
+    });
 
-      it('setCurrentVideo, load, play when index currentVideo of videos is 0', () => {
-        comp.currentVideo = communication.videoService.videoUrlsMock.videos[0];
-        comp.endedEventHandler();
-        expect(comp.setCurrentVideo).toHaveBeenCalledWith(1);
-        expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
-        expect(comp.playVideo).toHaveBeenCalled();
-      });
+    it('setCurrentVideo, load, play when index currentVideo of videos is 0', () => {
+      comp.currentVideo = communication.videoService.videoUrlsMock.videos[0];
+      comp.endedEventHandler();
+      expect(comp.setCurrentVideo).toHaveBeenCalledWith(1);
+      expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
+      expect(comp.playVideo).toHaveBeenCalled();
+    });
 
-      it('load, stopVideo when index currentVideo of videos is 3', () => {
-        comp.currentVideo = communication.videoService.videoUrlsMock.videos[3];
-        comp.endedEventHandler();
-        expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
-        expect(comp.stopVideo).toHaveBeenCalled();
-      });
+    it('load, stopVideo when index currentVideo of videos is 3', () => {
+      comp.currentVideo = communication.videoService.videoUrlsMock.videos[3];
+      comp.endedEventHandler();
+      expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
+      expect(comp.stopVideo).toHaveBeenCalled();
     });
   });
 
-  describe('endedRepeatedCurrentVideoEventHandler should', () => {
+  describe('endedRepeatedCurrentVideoEventHandler() should', () => {
     beforeEach(() => {
       spyOn(comp.videoElement.nativeElement, 'play');
-    });
-
-    it('call event.preventDefault() and videoElement.nativeElement.play()', () => {
-      comp.endedRepeatedCurrentVideoEventHandler();
     });
 
     it('call videoElement.nativeElement.play()', () => {
       comp.endedRepeatedCurrentVideoEventHandler();
       expect(comp.videoElement.nativeElement.play).toHaveBeenCalled();
+    });
+  });
+
+  describe('endedRepeatedPlaylistEventHandler() should', () => {
+    beforeEach(() => {
+      spyOn(comp, 'setCurrentVideo');
+      spyOn(comp, 'playVideo');
+      spyOn(comp.videoElement.nativeElement, 'load');
+      comp.videos = communication.videoService.videoUrlsMock.videos;
+    });
+
+    afterAll(() => {
+      comp.currentVideo = undefined;
+      comp.videos = undefined;
+    });
+
+    it('setCurrentVideo with parameter, load, call playVideo() when index currentVideo of videos is 0', () => {
+      comp.currentVideo = communication.videoService.videoUrlsMock.videos[0];
+      comp.endedRepeatedPlaylistEventHandler();
+      expect(comp.setCurrentVideo).toHaveBeenCalledWith(1);
+      expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
+      expect(comp.playVideo).toHaveBeenCalled();
+    });
+
+    it('setCurrentVideo without parameter, load, call playVideo() when index currentVideo of videos is 3', () => {
+      comp.currentVideo = communication.videoService.videoUrlsMock.videos[3];
+      comp.endedRepeatedPlaylistEventHandler();
+      expect(comp.setCurrentVideo).toHaveBeenCalledWith();
+      expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
+      expect(comp.playVideo).toHaveBeenCalled();
     });
   });
 
@@ -205,6 +227,7 @@ describe('PlayerComponent', () => {
       spyOn(comp.videoElement.nativeElement, 'play');
       spyOn(comp.videoElement.nativeElement, 'pause');
       spyOn(comp, 'endedRepeatedCurrentVideoEventHandler');
+      spyOn(comp, 'endedRepeatedPlaylistEventHandler');
       spyOn(comp, 'endedEventHandler');
       spyOn(comp, 'setCurrentVideo');
       comp.currentVideo = communication.videoService.videoUrlsMock.videos[0];
@@ -259,7 +282,25 @@ describe('PlayerComponent', () => {
       });
     });
 
-    describe('changeStatePlayerSettings() should set playerSettings as its opposite', () => {
+    describe('in method repeatPlaylist, and when', () => {
+      it('autoplay control is false and video call ended event handler should call endedRepeatedPlaylistEventHandler()', () => {
+        comp.repeatPlaylist();
+        comp.videoElement.nativeElement.onended(mediaStreamErrorEvent);
+        expect(comp.endedRepeatedPlaylistEventHandler).toHaveBeenCalled();
+        expect(comp.videoElement.nativeElement.autoplay).toBeTruthy();
+      });
+
+      it('autoplay control is true and video call ended event handler should call endedEventHandler', () => {
+        comp.videoElement.nativeElement.autoplay = true;
+        comp.repeatPlaylist();
+        comp.videoElement.nativeElement.onended(mediaStreamErrorEvent);
+        expect(comp.endedEventHandler).toHaveBeenCalled();
+        expect(comp.videoElement.nativeElement.autoplay).toBeFalsy();
+      });
+    });
+  });
+
+  describe('changeStatePlayerSettings() should set playerSettings as its opposite', () => {
       it('true to false', () => {
         comp.playerSettings = true;
         comp.changeStatePlayerSettings();
@@ -272,5 +313,4 @@ describe('PlayerComponent', () => {
         expect(comp.playerSettings).toBeTruthy();
       });
     });
-  });
 });
