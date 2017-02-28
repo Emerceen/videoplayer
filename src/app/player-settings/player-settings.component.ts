@@ -27,11 +27,17 @@ export class PlayerSettingsComponent implements OnInit {
       repeatPlaylist: false
     });
 
-    this.playerSettingsForm.controls[this.repeatVideoLiteral].valueChanges.subscribe(() => {
+    this.playerSettingsForm.controls[this.repeatVideoLiteral].valueChanges.subscribe((value) => {
+      if (value && this.playerSettingsForm.controls[this.repeatPlaylistLiteral].value) {
+        this.playerSettingsForm.controls[this.repeatPlaylistLiteral].setValue(false);
+      }
       this.repeatVideoClickEventHandler.emit();
     });
 
-     this.playerSettingsForm.controls[this.repeatPlaylistLiteral].valueChanges.subscribe(() => {
+     this.playerSettingsForm.controls[this.repeatPlaylistLiteral].valueChanges.subscribe((value) => {
+      if (value && this.playerSettingsForm.controls[this.repeatVideoLiteral].value) {
+        this.playerSettingsForm.controls[this.repeatVideoLiteral].setValue(false);
+      }
       this.repeatPlaylistClickEventHandler.emit();
     });
   }

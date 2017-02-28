@@ -75,9 +75,25 @@ describe('PlayerSettingsComponent', () => {
       spyOn(comp.repeatVideoClickEventHandler, 'emit');
     });
 
-    it('then emit() method of repeatVideoClickEventHandler Output should call', () => {
+    it('and value and repeatPlaylist value are false then emit() method of repeatVideoClickEventHandler Output should call', () => {
+      comp.playerSettingsForm.controls[repeatPlaylistLiteral].setValue(false);
+      comp.playerSettingsForm.controls[repeatVideoLiteral].setValue(false);
+      expect(comp.repeatVideoClickEventHandler.emit).toHaveBeenCalled();
+      expect(comp.playerSettingsForm.controls[repeatPlaylistLiteral].value).toBeFalsy();
+    });
+
+    it('and value is true and repeatPlaylist value is false then emit() method of repeatVideoClickEventHandler Output should call', () => {
+      comp.playerSettingsForm.controls[repeatPlaylistLiteral].setValue(false);
       comp.playerSettingsForm.controls[repeatVideoLiteral].setValue(true);
       expect(comp.repeatVideoClickEventHandler.emit).toHaveBeenCalled();
+      expect(comp.playerSettingsForm.controls[repeatPlaylistLiteral].value).toBeFalsy();
+    });
+
+    it('and value is true and repeatPlaylist value is true then emit() method of repeatVideoClickEventHandler Output should call', () => {
+      comp.playerSettingsForm.controls[repeatPlaylistLiteral].setValue(true);
+      comp.playerSettingsForm.controls[repeatVideoLiteral].setValue(true);
+      expect(comp.repeatVideoClickEventHandler.emit).toHaveBeenCalled();
+      expect(comp.playerSettingsForm.controls[repeatPlaylistLiteral].value).toBeFalsy();
     });
   });
 
@@ -86,9 +102,26 @@ describe('PlayerSettingsComponent', () => {
       spyOn(comp.repeatPlaylistClickEventHandler, 'emit');
     });
 
-    it('then emit() method of repeatPlaylistClickEventHandler Output should call', () => {
+    it('and value and repeatVideo value are false then emit() method of repeatPlaylistClickEventHandler Output should call', () => {
+      comp.playerSettingsForm.controls[repeatVideoLiteral].setValue(false);
+      comp.playerSettingsForm.controls[repeatPlaylistLiteral].setValue(false);
+      expect(comp.repeatPlaylistClickEventHandler.emit).toHaveBeenCalled();
+    });
+
+    it('and value is true and repeatVideo value is false then emit() method of repeatPlaylistClickEventHandler Output should call',
+      () => {
+      comp.playerSettingsForm.controls[repeatVideoLiteral].setValue(true);
+      comp.playerSettingsForm.controls[repeatPlaylistLiteral].setValue(false);
+      expect(comp.repeatPlaylistClickEventHandler.emit).toHaveBeenCalled();
+      expect(comp.playerSettingsForm.controls[repeatVideoLiteral].value).toBeTruthy();
+    });
+
+    it('and value is true and repeatVideo value is true then emit() method of repeatPlaylistClickEventHandler Output should call',
+      () => {
+      comp.playerSettingsForm.controls[repeatVideoLiteral].setValue(true);
       comp.playerSettingsForm.controls[repeatPlaylistLiteral].setValue(true);
       expect(comp.repeatPlaylistClickEventHandler.emit).toHaveBeenCalled();
+      expect(comp.playerSettingsForm.controls[repeatVideoLiteral].value).toBeFalsy();
     });
   });
 });
