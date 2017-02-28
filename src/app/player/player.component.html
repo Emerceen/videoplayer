@@ -9,14 +9,17 @@
         Your browser does not support the video tag.
       </video>
       <div id="video-settings">
-        <as-player-settings [playerSettings]="playerSettings" (repeatClickEventHandler)="repeatCurrentVideo()"></as-player-settings>
+        <as-player-settings 
+          [playerSettings]="playerSettings" 
+          (repeatVideoClickEventHandler)="repeatCurrentVideo()"
+          (repeatPlaylistClickEventHandler)="repeatPlaylist()">
+        </as-player-settings>
       </div>
     </div>
     <div id="video-controls">
       <i *ngIf="!currentVideo.controls.played" (click)="playVideo()" class="fa fa-play" aria-hidden="true"></i>
       <i *ngIf="currentVideo.controls.played" (click)="pauseVideo()" class="fa fa-pause" aria-hidden="true"></i>
       <i (click)="stopVideo()" class="fa fa-stop" aria-hidden="true"></i>
-      <!--<i (click)="repeatCurrentVideo()" class="fa fa-repeat" aria-hidden="true"></i>-->
       <i (click)="changeStatePlayerSettings()" class="fa fa-cog" aria-hidden="true"></i>
     </div>
      <div id="video-state">

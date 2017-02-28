@@ -73,6 +73,17 @@ export class PlayerComponent implements OnInit {
     this._videoElement.nativeElement.play();
   }
 
+  endedRepeatedPlaylistEventHandler(): void {
+    let index = this.videos.indexOf(this.currentVideo) + 1;
+    if (index < this.videos.length) {
+      this.setCurrentVideo(index);
+    } else {
+      this.setCurrentVideo();
+    }
+    this._videoElement.nativeElement.load();
+    this.playVideo();
+  }
+
   playVideo() {
     this.currentVideo.controls.stopped = false;
     this.currentVideo.controls.played = true;
@@ -101,6 +112,15 @@ export class PlayerComponent implements OnInit {
       this._videoElement.nativeElement.onended = () => this.endedEventHandler();
     }
     this.currentVideo.controls.repeated = !this.currentVideo.controls.repeated;
+  }
+
+  repeatPlaylist() {
+    if (!this._videoElement.nativeElement.autoplay) {
+      this._videoElement.nativeElement.onended = () => this.endedRepeatedPlaylistEventHandler();
+    } else {
+      this._videoElement.nativeElement.onended = () => this.endedEventHandler();
+    }
+    this._videoElement.nativeElement.autoplay = !this._videoElement.nativeElement.autoplay;
   }
 
   changeStatePlayerSettings() {
