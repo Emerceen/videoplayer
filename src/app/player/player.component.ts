@@ -28,6 +28,7 @@ export class PlayerComponent implements OnInit {
   public videos: Array<Video>;
   public posterUrl: string = 'https://images.pexels.com/photos/296878/pexels-photo-296878.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb';
   public playerSettings: boolean = false;
+  public shufflePlaying: boolean = false;
 
   private _videoElement: { nativeElement: HTMLVideoElement };
 
@@ -57,8 +58,7 @@ export class PlayerComponent implements OnInit {
     this.currentVideo = this.videos[index];
   }
 
-  endedEventHandler(): void {
-    let index = this.videos.indexOf(this.currentVideo) + 1;
+  endedEventHandler(index: number = this.videos.indexOf(this.currentVideo) + 1): void {
     if (index < this.videos.length) {
       this.setCurrentVideo(index);
       this._videoElement.nativeElement.load();
@@ -121,6 +121,33 @@ export class PlayerComponent implements OnInit {
       this._videoElement.nativeElement.onended = () => this.endedEventHandler();
     }
     this._videoElement.nativeElement.autoplay = !this._videoElement.nativeElement.autoplay;
+  }
+
+  shufflePlay() {
+    let randomNumber: number;
+    let shuffleVideoArray: Array<Video>;
+    if (!this.shufflePlaying) {
+      this._videoElement.nativeElement.onended = () => {
+        shuffleVideoArray = [];
+        this.videos.filter(video => !video.controls.playedInShuffle).map(video => {
+          shuffleVideoArray.push(video);
+        });
+        if (shuffleVideoArray.length > 0) {
+          randomNumber = Math.floor((Math.random() * shuffleVideoArray.length));
+          let indexInVideosArray = this.videos.indexOf(shuffleVideoArray[randomNumber]);
+          this.videos[indexInVideosArray].controls.playedInShuffle = true;
+          this.endedEventHandler(indexInVideosArray);
+        } else {
+          this.stopVideo();
+          this.videos.map(video => {
+            video.controls.playedInShuffle = false;
+          });
+        }
+      };
+    } else {
+      this._videoElement.nativeElement.onended = () => this.endedEventHandler();
+    }
+    this.shufflePlaying = !this.shufflePlaying;
   }
 
   changeStatePlayerSettings() {
