@@ -28,7 +28,7 @@ export class PlayerComponent implements OnInit {
   public videos: Array<Video>;
   public posterUrl: string = 'https://images.pexels.com/photos/296878/pexels-photo-296878.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb';
   public playerSettings: boolean = false;
-  public shufflePlaying: boolean = false;
+  public isRepeatedPlaylist: boolean = false;
 
   private _videoElement: { nativeElement: HTMLVideoElement };
 
@@ -114,43 +114,64 @@ export class PlayerComponent implements OnInit {
     this.currentVideo.controls.repeated = !this.currentVideo.controls.repeated;
   }
 
-  repeatPlaylist() {
-    if (!this._videoElement.nativeElement.autoplay) {
+  repeatPlaylist(isShufflePlaying: boolean) {
+    this.isRepeatedPlaylist = !this.isRepeatedPlaylist;
+    if (isShufflePlaying) {
+      return;
+    }
+    if (this.isRepeatedPlaylist) {
       this._videoElement.nativeElement.onended = () => this.endedRepeatedPlaylistEventHandler();
     } else {
       this._videoElement.nativeElement.onended = () => this.endedEventHandler();
     }
-    this._videoElement.nativeElement.autoplay = !this._videoElement.nativeElement.autoplay;
   }
 
-  shufflePlay() {
+  shufflePlay(isEnable?: boolean) {
     let randomNumber: number;
     let shuffleVideoArray: Array<Video>;
-    if (!this.shufflePlaying) {
+    if (isEnable) {
+      if (!this.currentVideo.controls.played) {
+        this.initialRandomVideo();
+      }
       this._videoElement.nativeElement.onended = () => {
-        shuffleVideoArray = [];
-        this.videos.filter(video => !video.controls.playedInShuffle).map(video => {
-          shuffleVideoArray.push(video);
-        });
+        this.currentVideo.controls.playedInShuffle = true;
+        shuffleVideoArray = this.videos.filter(video => !video.controls.playedInShuffle);
         if (shuffleVideoArray.length > 0) {
           randomNumber = Math.floor((Math.random() * shuffleVideoArray.length));
           let indexInVideosArray = this.videos.indexOf(shuffleVideoArray[randomNumber]);
           this.videos[indexInVideosArray].controls.playedInShuffle = true;
           this.endedEventHandler(indexInVideosArray);
-        } else {
+        } else if (!this.isRepeatedPlaylist) {
           this.stopVideo();
-          this.videos.map(video => {
-            video.controls.playedInShuffle = false;
-          });
+          this.resetShufflePlaying();
+          this.initialRandomVideo();
+        } else if (this.isRepeatedPlaylist) {
+          this.resetShufflePlaying();
+          this.initialRandomVideo();
+          this.playVideo();
         }
       };
     } else {
       this._videoElement.nativeElement.onended = () => this.endedEventHandler();
+      this.resetShufflePlaying();
     }
-    this.shufflePlaying = !this.shufflePlaying;
   }
 
-  changeStatePlayerSettings() {
+  initialRandomVideo() {
+    let randomNumber = Math.floor((Math.random() * this.videos.length));
+    this.setCurrentVideo(randomNumber);
+    this._videoElement.nativeElement.load();
+    this.currentVideo.controls.stopped = true;
+    this.currentVideo.controls.played = false;
+  }
+
+  resetShufflePlaying(): void {
+    this.videos.map(video => {
+      video.controls.playedInShuffle = false;
+    });
+  }
+
+  changeStatePlayerSettings(): void {
     this.playerSettings = !this.playerSettings;
   }
 }

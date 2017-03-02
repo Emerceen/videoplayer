@@ -12,8 +12,8 @@
         <as-player-settings
           [playerSettings]="playerSettings" 
           (repeatVideoClickEventHandler)="repeatCurrentVideo()"
-          (repeatPlaylistClickEventHandler)="repeatPlaylist()"
-          (shufflePlayClickEventHandler)="shufflePlay()">
+          (repeatPlaylistClickEventHandler)="repeatPlaylist($event)"
+          (shufflePlayClickEventHandler)="shufflePlay($event)">
         </as-player-settings>
       </div>
     </div>

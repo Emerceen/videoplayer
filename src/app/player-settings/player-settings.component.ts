@@ -45,7 +45,7 @@ export class PlayerSettingsComponent implements OnInit {
         this.playerSettingsForm.controls[this.repeatVideoLiteral].setValue(false);
       }
       if (value && this.playerSettingsForm.controls[this.shufflePlayLiteral].value) {
-        this.shufflePlayClickEventHandler.emit(true);
+        this.repeatPlaylistClickEventHandler.emit(true);
       } else {
         this.repeatPlaylistClickEventHandler.emit();
       }
@@ -56,9 +56,9 @@ export class PlayerSettingsComponent implements OnInit {
         this.playerSettingsForm.controls[this.repeatVideoLiteral].setValue(false);
       }
       if (value && this.playerSettingsForm.controls[this.repeatPlaylistLiteral].value) {
-        this.shufflePlayClickEventHandler.emit(true);
+        this.shufflePlayClickEventHandler.emit(value);
       } else {
-        this.shufflePlayClickEventHandler.emit();
+        this.shufflePlayClickEventHandler.emit(value);
       }
     });
   }
