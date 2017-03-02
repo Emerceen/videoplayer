@@ -10,7 +10,8 @@ export class VideoMock {
       controls: {
         played: false,
         stopped: true,
-        repeated: false
+        repeated: false,
+        playedInShuffle: false
       }
     },
     {
@@ -20,7 +21,8 @@ export class VideoMock {
       controls: {
         played: false,
         stopped: true,
-        repeated: false
+        repeated: false,
+        playedInShuffle: false
       }
     },
     {
@@ -30,7 +32,8 @@ export class VideoMock {
       controls: {
         played: false,
         stopped: true,
-        repeated: false
+        repeated: false,
+        playedInShuffle: false
       }
     },
     {
@@ -40,7 +43,8 @@ export class VideoMock {
       controls: {
         played: false,
         stopped: true,
-        repeated: false
+        repeated: false,
+        playedInShuffle: false
       }
     }
   ];
