@@ -126,7 +126,7 @@ export class PlayerComponent implements OnInit {
     }
   }
 
-  shufflePlay(isEnable?: boolean) {
+  shufflePlay(isEnable?: boolean): void {
     let randomNumber: number;
     let shuffleVideoArray: Array<Video>;
     if (isEnable) {
@@ -141,14 +141,14 @@ export class PlayerComponent implements OnInit {
           let indexInVideosArray = this.videos.indexOf(shuffleVideoArray[randomNumber]);
           this.videos[indexInVideosArray].controls.playedInShuffle = true;
           this.endedEventHandler(indexInVideosArray);
-        } else if (!this.isRepeatedPlaylist) {
-          this.stopVideo();
-          this.resetShufflePlaying();
-          this.initialRandomVideo();
         } else if (this.isRepeatedPlaylist) {
           this.resetShufflePlaying();
           this.initialRandomVideo();
           this.playVideo();
+        } else {
+          this.stopVideo();
+          this.resetShufflePlaying();
+          this.initialRandomVideo();
         }
       };
     } else {
@@ -157,7 +157,7 @@ export class PlayerComponent implements OnInit {
     }
   }
 
-  initialRandomVideo() {
+  initialRandomVideo(): void {
     let randomNumber = Math.floor((Math.random() * this.videos.length));
     this.setCurrentVideo(randomNumber);
     this._videoElement.nativeElement.load();
