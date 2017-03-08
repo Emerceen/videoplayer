@@ -55,11 +55,7 @@ export class PlayerSettingsComponent implements OnInit {
       if (value && this.playerSettingsForm.controls[this.repeatVideoLiteral].value) {
         this.playerSettingsForm.controls[this.repeatVideoLiteral].setValue(false);
       }
-      if (value && this.playerSettingsForm.controls[this.repeatPlaylistLiteral].value) {
-        this.shufflePlayClickEventHandler.emit(value);
-      } else {
-        this.shufflePlayClickEventHandler.emit(value);
-      }
+      this.shufflePlayClickEventHandler.emit(value);
     });
   }
 
