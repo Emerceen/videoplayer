@@ -14,31 +14,48 @@ export class PlayerSettingsComponent implements OnInit {
 
   public repeatVideoLiteral: string = 'repeatVideo';
   public repeatPlaylistLiteral: string = 'repeatPlaylist';
+  public shufflePlayLiteral: string = 'shufflePlay';
 
   @Input() playerSettings: boolean;
   @Output() repeatVideoClickEventHandler = new EventEmitter();
   @Output() repeatPlaylistClickEventHandler = new EventEmitter();
+  @Output() shufflePlayClickEventHandler = new EventEmitter();
 
   constructor(
     private _formBuilder: FormBuilder
   ) {
     this.playerSettingsForm = this._formBuilder.group({
       repeatVideo: false,
-      repeatPlaylist: false
+      repeatPlaylist: false,
+      shufflePlay: false
     });
 
     this.playerSettingsForm.controls[this.repeatVideoLiteral].valueChanges.subscribe((value) => {
       if (value && this.playerSettingsForm.controls[this.repeatPlaylistLiteral].value) {
         this.playerSettingsForm.controls[this.repeatPlaylistLiteral].setValue(false);
       }
+      if (value && this.playerSettingsForm.controls[this.shufflePlayLiteral].value) {
+        this.playerSettingsForm.controls[this.shufflePlayLiteral].setValue(false);
+      }
       this.repeatVideoClickEventHandler.emit();
     });
 
-     this.playerSettingsForm.controls[this.repeatPlaylistLiteral].valueChanges.subscribe((value) => {
+    this.playerSettingsForm.controls[this.repeatPlaylistLiteral].valueChanges.subscribe((value) => {
       if (value && this.playerSettingsForm.controls[this.repeatVideoLiteral].value) {
         this.playerSettingsForm.controls[this.repeatVideoLiteral].setValue(false);
       }
-      this.repeatPlaylistClickEventHandler.emit();
+      if (this.playerSettingsForm.controls[this.shufflePlayLiteral].value) {
+        this.repeatPlaylistClickEventHandler.emit(true);
+      } else {
+        this.repeatPlaylistClickEventHandler.emit();
+      }
+    });
+
+    this.playerSettingsForm.controls[this.shufflePlayLiteral].valueChanges.subscribe((value) => {
+      if (value && this.playerSettingsForm.controls[this.repeatVideoLiteral].value) {
+        this.playerSettingsForm.controls[this.repeatVideoLiteral].setValue(false);
+      }
+      this.shufflePlayClickEventHandler.emit(value);
     });
   }
 

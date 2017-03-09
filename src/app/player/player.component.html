@@ -9,10 +9,11 @@
         Your browser does not support the video tag.
       </video>
       <div id="video-settings">
-        <as-player-settings 
+        <as-player-settings
           [playerSettings]="playerSettings" 
           (repeatVideoClickEventHandler)="repeatCurrentVideo()"
-          (repeatPlaylistClickEventHandler)="repeatPlaylist()">
+          (repeatPlaylistClickEventHandler)="repeatPlaylist($event)"
+          (shufflePlayClickEventHandler)="shufflePlay($event)">
         </as-player-settings>
       </div>
     </div>
