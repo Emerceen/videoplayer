@@ -9,9 +9,27 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 import { Communication } from '../services/communication';
 import { MockCommunication } from '../services/mock-communication';
+import { DocumentMozMsPrefixesRefService } from '../services/document.service';
 
 import { PlayerComponent, PlayerModule } from './index';
 
+
+class DocumentMock {
+  public nativeDocument = {
+    webkitExitFullscreen(): void {
+      return;
+    },
+    exitFullscreen(): void {
+      return;
+    },
+    mozCancelFullScreen(): void {
+      return;
+    },
+    msExitFullscreen(): void {
+      return;
+    }
+  };
+}
 
 class SanitizerStub {
   public bypassSecurityTrustUrl(url: string): string {
@@ -34,6 +52,7 @@ class ElementStub {
   };
 }
 
+
 @Component({
   selector: 'as-test',
   template: '<as-player></as-player>'
@@ -49,6 +68,7 @@ let communication: MockCommunication;
 let sanitizer: DomSanitizer;
 let element = new ElementStub();
 let mediaStreamErrorEvent: MediaStreamErrorEvent = undefined;
+let documentMock: DocumentMozMsPrefixesRefService;
 
 describe('PlayerComponent', () => {
   beforeEach(async(() => {
@@ -57,7 +77,8 @@ describe('PlayerComponent', () => {
       imports: [PlayerModule],
       providers: [
         { provide: Communication, useClass: MockCommunication },
-        { provide: DomSanitizer, useClass: SanitizerStub }
+        { provide: DomSanitizer, useClass: SanitizerStub },
+        { provide: DocumentMozMsPrefixesRefService, useClass: DocumentMock }
       ]
     }).compileComponents();
   }));
@@ -67,7 +88,9 @@ describe('PlayerComponent', () => {
     comp = fixture.componentInstance;
     communication = fixture.debugElement.injector.get(Communication);
     sanitizer = fixture.debugElement.injector.get(DomSanitizer);
+    documentMock = fixture.debugElement.injector.get(DocumentMozMsPrefixesRefService);
     comp.videoElement = <ElementRef> element;
+    comp.videoWrapper = <ElementRef> element;
   });
 
   it('ngOnInit should call getVideoUrls,', () => {
@@ -314,7 +337,7 @@ describe('PlayerComponent', () => {
       spyOn(comp, 'initialRandomVideo');
     });
     describe('when parameter isEnable is truthy', () => {
-      describe('and when this.currentVideo.controls.played is', () => {
+      describe('and when comp.currentVideo.controls.played is', () => {
 
         it('falsy should call initialRandomVideo()', () => {
           comp.currentVideo.controls.played = false;
@@ -450,16 +473,113 @@ describe('PlayerComponent', () => {
   });
 
   describe('changeStatePlayerSettings() should set playerSettings as its opposite', () => {
-      it('true to false', () => {
-        comp.playerSettings = true;
-        comp.changeStatePlayerSettings();
-        expect(comp.playerSettings).toBeFalsy();
-      });
+    it('true to false', () => {
+      comp.playerSettings = true;
+      comp.changeStatePlayerSettings();
+      expect(comp.playerSettings).toBeFalsy();
+    });
 
-      it('false to true', () => {
-        comp.playerSettings = false;
-        comp.changeStatePlayerSettings();
-        expect(comp.playerSettings).toBeTruthy();
+    it('false to true', () => {
+      comp.playerSettings = false;
+      comp.changeStatePlayerSettings();
+      expect(comp.playerSettings).toBeTruthy();
+    });
+  });
+
+  describe('toggleFullScreen()', () => {
+    describe('when isFullScreen is falsy', () => {
+      beforeEach(() => {
+        comp.isFullScreen = false;
+        comp.videoWrapper.nativeElement.webkitRequestFullScreen = undefined;
+        comp.videoWrapper.nativeElement.requestFullScreen = undefined;
+        comp.videoWrapper.nativeElement.mozRequestFullScreen = undefined;
+        comp.videoWrapper.nativeElement.msRequestFullscreen = undefined;
+      });
+      describe('and videoElement.nativeElement has method', () => {
+
+        it('webkitRequestFullScreen, should call it', () => {
+          comp.videoWrapper.nativeElement.webkitRequestFullScreen = () => { return; };
+          spyOn(comp.videoWrapper.nativeElement, 'webkitRequestFullScreen');
+          comp.toggleFullScreen();
+          expect(comp.videoWrapper.nativeElement.webkitRequestFullScreen).toHaveBeenCalled();
+        });
+
+        it('requestFullScreen, should call it', () => {
+          comp.videoWrapper.nativeElement.requestFullScreen = () => { return; };
+          spyOn(comp.videoWrapper.nativeElement, 'requestFullScreen');
+          comp.toggleFullScreen();
+          expect(comp.videoWrapper.nativeElement.requestFullScreen).toHaveBeenCalled();
+        });
+
+        it('mozRequestFullScreen, should call it', () => {
+          comp.videoWrapper.nativeElement.mozRequestFullScreen = () => { return; };
+          spyOn(comp.videoWrapper.nativeElement, 'mozRequestFullScreen');
+          comp.toggleFullScreen();
+          expect(comp.videoWrapper.nativeElement.mozRequestFullScreen).toHaveBeenCalled();
+        });
+
+        it('msRequestFullscreen, should call it', () => {
+          comp.videoWrapper.nativeElement.msRequestFullscreen = () => { return; };
+          spyOn(comp.videoWrapper.nativeElement, 'msRequestFullscreen');
+          comp.toggleFullScreen();
+          expect(comp.videoWrapper.nativeElement.msRequestFullscreen).toHaveBeenCalled();
+        });
+
+
+      });
+      describe('and videoElement.nativeElement hasn`t fullScreen methods', () => {
+        it('should return null', () => {
+          comp.videoWrapper.nativeElement.webkitRequestFullScreen = undefined;
+          comp.videoWrapper.nativeElement.requestFullScreen = undefined;
+          comp.videoWrapper.nativeElement.mozRequestFullScreen = undefined;
+          comp.videoWrapper.nativeElement.msRequestFullscreen = undefined;
+          expect(comp.toggleFullScreen()).toBeUndefined();
+        });
       });
     });
+
+    describe('when isFullScreen is truthy', () => {
+      beforeEach(() => {
+        comp.isFullScreen = true;
+        documentMock.nativeDocument.webkitExitFullscreen = undefined;
+        documentMock.nativeDocument.exitFullscreen = undefined;
+        documentMock.nativeDocument.mozCancelFullScreen = undefined;
+        documentMock.nativeDocument.msExitFullscreen = undefined;
+      });
+
+      it('and document has method webkitExitFullscreen, should call it', () => {
+        documentMock.nativeDocument.webkitExitFullscreen = () => { return; };
+        spyOn(documentMock.nativeDocument, 'webkitExitFullscreen');
+        comp.toggleFullScreen();
+        expect(documentMock.nativeDocument.webkitExitFullscreen).toHaveBeenCalled();
+      });
+
+      it('and document.nativeDocument has method exitFullscreen, should call it', () => {
+        documentMock.nativeDocument.exitFullscreen = () => { return; };
+        spyOn(documentMock.nativeDocument, 'exitFullscreen');
+        comp.toggleFullScreen();
+        expect(documentMock.nativeDocument.exitFullscreen).toHaveBeenCalled();
+      });
+
+      it('and document.nativeDocument has method mozCancelFullScreen, should call it', () => {
+        documentMock.nativeDocument.mozCancelFullScreen = () => { return; };
+        spyOn(documentMock.nativeDocument, 'mozCancelFullScreen');
+        comp.toggleFullScreen();
+        expect(documentMock.nativeDocument.mozCancelFullScreen).toHaveBeenCalled();
+      });
+
+      it('and document.nativeDocument has method msExitFullscreen, should call it', () => {
+        documentMock.nativeDocument.msExitFullscreen = () => { return; };
+        spyOn(documentMock.nativeDocument, 'msExitFullscreen');
+        comp.toggleFullScreen();
+        expect(documentMock.nativeDocument.msExitFullscreen).toHaveBeenCalled();
+      });
+
+      describe('and videoElement.nativeElement hasn`t fullScreen methods', () => {
+        it('should return null', () => {
+          expect(comp.toggleFullScreen()).toBeUndefined();
+        });
+      });
+    });
+  });
 });

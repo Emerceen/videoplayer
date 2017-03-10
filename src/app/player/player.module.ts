@@ -5,6 +5,7 @@ import { PlayerComponent } from './index';
 import { PlayerSettingsModule } from '../player-settings/index';
 
 import { Communication } from '../services/communication';
+import { DocumentMozMsPrefixesRefService } from '../services/document.service';
 
 import { SharedModule } from '../shared/shared.module';
 
@@ -21,7 +22,8 @@ import { SharedModule } from '../shared/shared.module';
     PlayerComponent
   ],
   providers: [
-    Communication
+    Communication,
+    DocumentMozMsPrefixesRefService
   ]
 })
 

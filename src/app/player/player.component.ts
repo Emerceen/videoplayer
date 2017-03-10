@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { Video } from '../entities/video';
-
+// import { DocumentMoz } from '../entities/document-moz.interface';
 import { Communication } from '../services/communication';
+import { DocumentMozMsPrefixesRefService } from '../services/document.service';
 
 @Component({
   moduleId: module.id,
@@ -20,6 +21,8 @@ export class PlayerComponent implements OnInit {
     }
   }
 
+  @ViewChild('videoWrapper') videoWrapper: ElementRef;
+
   get videoElement(): { nativeElement: HTMLVideoElement } {
     return this._videoElement;
   };
@@ -29,13 +32,15 @@ export class PlayerComponent implements OnInit {
   public posterUrl: string = 'https://images.pexels.com/photos/296878/pexels-photo-296878.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb';
   public playerSettings: boolean = false;
   public isRepeatedPlaylist: boolean = false;
+  public isFullScreen: boolean = false;
 
   private _videoElement: { nativeElement: HTMLVideoElement };
 
   constructor(
     private _cm: Communication,
-    private _sanitizer: DomSanitizer
-  ) {}
+    private _sanitizer: DomSanitizer,
+    private _document: DocumentMozMsPrefixesRefService
+  ) { }
 
   ngOnInit(): void {
     this.getVideoUrls();
@@ -84,20 +89,20 @@ export class PlayerComponent implements OnInit {
     this.playVideo();
   }
 
-  playVideo() {
+  playVideo(): void {
     this.currentVideo.controls.stopped = false;
     this.currentVideo.controls.played = true;
     this._videoElement.nativeElement.play();
     this._videoElement.nativeElement.poster = '';
   }
 
-  pauseVideo() {
+  pauseVideo(): void {
     this.currentVideo.controls.stopped = false;
     this.currentVideo.controls.played = false;
     this._videoElement.nativeElement.pause();
   }
 
-  stopVideo() {
+  stopVideo(): void {
     this._videoElement.nativeElement.poster = this.posterUrl;
     this.setCurrentVideo();
     this._videoElement.nativeElement.load();
@@ -105,7 +110,7 @@ export class PlayerComponent implements OnInit {
     this.currentVideo.controls.played = false;
   }
 
-  repeatCurrentVideo() {
+  repeatCurrentVideo(): void {
     if (!this.currentVideo.controls.repeated) {
       this._videoElement.nativeElement.onended = () => this.endedRepeatedCurrentVideoEventHandler();
     } else {
@@ -114,7 +119,7 @@ export class PlayerComponent implements OnInit {
     this.currentVideo.controls.repeated = !this.currentVideo.controls.repeated;
   }
 
-  repeatPlaylist(isShufflePlaying: boolean) {
+  repeatPlaylist(isShufflePlaying: boolean): void {
     this.isRepeatedPlaylist = !this.isRepeatedPlaylist;
     if (isShufflePlaying) {
       return;
@@ -173,5 +178,34 @@ export class PlayerComponent implements OnInit {
 
   changeStatePlayerSettings(): void {
     this.playerSettings = !this.playerSettings;
+  }
+
+  toggleFullScreen(): void {
+    if (!this.isFullScreen) {
+      if (this.videoWrapper.nativeElement.webkitRequestFullScreen) {
+        this.videoWrapper.nativeElement.webkitRequestFullScreen();
+      } else if (this.videoWrapper.nativeElement.requestFullScreen) {
+        this.videoWrapper.nativeElement.requestFullScreen();
+      } else if (this.videoWrapper.nativeElement.mozRequestFullScreen) {
+        this.videoWrapper.nativeElement.mozRequestFullScreen();
+      } else if (this.videoWrapper.nativeElement.msRequestFullscreen) {
+        this.videoWrapper.nativeElement.msRequestFullscreen();
+      } else {
+        return;
+      }
+    } else {
+      if (this._document.nativeDocument.webkitExitFullscreen) {
+        this._document.nativeDocument.webkitExitFullscreen();
+      } else if (this._document.nativeDocument.exitFullscreen) {
+        this._document.nativeDocument.exitFullscreen();
+      } else if (this._document.nativeDocument.mozCancelFullScreen) {
+        this._document.nativeDocument.mozCancelFullScreen();
+      } else if (this._document.nativeDocument.msExitFullscreen) {
+        this._document.nativeDocument.msExitFullscreen();
+      } else {
+        return;
+      }
+    }
+    this.isFullScreen = !this.isFullScreen;
   }
 }

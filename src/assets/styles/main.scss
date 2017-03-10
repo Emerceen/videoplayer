@@ -9,6 +9,9 @@
 @import 'player-settings';
 @import 'materialize-colors';
 
+body {
+  line-height: 0;
+}
 
 .container {
   width: 100%;
@@ -21,4 +24,10 @@
   display: flex;
   justify-content: center;
   background-color: #000;
+}
+
+#video-wrapper .full-screen{
+  #main-video {
+    max-width: 100%;
+  }
 }
