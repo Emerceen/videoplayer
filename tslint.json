@@ -31,7 +31,7 @@
     "no-duplicate-variable": true,
     "no-empty": true,
     "no-eval": true,
-    "no-inferrable-types": true,
+    // "no-inferrable-types": [true],
     "no-shadowed-variable": true,
     "no-string-literal": true,
     "no-switch-case-fall-through": true,
@@ -78,11 +78,13 @@
     "no-forward-ref": true,
     "use-life-cycle-interface": true,
     "use-pipe-transform-interface": true,
-    "component-class-suffix": [true, "Component"],
-    "directive-class-suffix": [true, "Directive"],
+    "component-class-suffix": true,
+    "directive-class-suffix": true,
     "import-destructuring-spacing": true,
-    "templates-use-public": true,
+    "templates-use-public": false,
     "no-access-missing-member": true,
-    "invoke-injectable": true
+    "invoke-injectable": true,
+
+    "typedef": [true, "call-signature", "parameter", "member-variable-declaration"]
   }
 }
