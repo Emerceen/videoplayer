@@ -1,4 +1,4 @@
-export function apiUrl(url, urlParameters?) {
+export function apiUrl(url: string, urlParameters?: string): string {
   let urlGlobal = '/';
 
   if (!urlParameters) {

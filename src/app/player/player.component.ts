@@ -58,7 +58,7 @@ export class PlayerComponent implements OnInit {
     );
   }
 
-  setCurrentVideo(index = 0): void {
+  setCurrentVideo(index: number = 0): void {
     this.videos[index].safeUrl = this._sanitizer.bypassSecurityTrustUrl(this.videos[index].url);
     this.currentVideo = this.videos[index];
   }

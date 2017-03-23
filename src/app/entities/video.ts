@@ -9,7 +9,7 @@ export interface VideoInterface {
 }
 
 export class Video {
-  static fromData(data: VideoInterface) {
+  static fromData(data: VideoInterface): Video {
     return new Video(data.Name, data.Url, data.Type, new VideoControls());
   }
 

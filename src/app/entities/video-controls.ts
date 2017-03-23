@@ -1,8 +1,8 @@
 export class VideoControls {
   constructor(
-    public played = false,
-    public stopped = true,
-    public repeated = false,
-    public playedInShuffle = false
+    public played: boolean = false,
+    public stopped: boolean = true,
+    public repeated: boolean = false,
+    public playedInShuffle: boolean = false
   ) {}
 }

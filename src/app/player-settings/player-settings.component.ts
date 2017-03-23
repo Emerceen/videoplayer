@@ -17,9 +17,9 @@ export class PlayerSettingsComponent implements OnInit {
   public shufflePlayLiteral: string = 'shufflePlay';
 
   @Input() playerSettings: boolean;
-  @Output() repeatVideoClickEventHandler = new EventEmitter();
-  @Output() repeatPlaylistClickEventHandler = new EventEmitter();
-  @Output() shufflePlayClickEventHandler = new EventEmitter();
+  @Output() repeatVideoClickEventHandler: EventEmitter<boolean> = new EventEmitter();
+  @Output() repeatPlaylistClickEventHandler: EventEmitter<boolean> = new EventEmitter();
+  @Output() shufflePlayClickEventHandler: EventEmitter<boolean> = new EventEmitter();
 
   constructor(
     private _formBuilder: FormBuilder
@@ -59,7 +59,7 @@ export class PlayerSettingsComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     console.log(1);
   }
 }

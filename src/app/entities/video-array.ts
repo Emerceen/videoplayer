@@ -5,7 +5,7 @@ export interface VideoArrayInterface {
 }
 
 export class VideoArray {
-  static fromData(data: VideoArrayInterface) {
+  static fromData(data: VideoArrayInterface): VideoArray {
     return new VideoArray(
       data.Videos.map(video => Video.fromData(video))
     );
