@@ -6,7 +6,7 @@ beforeEach(() => {
                     let actualText = actual.textContent;
                     return {
                         pass: actualText.indexOf(expectedText) > -1,
-                        get message() { return 'Expected ' + actualText + ' to contain ' + expectedText; }
+                        get message(): string { return 'Expected ' + actualText + ' to contain ' + expectedText; }
                     };
                 }
             };

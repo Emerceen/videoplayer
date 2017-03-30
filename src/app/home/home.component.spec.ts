@@ -20,7 +20,7 @@ class TestComponent {
 
 let comp: HomeComponent;
 let fixture: ComponentFixture<HomeComponent>;
-let communication: MockCommunication;
+let communication: any;
 
 describe('HomeComponent', () => {
   beforeEach(async(() => {
