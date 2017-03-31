@@ -15,7 +15,7 @@ import { PlayerComponent, PlayerModule } from './index';
 
 
 class DocumentMock {
-  public nativeDocument = {
+  public nativeDocument: Object = {
     webkitExitFullscreen(): void {
       return;
     },
@@ -64,7 +64,7 @@ class TestComponent {
 
 let comp: PlayerComponent;
 let fixture: ComponentFixture<PlayerComponent>;
-let communication: MockCommunication;
+let communication: any;
 let sanitizer: DomSanitizer;
 let element = new ElementStub();
 let mediaStreamErrorEvent: MediaStreamErrorEvent = undefined;
