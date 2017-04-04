@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { Video } from '../entities/video';
@@ -22,6 +22,7 @@ export class PlayerComponent implements OnInit {
   }
 
   @ViewChild('videoWrapper') videoWrapper: ElementRef;
+  @ViewChild('playerSettingsComponent') playerSettingsComponent: ElementRef;
 
   get videoElement(): { nativeElement: HTMLVideoElement } {
     return this._videoElement;
@@ -38,6 +39,14 @@ export class PlayerComponent implements OnInit {
   public isFullScreen: boolean = false;
 
   private _videoElement: { nativeElement: HTMLVideoElement };
+
+  @HostListener('document:click', ['$event'])
+    clickout(event: any): void {
+      let disableString = 'document-click-disable';
+      if (!this.playerSettingsComponent.nativeElement.contains(event.target) && !event.target.className.includes(disableString)) {
+        this.playerSettings = false;
+      }
+    }
 
   constructor(
     private _cm: Communication,
