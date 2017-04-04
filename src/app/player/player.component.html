@@ -1,5 +1,5 @@
 <section class="main">
-  <div *ngIf="currentVideo" id="video-wrapper" #videoWrapper>
+  <div *ngIf="currentVideo" id="video-wrapper" #videoWrapper [asHover]="controls">
     <div id="player-wrapper"  [ngClass]="{'full-screen': isFullScreen}">
       <video
         id="main-video"
@@ -17,7 +17,7 @@
         </as-player-settings>
       </div>
     </div>
-    <div id="video-controls">
+    <div id="video-controls" [ngClass]="{hover: controls.isHover}">
       <div>
         <i *ngIf="!currentVideo.controls.played" (click)="playVideo()" class="fa fa-play vc-main" aria-hidden="true"></i>
         <i *ngIf="currentVideo.controls.played" (click)="pauseVideo()" class="fa fa-pause vc-main" aria-hidden="true"></i>
