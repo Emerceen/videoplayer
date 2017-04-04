@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { Video } from '../entities/video';
-// import { DocumentMoz } from '../entities/document-moz.interface';
+import { HoverInterface } from './../entities/hover';
 import { Communication } from '../services/communication';
 import { DocumentMozMsPrefixesRefService } from '../services/document.service';
 
@@ -28,6 +28,9 @@ export class PlayerComponent implements OnInit {
   };
 
   public currentVideo: Video;
+  public controls: HoverInterface = {
+    isHover: false
+  };
   public videos: Array<Video>;
   public posterUrl: string = 'https://images.pexels.com/photos/296878/pexels-photo-296878.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb';
   public playerSettings: boolean = false;
