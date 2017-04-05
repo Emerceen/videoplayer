@@ -18,13 +18,12 @@ export class HoverDirective {
   @HostListener('mouseenter') onMouseEnter(): void {
     this.toggleHover(true);
   }
+
   @HostListener('mouseleave') onMouseLeave(): void {
     this.toggleHover(false);
   }
 
   private toggleHover(value: boolean): void {
-    if (this.element) {
-      this.element.isHover = value;
-    }
+    this.element.isHover = value;
   }
 }
