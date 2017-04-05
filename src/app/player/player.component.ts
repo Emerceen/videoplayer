@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { Video } from '../entities/video';
-// import { DocumentMoz } from '../entities/document-moz.interface';
+import { HoverInterface } from './../entities/hover';
 import { Communication } from '../services/communication';
 import { DocumentMozMsPrefixesRefService } from '../services/document.service';
 
@@ -22,12 +22,16 @@ export class PlayerComponent implements OnInit {
   }
 
   @ViewChild('videoWrapper') videoWrapper: ElementRef;
+  @ViewChild('playerSettingsComponent') playerSettingsComponent: ElementRef;
 
   get videoElement(): { nativeElement: HTMLVideoElement } {
     return this._videoElement;
   };
 
   public currentVideo: Video;
+  public controls: HoverInterface = {
+    isHover: false
+  };
   public videos: Array<Video>;
   public posterUrl: string = 'https://images.pexels.com/photos/296878/pexels-photo-296878.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb';
   public playerSettings: boolean = false;
@@ -35,6 +39,14 @@ export class PlayerComponent implements OnInit {
   public isFullScreen: boolean = false;
 
   private _videoElement: { nativeElement: HTMLVideoElement };
+
+  @HostListener('document:click', ['$event'])
+    clickout(event: any): void {
+      let disableString = 'document-click-disable';
+      if (!this.playerSettingsComponent.nativeElement.contains(event.target) && !event.target.className.includes(disableString)) {
+        this.playerSettings = false;
+      }
+    }
 
   constructor(
     private _cm: Communication,
