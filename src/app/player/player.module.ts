@@ -7,6 +7,8 @@ import { PlayerSettingsModule } from '../player-settings/index';
 import { Communication } from '../services/communication';
 import { DocumentMozMsPrefixesRefService } from '../services/document.service';
 
+import { HoverModule } from '../directives/hover.module';
+
 import { SharedModule } from '../shared/shared.module';
 
 
@@ -16,7 +18,8 @@ import { SharedModule } from '../shared/shared.module';
   ],
   imports: [
     SharedModule,
-    PlayerSettingsModule
+    PlayerSettingsModule,
+    HoverModule
   ],
   declarations: [
     PlayerComponent

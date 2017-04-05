@@ -1,5 +1,5 @@
 <section class="main">
-  <div *ngIf="currentVideo" id="video-wrapper" #videoWrapper>
+  <div *ngIf="currentVideo" id="video-wrapper" #videoWrapper [asHover]="controls">
     <div id="player-wrapper"  [ngClass]="{'full-screen': isFullScreen}">
       <video
         id="main-video"
@@ -8,7 +8,7 @@
         <source [src]="currentVideo.safeUrl" [type]="currentVideo.type">
         Your browser does not support the video tag.
       </video>
-      <div id="video-settings">
+      <div id="video-settings" #playerSettingsComponent>
         <as-player-settings
           [playerSettings]="playerSettings" 
           (repeatVideoClickEventHandler)="repeatCurrentVideo()"
@@ -17,12 +17,12 @@
         </as-player-settings>
       </div>
     </div>
-    <div id="video-controls">
+    <div id="video-controls" [ngClass]="{hover: controls.isHover || playerSettings}">
       <div>
         <i *ngIf="!currentVideo.controls.played" (click)="playVideo()" class="fa fa-play vc-main" aria-hidden="true"></i>
         <i *ngIf="currentVideo.controls.played" (click)="pauseVideo()" class="fa fa-pause vc-main" aria-hidden="true"></i>
         <i (click)="stopVideo()" class="fa fa-stop vc-main" aria-hidden="true"></i>
-        <i (click)="changeStatePlayerSettings()" class="fa fa-cog" aria-hidden="true"></i>
+        <i (click)="changeStatePlayerSettings()" class="fa fa-cog document-click-disable" aria-hidden="true"></i>
         <i *ngIf="!isFullScreen" (click)="toggleFullScreen()" class="fa fa-arrows-alt" aria-hidden="true"></i>
         <i *ngIf="isFullScreen" (click)="toggleFullScreen()" class="fa fa-compress" aria-hidden="true"></i>
       </div>

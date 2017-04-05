@@ -15,7 +15,7 @@ import { PlayerComponent, PlayerModule } from './index';
 
 
 class DocumentMock {
-  public nativeDocument: Object = {
+  public nativeDocument: object = {
     webkitExitFullscreen(): void {
       return;
     },
@@ -31,14 +31,24 @@ class DocumentMock {
   };
 }
 
-class SanitizerStub {
-  public bypassSecurityTrustUrl(url: string): string {
-    return url;
+class ClassNameStub {
+  includesValue: boolean = false;
+  includes(): boolean {
+    return this.includesValue;
   }
 }
 
+class TargetStub {
+  className: ClassNameStub = new ClassNameStub();
+}
+
+class EventStub {
+  target: TargetStub = new TargetStub();
+};
+
 class ElementStub {
   nativeElement: Object = {
+    containsValue: false,
     poster: '',
     load(): void {
       return;
@@ -48,6 +58,9 @@ class ElementStub {
     },
     pause(): void {
       return;
+    },
+    contains(): boolean {
+      return this.containsValue;
     }
   };
 }
@@ -77,7 +90,7 @@ describe('PlayerComponent', () => {
       imports: [PlayerModule],
       providers: [
         { provide: Communication, useClass: MockCommunication },
-        { provide: DomSanitizer, useClass: SanitizerStub },
+        DomSanitizer,
         { provide: DocumentMozMsPrefixesRefService, useClass: DocumentMock }
       ]
     }).compileComponents();
@@ -91,6 +104,7 @@ describe('PlayerComponent', () => {
     documentMock = fixture.debugElement.injector.get(DocumentMozMsPrefixesRefService);
     comp.videoElement = <ElementRef> element;
     comp.videoWrapper = <ElementRef> element;
+    comp.playerSettingsComponent = <ElementRef> element;
   });
 
   it('ngOnInit should call getVideoUrls,', () => {
@@ -155,19 +169,11 @@ describe('PlayerComponent', () => {
 
       it('when index parameter is not given', () => {
         comp.setCurrentVideo();
-        expect(comp.videos[0].safeUrl).toBe(communication.videoService.videoUrlsMock.videos[0].url);
-        expect(comp.videos[1].safeUrl).toBeUndefined();
-        expect(comp.videos[2].safeUrl).toBeUndefined();
-        expect(comp.videos[3].safeUrl).toBeUndefined();
         expect(comp.currentVideo).toBe(comp.videos[0]);
       });
 
       it('when index parameter is 3', () => {
         comp.setCurrentVideo(3);
-        expect(comp.videos[3].safeUrl).toBe(communication.videoService.videoUrlsMock.videos[3].url);
-        expect(comp.videos[1].safeUrl).toBeUndefined();
-        expect(comp.videos[2].safeUrl).toBeUndefined();
-        expect(comp.videos[0].safeUrl).toBeUndefined();
         expect(comp.currentVideo).toBe(comp.videos[3]);
       });
     });
@@ -580,6 +586,46 @@ describe('PlayerComponent', () => {
           expect(comp.toggleFullScreen()).toBeUndefined();
         });
       });
+    });
+  });
+
+  describe('document click should call comp.clickout', () => {
+    beforeEach(() => {
+      spyOn(comp, 'clickout');
+    });
+
+    it('', () => {
+      fixture.detectChanges();
+      let mainContainer = fixture.nativeElement.querySelector('.main');
+      mainContainer.click();
+      expect(comp.clickout).toHaveBeenCalled();
+    });
+  });
+
+  describe('clickout should set playerSetting to false, when', () => {
+    let eventStub = new EventStub();
+
+    beforeEach(() => {
+      comp.playerSettings = true;
+      eventStub.target.className.includesValue = false;
+      comp.playerSettingsComponent.nativeElement.containsValue = false;
+    });
+
+    it('... .contains and ... .includes return falsy', () => {
+      comp.clickout(eventStub);
+      expect(comp.playerSettings).toBeFalsy();
+    });
+
+    it('... .contains return true', () => {
+      comp.playerSettingsComponent.nativeElement.containsValue = true;
+      comp.clickout(eventStub);
+      expect(comp.playerSettings).toBeTruthy();
+    });
+
+    it('... .includes return true', () => {
+      eventStub.target.className.includesValue = true;
+      comp.clickout(eventStub);
+      expect(comp.playerSettings).toBeTruthy();
     });
   });
 });
