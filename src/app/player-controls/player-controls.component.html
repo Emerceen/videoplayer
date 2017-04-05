@@ -1,0 +1,10 @@
+<div id="video-controls" [ngClass]="{hover: controls.isHover || playerSettings}">
+  <div>
+    <i *ngIf="!videoControls.played" (click)="playVideo()" class="fa fa-play vc-main" aria-hidden="true"></i>
+    <i *ngIf="videoControls.played" (click)="pauseVideo()" class="fa fa-pause vc-main" aria-hidden="true"></i>
+    <i (click)="stopVideo()" class="fa fa-stop vc-main" aria-hidden="true"></i>
+    <i (click)="changeStatePlayerSettings()" class="fa fa-cog document-click-disable" aria-hidden="true"></i>
+    <i *ngIf="!isFullScreen" (click)="toggleFullScreen()" class="fa fa-arrows-alt" aria-hidden="true"></i>
+    <i *ngIf="isFullScreen" (click)="toggleFullScreen()" class="fa fa-compress" aria-hidden="true"></i>
+  </div>
+</div>

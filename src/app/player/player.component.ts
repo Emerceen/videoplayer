@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { VideoControls } from './../entities/video-controls';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { Video } from '../entities/video';
 import { HoverInterface } from './../entities/hover';
 import { Communication } from '../services/communication';
-import { DocumentMozMsPrefixesRefService } from '../services/document.service';
+import { PlayerControlsComponent } from '../player-controls/index';
 
 @Component({
   moduleId: module.id,
@@ -12,33 +13,45 @@ import { DocumentMozMsPrefixesRefService } from '../services/document.service';
   templateUrl: 'player.component.html'
 })
 
-
 export class PlayerComponent implements OnInit {
   @ViewChild('mainVideo') set videoElement(element: { nativeElement: HTMLVideoElement }) {
     if (element) {
       this._videoElement = element;
       this._videoElement.nativeElement.onended = () => this.endedEventHandler();
+      this.cdr.detectChanges();
     }
-  }
-
-  @ViewChild('videoWrapper') videoWrapper: ElementRef;
+  };
+  @ViewChild('videoWrapper') set videoWrapperElement(element: ElementRef) {
+    if (element && element.nativeElement) {
+      this._videoWrapperElement = element;
+      this.cdr.detectChanges();
+    }
+  };
   @ViewChild('playerSettingsComponent') playerSettingsComponent: ElementRef;
+  @ViewChild(PlayerControlsComponent) playerControlsComponent: PlayerControlsComponent;
 
   get videoElement(): { nativeElement: HTMLVideoElement } {
     return this._videoElement;
   };
 
+  get videoWrapperElement(): ElementRef {
+    return this._videoWrapperElement;
+  };
+
   public currentVideo: Video;
   public controls: HoverInterface = {
-    isHover: false
+    isHover: false,
   };
+  public videoControls: VideoControls = new VideoControls();
+
+  public isFullScreen: boolean = false;
   public videos: Array<Video>;
   public posterUrl: string = 'https://images.pexels.com/photos/296878/pexels-photo-296878.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb';
   public playerSettings: boolean = false;
   public isRepeatedPlaylist: boolean = false;
-  public isFullScreen: boolean = false;
 
   private _videoElement: { nativeElement: HTMLVideoElement };
+  private _videoWrapperElement: ElementRef;
 
   @HostListener('document:click', ['$event'])
     clickout(event: any): void {
@@ -51,7 +64,7 @@ export class PlayerComponent implements OnInit {
   constructor(
     private _cm: Communication,
     private _sanitizer: DomSanitizer,
-    private _document: DocumentMozMsPrefixesRefService
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -79,10 +92,10 @@ export class PlayerComponent implements OnInit {
     if (index < this.videos.length) {
       this.setCurrentVideo(index);
       this._videoElement.nativeElement.load();
-      this.playVideo();
+      this.callPlayVideo();
     } else {
       this._videoElement.nativeElement.load();
-      this.stopVideo();
+      this.callStopVideo();
     }
   }
 
@@ -98,37 +111,16 @@ export class PlayerComponent implements OnInit {
       this.setCurrentVideo();
     }
     this._videoElement.nativeElement.load();
-    this.playVideo();
-  }
-
-  playVideo(): void {
-    this.currentVideo.controls.stopped = false;
-    this.currentVideo.controls.played = true;
-    this._videoElement.nativeElement.play();
-    this._videoElement.nativeElement.poster = '';
-  }
-
-  pauseVideo(): void {
-    this.currentVideo.controls.stopped = false;
-    this.currentVideo.controls.played = false;
-    this._videoElement.nativeElement.pause();
-  }
-
-  stopVideo(): void {
-    this._videoElement.nativeElement.poster = this.posterUrl;
-    this.setCurrentVideo();
-    this._videoElement.nativeElement.load();
-    this.currentVideo.controls.stopped = true;
-    this.currentVideo.controls.played = false;
+    this.callPlayVideo();
   }
 
   repeatCurrentVideo(): void {
-    if (!this.currentVideo.controls.repeated) {
+    if (!this.videoControls.repeated) {
       this._videoElement.nativeElement.onended = () => this.endedRepeatedCurrentVideoEventHandler();
     } else {
       this._videoElement.nativeElement.onended = () => this.endedEventHandler();
     }
-    this.currentVideo.controls.repeated = !this.currentVideo.controls.repeated;
+    this.videoControls.repeated = !this.videoControls.repeated;
   }
 
   repeatPlaylist(isShufflePlaying: boolean): void {
@@ -147,23 +139,23 @@ export class PlayerComponent implements OnInit {
     let randomNumber: number;
     let shuffleVideoArray: Array<Video>;
     if (isEnable) {
-      if (!this.currentVideo.controls.played) {
+      if (!this.videoControls.played) {
         this.initialRandomVideo();
       }
       this._videoElement.nativeElement.onended = () => {
-        this.currentVideo.controls.playedInShuffle = true;
-        shuffleVideoArray = this.videos.filter(video => !video.controls.playedInShuffle);
+        this.videoControls.playedInShuffle = true;
+        shuffleVideoArray = this.videos.filter(video => !video.playedInShuffle);
         if (shuffleVideoArray.length > 0) {
           randomNumber = Math.floor(Math.random() * shuffleVideoArray.length);
           let indexInVideosArray = this.videos.indexOf(shuffleVideoArray[randomNumber]);
-          this.videos[indexInVideosArray].controls.playedInShuffle = true;
+          this.videos[indexInVideosArray].playedInShuffle = true;
           this.endedEventHandler(indexInVideosArray);
         } else if (this.isRepeatedPlaylist) {
           this.resetShufflePlaying();
           this.initialRandomVideo();
-          this.playVideo();
+          this.callPlayVideo();
         } else {
-          this.stopVideo();
+          this.callStopVideo();
           this.resetShufflePlaying();
           this.initialRandomVideo();
         }
@@ -178,46 +170,21 @@ export class PlayerComponent implements OnInit {
     let randomNumber = Math.floor(Math.random() * this.videos.length);
     this.setCurrentVideo(randomNumber);
     this._videoElement.nativeElement.load();
-    this.currentVideo.controls.stopped = true;
-    this.currentVideo.controls.played = false;
+    this.videoControls.stopped = true;
+    this.videoControls.played = false;
   }
 
   resetShufflePlaying(): void {
     this.videos.map(video => {
-      video.controls.playedInShuffle = false;
+      video.playedInShuffle = false;
     });
   }
 
-  changeStatePlayerSettings(): void {
-    this.playerSettings = !this.playerSettings;
+  callPlayVideo(): void {
+    this.playerControlsComponent.playVideo();
   }
 
-  toggleFullScreen(): void {
-    if (!this.isFullScreen) {
-      if (this.videoWrapper.nativeElement.webkitRequestFullScreen) {
-        this.videoWrapper.nativeElement.webkitRequestFullScreen();
-      } else if (this.videoWrapper.nativeElement.requestFullScreen) {
-        this.videoWrapper.nativeElement.requestFullScreen();
-      } else if (this.videoWrapper.nativeElement.mozRequestFullScreen) {
-        this.videoWrapper.nativeElement.mozRequestFullScreen();
-      } else if (this.videoWrapper.nativeElement.msRequestFullscreen) {
-        this.videoWrapper.nativeElement.msRequestFullscreen();
-      } else {
-        return;
-      }
-    } else {
-      if (this._document.nativeDocument.webkitExitFullscreen) {
-        this._document.nativeDocument.webkitExitFullscreen();
-      } else if (this._document.nativeDocument.exitFullscreen) {
-        this._document.nativeDocument.exitFullscreen();
-      } else if (this._document.nativeDocument.mozCancelFullScreen) {
-        this._document.nativeDocument.mozCancelFullScreen();
-      } else if (this._document.nativeDocument.msExitFullscreen) {
-        this._document.nativeDocument.msExitFullscreen();
-      } else {
-        return;
-      }
-    }
-    this.isFullScreen = !this.isFullScreen;
+  callStopVideo(): void {
+    this.playerControlsComponent.stopVideo();
   }
 }
