@@ -10,10 +10,16 @@
       </video>
       <div id="video-settings" #playerSettingsComponent>
         <as-player-settings
+          [currentVideo]="currentVideo"
           [playerSettings]="playerSettings"
-          (repeatVideoClickEventHandler)="repeatCurrentVideo()"
-          (repeatPlaylistClickEventHandler)="repeatPlaylist($event)"
-          (shufflePlayClickEventHandler)="shufflePlay($event)">
+          [(videoControls)]="videoControls"
+          [videoElement]="videoElement"
+          [videos]="videos"
+          (setCurrentVideo)="setCurrentVideo($event)"
+          (setPlayedInShuffle)="setPlayedInShuffle($event)"
+          (endedEventHandler)="endedEventHandler($event)"
+          (callPlayVideo)="callPlayVideo()"
+          (callStopVideo)="callStopVideo()">
         </as-player-settings>
       </div>
     </div>
@@ -21,7 +27,6 @@
         <as-player-controls
           [controls]="controls"
           [(videoControls)]="videoControls"
-          [(currentVideo)]="currentVideo"
           [(isFullScreen)]="isFullScreen"
           [(playerSettings)]="playerSettings"
           [videoElement]="videoElement"

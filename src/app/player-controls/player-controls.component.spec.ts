@@ -6,7 +6,6 @@ import {
 
 import { Component, ElementRef } from '@angular/core';
 
-import { MockCommunication } from '../services/mock-communication';
 import { DocumentMozMsPrefixesRefService } from '../services/document.service';
 
 import { PlayerControlsComponent, PlayerControlsModule } from './index';
@@ -56,7 +55,6 @@ describe('PlayerComponent', () => {
       spyOn(comp.videoElement.nativeElement, 'pause');
       spyOn(comp, 'emitVideoControls');
       spyOn(comp.setCurrentVideo, 'emit');
-      comp.currentVideo = new MockCommunication().videoService.videoUrlsMock.videos[0];
     });
 
     afterEach(() => {

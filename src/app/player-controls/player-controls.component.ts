@@ -1,7 +1,6 @@
 import { VideoControls } from './../entities/video-controls';
 import { Component, Input, Output, EventEmitter, ElementRef } from '@angular/core';
 
-import { Video } from './../entities/video';
 import { HoverInterface } from './../entities/hover';
 
 import { DocumentMozMsPrefixesRefService } from './../services/document.service';
@@ -14,7 +13,6 @@ import { DocumentMozMsPrefixesRefService } from './../services/document.service'
 
 export class PlayerControlsComponent {
   @Input() public controls: HoverInterface;
-  @Input() public currentVideo: Video;
   @Input() public videoControls: VideoControls;
   @Input() public isFullScreen: boolean = false;
   @Input() public playerSettings: boolean;
@@ -22,11 +20,10 @@ export class PlayerControlsComponent {
   @Input() public videoElement: { nativeElement: HTMLVideoElement };
   @Input() public posterUrl: string;
 
-  @Output() public currentVideoChange: EventEmitter<Video> = new EventEmitter();
   @Output() public videoControlsChange: EventEmitter<VideoControls> = new EventEmitter();
   @Output() public isFullScreenChange: EventEmitter<boolean> = new EventEmitter();
   @Output() public playerSettingsChange: EventEmitter<boolean> = new EventEmitter();
-  @Output() setCurrentVideo: EventEmitter<number> = new EventEmitter();
+  @Output() public setCurrentVideo: EventEmitter<number> = new EventEmitter();
 
   constructor(
     private document: DocumentMozMsPrefixesRefService

@@ -48,7 +48,6 @@ export class PlayerComponent implements OnInit {
   public videos: Array<Video>;
   public posterUrl: string = 'https://images.pexels.com/photos/296878/pexels-photo-296878.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb';
   public playerSettings: boolean = false;
-  public isRepeatedPlaylist: boolean = false;
 
   private _videoElement: { nativeElement: HTMLVideoElement };
   private _videoWrapperElement: ElementRef;
@@ -99,92 +98,15 @@ export class PlayerComponent implements OnInit {
     }
   }
 
-  endedRepeatedCurrentVideoEventHandler(): void {
-    this._videoElement.nativeElement.play();
-  }
-
-  endedRepeatedPlaylistEventHandler(): void {
-    let index = this.videos.indexOf(this.currentVideo) + 1;
-    if (index < this.videos.length) {
-      this.setCurrentVideo(index);
-    } else {
-      this.setCurrentVideo();
-    }
-    this._videoElement.nativeElement.load();
-    this.callPlayVideo();
-  }
-
-  repeatCurrentVideo(): void {
-    if (!this.videoControls.repeated) {
-      this._videoElement.nativeElement.onended = () => this.endedRepeatedCurrentVideoEventHandler();
-    } else {
-      this._videoElement.nativeElement.onended = () => this.endedEventHandler();
-    }
-    this.videoControls.repeated = !this.videoControls.repeated;
-  }
-
-  repeatPlaylist(isShufflePlaying: boolean): void {
-    this.isRepeatedPlaylist = !this.isRepeatedPlaylist;
-    if (isShufflePlaying) {
-      return;
-    }
-    if (this.isRepeatedPlaylist) {
-      this._videoElement.nativeElement.onended = () => this.endedRepeatedPlaylistEventHandler();
-    } else {
-      this._videoElement.nativeElement.onended = () => this.endedEventHandler();
-    }
-  }
-
-  shufflePlay(isEnable?: boolean): void {
-    let randomNumber: number;
-    let shuffleVideoArray: Array<Video>;
-    if (isEnable) {
-      if (!this.videoControls.played) {
-        this.initialRandomVideo();
-      }
-      this._videoElement.nativeElement.onended = () => {
-        this.currentVideo.playedInShuffle = true;
-        shuffleVideoArray = this.videos.filter(video => !video.playedInShuffle);
-        if (shuffleVideoArray.length > 0) {
-          randomNumber = Math.floor(Math.random() * shuffleVideoArray.length);
-          let indexInVideosArray = this.videos.indexOf(shuffleVideoArray[randomNumber]);
-          this.videos[indexInVideosArray].playedInShuffle = true;
-          this.endedEventHandler(indexInVideosArray);
-        } else if (this.isRepeatedPlaylist) {
-          this.resetShufflePlaying();
-          this.initialRandomVideo();
-          this.callPlayVideo();
-        } else {
-          this.callStopVideo();
-          this.resetShufflePlaying();
-          this.initialRandomVideo();
-        }
-      };
-    } else {
-      this._videoElement.nativeElement.onended = () => this.endedEventHandler();
-      this.resetShufflePlaying();
-    }
-  }
-
-  initialRandomVideo(): void {
-    let randomNumber = Math.floor(Math.random() * this.videos.length);
-    this.setCurrentVideo(randomNumber);
-    this._videoElement.nativeElement.load();
-    this.videoControls.stopped = true;
-    this.videoControls.played = false;
-  }
-
-  resetShufflePlaying(): void {
-    this.videos.map(video => {
-      video.playedInShuffle = false;
-    });
-  }
-
   callPlayVideo(): void {
     this.playerControlsComponent.playVideo();
   }
 
   callStopVideo(): void {
     this.playerControlsComponent.stopVideo();
+  }
+
+  setPlayedInShuffle(value: boolean): void {
+    this.currentVideo.playedInShuffle = value;
   }
 }
