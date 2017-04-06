@@ -153,45 +153,10 @@ describe('PlayerComponent', () => {
       expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
       expect(comp.callStopVideo).toHaveBeenCalled();
     });
-  });
 
-  describe('endedRepeatedCurrentVideoEventHandler() should', () => {
-    beforeEach(() => {
-      spyOn(comp.videoElement.nativeElement, 'play');
-    });
-
-    it('call videoElement.nativeElement.play()', () => {
-      comp.endedRepeatedCurrentVideoEventHandler();
-      expect(comp.videoElement.nativeElement.play).toHaveBeenCalled();
-    });
-  });
-
-  describe('endedRepeatedPlaylistEventHandler() should', () => {
-    beforeEach(() => {
-      spyOn(comp, 'setCurrentVideo');
-      spyOn(comp, 'callPlayVideo');
-      spyOn(comp, 'endedRepeatedCurrentVideoEventHandler');
-      spyOn(comp.videoElement.nativeElement, 'load');
-      comp.videos = communication.videoService.videoUrlsMock.videos;
-    });
-
-    afterAll(() => {
-      comp.currentVideo = undefined;
-      comp.videos = undefined;
-    });
-
-    it('setCurrentVideo with parameter, load, call callPlayVideo() when index currentVideo of videos is 0', () => {
-      comp.currentVideo = communication.videoService.videoUrlsMock.videos[0];
-      comp.endedRepeatedPlaylistEventHandler();
+    it('setCurrentVideo, load, play when argument is passed', () => {
+      comp.endedEventHandler(1);
       expect(comp.setCurrentVideo).toHaveBeenCalledWith(1);
-      expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
-      expect(comp.callPlayVideo).toHaveBeenCalled();
-    });
-
-    it('setCurrentVideo without parameter, load, call callPlayVideo() when index currentVideo of videos is 3', () => {
-      comp.currentVideo = communication.videoService.videoUrlsMock.videos[3];
-      comp.endedRepeatedPlaylistEventHandler();
-      expect(comp.setCurrentVideo).toHaveBeenCalledWith();
       expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
       expect(comp.callPlayVideo).toHaveBeenCalled();
     });
@@ -201,8 +166,6 @@ describe('PlayerComponent', () => {
     beforeEach(() => {
       spyOn(comp.playerControlsComponent, 'playVideo');
       spyOn(comp.playerControlsComponent, 'stopVideo');
-      spyOn(comp, 'endedRepeatedCurrentVideoEventHandler');
-      spyOn(comp, 'endedRepeatedPlaylistEventHandler');
       spyOn(comp, 'endedEventHandler');
       spyOn(comp, 'setCurrentVideo');
       comp.videos = communication.videoService.videoUrlsMock.videos;
@@ -217,187 +180,6 @@ describe('PlayerComponent', () => {
     it('in method callStopVideo', () => {
       comp.callStopVideo();
       expect(comp.playerControlsComponent.stopVideo).toHaveBeenCalled();
-    });
-
-    describe('in method repeatCurrentVideo, and when', () => {
-      it('repeated control is false and video call ended event handler should call endedRepeatedCurrentVideoEventHandler', () => {
-        comp.repeatCurrentVideo();
-        comp.videoElement.nativeElement.onended(mediaStreamErrorEvent);
-        expect(comp.endedRepeatedCurrentVideoEventHandler).toHaveBeenCalled();
-        expect(comp.videoControls.repeated).toBeTruthy();
-      });
-
-      it('repeated control is true and video call ended event handler should call endedEventHandler', () => {
-        comp.videoControls.repeated = true;
-        comp.repeatCurrentVideo();
-        comp.videoElement.nativeElement.onended(mediaStreamErrorEvent);
-        expect(comp.endedEventHandler).toHaveBeenCalled();
-        expect(comp.videoControls.repeated).toBeFalsy();
-      });
-    });
-
-    describe('in method repeatPlaylist, and when', () => {
-      it('isRepeatedPlaylist, argument are falsy and video call ended event handler should call endedRepeatedPlaylistEventHandler()',
-        () => {
-        comp.isRepeatedPlaylist = false;
-        comp.repeatPlaylist(false);
-        comp.videoElement.nativeElement.onended(mediaStreamErrorEvent);
-        expect(comp.endedRepeatedPlaylistEventHandler).toHaveBeenCalled();
-        expect(comp.isRepeatedPlaylist).toBeTruthy();
-      });
-
-      it('isRepeatedPlaylist is truthy, argument is falsy and video call ended event handler should call endedEventHandler', () => {
-        comp.isRepeatedPlaylist = true;
-        comp.videoElement.nativeElement.autoplay = true;
-        comp.repeatPlaylist(false);
-        comp.videoElement.nativeElement.onended(mediaStreamErrorEvent);
-        expect(comp.endedEventHandler).toHaveBeenCalled();
-        expect(comp.isRepeatedPlaylist).toBeFalsy();
-      });
-
-      it('argument is truthy, sholud return undefined', () => {
-        expect(comp.repeatPlaylist(true)).toBeUndefined();
-      });
-    });
-  });
-
-  describe('shufflePlay()', () => {
-    beforeEach(() => {
-      comp.videos = communication.videoService.videoUrlsMock.videos;
-      comp.setCurrentVideo();
-      spyOn(comp, 'initialRandomVideo');
-    });
-    describe('when parameter isEnable is truthy', () => {
-      describe('and when comp.videoControls.played is', () => {
-
-        it('falsy should call initialRandomVideo()', () => {
-          comp.videoControls.played = false;
-          comp.shufflePlay(true);
-          expect(comp.initialRandomVideo).toHaveBeenCalled();
-        });
-
-        it('truthy should not call initialRandomVideo()', () => {
-          comp.videoControls.played = true;
-          comp.shufflePlay(true);
-          expect(comp.initialRandomVideo).toHaveBeenCalledTimes(0);
-        });
-
-        describe('and should set onended method', () => {
-          describe('that should set videoControls.playedInShuffle to true',
-            () => {
-            it('', () => {
-              comp.shufflePlay(true);
-              comp.videoElement.nativeElement.onended(mediaStreamErrorEvent);
-              expect(comp.currentVideo.playedInShuffle).toBeTruthy();
-            });
-
-            describe('and when videos array filter by video.control.playedInShuffle length is greater than 0', () => {
-              it('should call endedEventHandler() with random number', () => {
-                spyOn(comp, 'endedEventHandler');
-                comp.shufflePlay(true);
-                comp.videoElement.nativeElement.onended(mediaStreamErrorEvent);
-                expect(comp.endedEventHandler).toHaveBeenCalled();
-              });
-            });
-
-            describe('and when videos array filter by video.control.playedInShuffle length is less than 0', () => {
-              beforeEach(() => {
-                spyOn(comp, 'callStopVideo');
-                spyOn(comp, 'resetShufflePlaying');
-                spyOn(comp, 'callPlayVideo');
-                comp.videos.map(videos => {
-                  videos.playedInShuffle = true;
-                });
-              });
-
-              describe('and isRepeatedPlaylist is truthy', () => {
-                beforeEach(() => {
-                  comp.isRepeatedPlaylist = true;
-                });
-
-                it('should call stopVideo(), resetShufflePlaying(), initialRandomVideo()', () => {
-                  comp.shufflePlay(true);
-                  comp.videoElement.nativeElement.onended(mediaStreamErrorEvent);
-                  expect(comp.resetShufflePlaying).toHaveBeenCalled();
-                  expect(comp.initialRandomVideo).toHaveBeenCalled();
-                  expect(comp.callPlayVideo).toHaveBeenCalled();
-                });
-              });
-
-              describe('and isRepeatedPlaylist is falsy', () => {
-                beforeEach(() => {
-                  comp.isRepeatedPlaylist = false;
-                });
-
-                it('should call stopVideo(), resetShufflePlaying(), initialRandomVideo()', () => {
-                  comp.shufflePlay(true);
-                  comp.videoElement.nativeElement.onended(mediaStreamErrorEvent);
-                  expect(comp.callStopVideo).toHaveBeenCalled();
-                  expect(comp.resetShufflePlaying).toHaveBeenCalled();
-                  expect(comp.initialRandomVideo).toHaveBeenCalled();
-                });
-              });
-            });
-          });
-        });
-      });
-    });
-
-    describe('when parameter isEnable is falsy should set onended method', () => {
-      beforeEach(() => {
-        spyOn(comp, 'endedEventHandler');
-        spyOn(comp, 'resetShufflePlaying');
-      });
-
-      it('that should call endedEventHandler() without argument', () => {
-        comp.shufflePlay(false);
-        comp.videoElement.nativeElement.onended(mediaStreamErrorEvent);
-        expect(comp.endedEventHandler).toHaveBeenCalledWith();
-      });
-
-      it('and call resetShufflePlaying()', () => {
-        comp.shufflePlay(false);
-        comp.videoElement.nativeElement.onended(mediaStreamErrorEvent);
-        expect(comp.resetShufflePlaying).toHaveBeenCalled();
-      });
-    });
-  });
-
-  describe('initialRandomVideo() should set properties', () => {
-    beforeEach(() => {
-      comp.videos = communication.videoService.videoUrlsMock.videos;
-      comp.setCurrentVideo();
-    });
-
-    it('', () => {
-      comp.initialRandomVideo();
-      expect(comp.videoControls.stopped).toBeTruthy();
-      expect(comp.videoControls.played).toBeFalsy();
-    });
-
-    it('and call setCurrentVideo with randomNumber', () => {
-      spyOn(comp, 'setCurrentVideo');
-      comp.initialRandomVideo();
-      expect(comp.setCurrentVideo).toHaveBeenCalled();
-    });
-
-    it('and call comp.videoElement.nativeElement.load()', () => {
-      spyOn(comp.videoElement.nativeElement, 'load');
-      comp.initialRandomVideo();
-      expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
-    });
-  });
-
-  describe('resetShufflePlaying() should map array videos, anvideoControls.playedInShuffle set to falsy', () => {
-    beforeEach(() => {
-      comp.videos = communication.videoService.videoUrlsMock.videos;
-      comp.videos.map(video => video.playedInShuffle = true);
-    });
-
-    it('', () => {
-      comp.resetShufflePlaying();
-      expect(comp.videos[0].playedInShuffle).toBeFalsy();
-      expect(comp.videos[3].playedInShuffle).toBeFalsy();
     });
   });
 
@@ -438,6 +220,22 @@ describe('PlayerComponent', () => {
       eventStub.target.className.includesValue = true;
       comp.clickout(eventStub);
       expect(comp.playerSettings).toBeTruthy();
+    });
+  });
+
+  describe('setPlayedInShuffle should set playedInShuffle of currentVideo, to', () => {
+    beforeEach(() => {
+      comp.currentVideo = communication.videoService.videoUrlsMock.videos[0];
+    });
+
+    it('true', () => {
+      comp.setPlayedInShuffle(true);
+      expect(comp.currentVideo.playedInShuffle).toBeTruthy();
+    });
+
+    it('false', () => {
+      comp.setPlayedInShuffle(false);
+      expect(comp.currentVideo.playedInShuffle).toBeFalsy();
     });
   });
 });
