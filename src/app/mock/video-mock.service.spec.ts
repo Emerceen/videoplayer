@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs/Rx';
-import { VideoMock } from './video-mock';
+import { VideoMock } from './video-mock.spec';
 
 export class VideoMockService  {
   public videoUrlsMock: VideoMock = new VideoMock();

@@ -4,8 +4,8 @@ import { MockBackend } from '@angular/http/testing';
 
 import { VideoService } from './video.service';
 
-import { VideoMockPascalCase } from '../mock/video-mock';
-import { ConnectionsMock } from '../mock/connections-mock.service';
+import { VideoMockPascalCase } from '../mock/video-mock.spec';
+import { ConnectionsMock } from '../mock/connections-mock.service.spec';
 
 import { VideoArray } from '../entities/video-array';
 import { Video } from '../entities/video';

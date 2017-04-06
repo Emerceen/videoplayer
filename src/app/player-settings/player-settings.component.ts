@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 
@@ -9,7 +9,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 
 
-export class PlayerSettingsComponent implements OnInit {
+export class PlayerSettingsComponent {
   public playerSettingsForm: FormGroup;
 
   public repeatVideoLiteral: string = 'repeatVideo';
@@ -57,9 +57,5 @@ export class PlayerSettingsComponent implements OnInit {
       }
       this.shufflePlayClickEventHandler.emit(value);
     });
-  }
-
-  ngOnInit(): void {
-    console.log(1);
   }
 }
