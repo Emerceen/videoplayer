@@ -33,7 +33,6 @@ export class PlayerControlsComponent {
   ) { }
 
   playVideo(): void {
-    console.log(this.videoControls);
     this.videoControls.stopped = false;
     this.videoControls.played = true;
     this.videoElement.nativeElement.play();
