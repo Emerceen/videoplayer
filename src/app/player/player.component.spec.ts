@@ -1,9 +1,4 @@
-import {
-  async,
-  TestBed,
-  ComponentFixture
-} from '@angular/core/testing';
-
+import { async, TestBed, ComponentFixture } from '@angular/core/testing';
 import { Component, ElementRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -11,66 +6,16 @@ import { Communication } from '../services/communication';
 import { MockCommunication } from '../services/mock-communication';
 import { DocumentMozMsPrefixesRefService } from '../services/document.service';
 
+import { ElementStub } from './../mock/element-stub.spec';
+import { EventStub } from './../mock/event-stub.spec';
+import { DocumentMock } from './../mock/document-mock.spec';
+
 import { PlayerComponent, PlayerModule } from './index';
-
-
-class DocumentMock {
-  public nativeDocument: object = {
-    webkitExitFullscreen(): void {
-      return;
-    },
-    exitFullscreen(): void {
-      return;
-    },
-    mozCancelFullScreen(): void {
-      return;
-    },
-    msExitFullscreen(): void {
-      return;
-    }
-  };
-}
-
-class ClassNameStub {
-  includesValue: boolean = false;
-  includes(): boolean {
-    return this.includesValue;
-  }
-}
-
-class TargetStub {
-  className: ClassNameStub = new ClassNameStub();
-}
-
-class EventStub {
-  target: TargetStub = new TargetStub();
-};
-
-class ElementStub {
-  nativeElement: Object = {
-    containsValue: false,
-    poster: '',
-    load(): void {
-      return;
-    },
-    play(): void {
-      return;
-    },
-    pause(): void {
-      return;
-    },
-    contains(): boolean {
-      return this.containsValue;
-    }
-  };
-}
-
 
 @Component({
   selector: 'as-test',
   template: '<as-player></as-player>'
 })
-
 
 class TestComponent {
 }
@@ -103,8 +48,9 @@ describe('PlayerComponent', () => {
     sanitizer = fixture.debugElement.injector.get(DomSanitizer);
     documentMock = fixture.debugElement.injector.get(DocumentMozMsPrefixesRefService);
     comp.videoElement = <ElementRef> element;
-    comp.videoWrapper = <ElementRef> element;
+    comp.videoWrapperElement = <ElementRef> element;
     comp.playerSettingsComponent = <ElementRef> element;
+    comp.playerControlsComponent = <any> element;
   });
 
   it('ngOnInit should call getVideoUrls,', () => {
@@ -182,8 +128,8 @@ describe('PlayerComponent', () => {
   describe('endedEventHandler should call event.preventDefault and call', () => {
     beforeEach(() => {
       spyOn(comp, 'setCurrentVideo');
-      spyOn(comp, 'stopVideo');
-      spyOn(comp, 'playVideo');
+      spyOn(comp, 'callStopVideo');
+      spyOn(comp, 'callPlayVideo');
       spyOn(comp.videoElement.nativeElement, 'load');
       comp.videos = communication.videoService.videoUrlsMock.videos;
     });
@@ -198,14 +144,14 @@ describe('PlayerComponent', () => {
       comp.endedEventHandler();
       expect(comp.setCurrentVideo).toHaveBeenCalledWith(1);
       expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
-      expect(comp.playVideo).toHaveBeenCalled();
+      expect(comp.callPlayVideo).toHaveBeenCalled();
     });
 
     it('load, stopVideo when index currentVideo of videos is 3', () => {
       comp.currentVideo = communication.videoService.videoUrlsMock.videos[3];
       comp.endedEventHandler();
       expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
-      expect(comp.stopVideo).toHaveBeenCalled();
+      expect(comp.callStopVideo).toHaveBeenCalled();
     });
   });
 
@@ -223,7 +169,8 @@ describe('PlayerComponent', () => {
   describe('endedRepeatedPlaylistEventHandler() should', () => {
     beforeEach(() => {
       spyOn(comp, 'setCurrentVideo');
-      spyOn(comp, 'playVideo');
+      spyOn(comp, 'callPlayVideo');
+      spyOn(comp, 'endedRepeatedCurrentVideoEventHandler');
       spyOn(comp.videoElement.nativeElement, 'load');
       comp.videos = communication.videoService.videoUrlsMock.videos;
     });
@@ -233,65 +180,43 @@ describe('PlayerComponent', () => {
       comp.videos = undefined;
     });
 
-    it('setCurrentVideo with parameter, load, call playVideo() when index currentVideo of videos is 0', () => {
+    it('setCurrentVideo with parameter, load, call callPlayVideo() when index currentVideo of videos is 0', () => {
       comp.currentVideo = communication.videoService.videoUrlsMock.videos[0];
       comp.endedRepeatedPlaylistEventHandler();
       expect(comp.setCurrentVideo).toHaveBeenCalledWith(1);
       expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
-      expect(comp.playVideo).toHaveBeenCalled();
+      expect(comp.callPlayVideo).toHaveBeenCalled();
     });
 
-    it('setCurrentVideo without parameter, load, call playVideo() when index currentVideo of videos is 3', () => {
+    it('setCurrentVideo without parameter, load, call callPlayVideo() when index currentVideo of videos is 3', () => {
       comp.currentVideo = communication.videoService.videoUrlsMock.videos[3];
       comp.endedRepeatedPlaylistEventHandler();
       expect(comp.setCurrentVideo).toHaveBeenCalledWith();
       expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
-      expect(comp.playVideo).toHaveBeenCalled();
+      expect(comp.callPlayVideo).toHaveBeenCalled();
     });
   });
 
   describe('action methods should set properties of component', () => {
     beforeEach(() => {
-      spyOn(comp.videoElement.nativeElement, 'load');
-      spyOn(comp.videoElement.nativeElement, 'play');
-      spyOn(comp.videoElement.nativeElement, 'pause');
+      spyOn(comp.playerControlsComponent, 'playVideo');
+      spyOn(comp.playerControlsComponent, 'stopVideo');
       spyOn(comp, 'endedRepeatedCurrentVideoEventHandler');
       spyOn(comp, 'endedRepeatedPlaylistEventHandler');
       spyOn(comp, 'endedEventHandler');
       spyOn(comp, 'setCurrentVideo');
+      comp.videos = communication.videoService.videoUrlsMock.videos;
       comp.currentVideo = communication.videoService.videoUrlsMock.videos[0];
     });
 
-    afterEach(() => {
-      comp.videoElement.nativeElement.poster = '';
-      comp.currentVideo.controls.stopped = true;
-      comp.currentVideo.controls.played = false;
-      comp.currentVideo.controls.repeated = false;
+    it('in method callPlayVideo', () => {
+      comp.callPlayVideo();
+      expect(comp.playerControlsComponent.playVideo).toHaveBeenCalled();
     });
 
-    it('in method playVideo', () => {
-      comp.videoElement.nativeElement.poster = 'example';
-      comp.playVideo();
-      expect(comp.currentVideo.controls.stopped).toBeFalsy();
-      expect(comp.currentVideo.controls.played).toBeTruthy();
-      expect(comp.videoElement.nativeElement.play).toHaveBeenCalled();
-      expect(comp.videoElement.nativeElement.poster).toBe('');
-    });
-
-    it('in method pauseVideo', () => {
-      comp.pauseVideo();
-      expect(comp.currentVideo.controls.stopped).toBeFalsy();
-      expect(comp.currentVideo.controls.played).toBeFalsy();
-      expect(comp.videoElement.nativeElement.pause).toHaveBeenCalled();
-    });
-
-    it('in method stopVideo', () => {
-      comp.stopVideo();
-      expect(comp.videoElement.nativeElement.poster).toBe(comp.posterUrl);
-      expect(comp.setCurrentVideo).toHaveBeenCalled();
-      expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
-      expect(comp.currentVideo.controls.stopped).toBeTruthy();
-      expect(comp.currentVideo.controls.played).toBeFalsy();
+    it('in method callStopVideo', () => {
+      comp.callStopVideo();
+      expect(comp.playerControlsComponent.stopVideo).toHaveBeenCalled();
     });
 
     describe('in method repeatCurrentVideo, and when', () => {
@@ -299,15 +224,15 @@ describe('PlayerComponent', () => {
         comp.repeatCurrentVideo();
         comp.videoElement.nativeElement.onended(mediaStreamErrorEvent);
         expect(comp.endedRepeatedCurrentVideoEventHandler).toHaveBeenCalled();
-        expect(comp.currentVideo.controls.repeated).toBeTruthy();
+        expect(comp.videoControls.repeated).toBeTruthy();
       });
 
       it('repeated control is true and video call ended event handler should call endedEventHandler', () => {
-        comp.currentVideo.controls.repeated = true;
+        comp.videoControls.repeated = true;
         comp.repeatCurrentVideo();
         comp.videoElement.nativeElement.onended(mediaStreamErrorEvent);
         expect(comp.endedEventHandler).toHaveBeenCalled();
-        expect(comp.currentVideo.controls.repeated).toBeFalsy();
+        expect(comp.videoControls.repeated).toBeFalsy();
       });
     });
 
@@ -343,27 +268,27 @@ describe('PlayerComponent', () => {
       spyOn(comp, 'initialRandomVideo');
     });
     describe('when parameter isEnable is truthy', () => {
-      describe('and when comp.currentVideo.controls.played is', () => {
+      describe('and when comp.videoControls.played is', () => {
 
         it('falsy should call initialRandomVideo()', () => {
-          comp.currentVideo.controls.played = false;
+          comp.videoControls.played = false;
           comp.shufflePlay(true);
           expect(comp.initialRandomVideo).toHaveBeenCalled();
         });
 
         it('truthy should not call initialRandomVideo()', () => {
-          comp.currentVideo.controls.played = true;
+          comp.videoControls.played = true;
           comp.shufflePlay(true);
           expect(comp.initialRandomVideo).toHaveBeenCalledTimes(0);
         });
 
         describe('and should set onended method', () => {
-          describe('that should set currentVideo.controls.playedInShuffle to true',
+          describe('that should set videoControls.playedInShuffle to true',
             () => {
             it('', () => {
               comp.shufflePlay(true);
               comp.videoElement.nativeElement.onended(mediaStreamErrorEvent);
-              expect(comp.currentVideo.controls.playedInShuffle).toBeTruthy();
+              expect(comp.currentVideo.playedInShuffle).toBeTruthy();
             });
 
             describe('and when videos array filter by video.control.playedInShuffle length is greater than 0', () => {
@@ -377,11 +302,11 @@ describe('PlayerComponent', () => {
 
             describe('and when videos array filter by video.control.playedInShuffle length is less than 0', () => {
               beforeEach(() => {
-                spyOn(comp, 'stopVideo');
+                spyOn(comp, 'callStopVideo');
                 spyOn(comp, 'resetShufflePlaying');
-                spyOn(comp, 'playVideo');
+                spyOn(comp, 'callPlayVideo');
                 comp.videos.map(videos => {
-                  videos.controls.playedInShuffle = true;
+                  videos.playedInShuffle = true;
                 });
               });
 
@@ -395,7 +320,7 @@ describe('PlayerComponent', () => {
                   comp.videoElement.nativeElement.onended(mediaStreamErrorEvent);
                   expect(comp.resetShufflePlaying).toHaveBeenCalled();
                   expect(comp.initialRandomVideo).toHaveBeenCalled();
-                  expect(comp.playVideo).toHaveBeenCalled();
+                  expect(comp.callPlayVideo).toHaveBeenCalled();
                 });
               });
 
@@ -407,7 +332,7 @@ describe('PlayerComponent', () => {
                 it('should call stopVideo(), resetShufflePlaying(), initialRandomVideo()', () => {
                   comp.shufflePlay(true);
                   comp.videoElement.nativeElement.onended(mediaStreamErrorEvent);
-                  expect(comp.stopVideo).toHaveBeenCalled();
+                  expect(comp.callStopVideo).toHaveBeenCalled();
                   expect(comp.resetShufflePlaying).toHaveBeenCalled();
                   expect(comp.initialRandomVideo).toHaveBeenCalled();
                 });
@@ -446,8 +371,8 @@ describe('PlayerComponent', () => {
 
     it('', () => {
       comp.initialRandomVideo();
-      expect(comp.currentVideo.controls.stopped).toBeTruthy();
-      expect(comp.currentVideo.controls.played).toBeFalsy();
+      expect(comp.videoControls.stopped).toBeTruthy();
+      expect(comp.videoControls.played).toBeFalsy();
     });
 
     it('and call setCurrentVideo with randomNumber', () => {
@@ -463,129 +388,16 @@ describe('PlayerComponent', () => {
     });
   });
 
-  describe('resetShufflePlaying() should map array videos, and each video.controls.playedInShuffle set to falsy', () => {
+  describe('resetShufflePlaying() should map array videos, anvideoControls.playedInShuffle set to falsy', () => {
     beforeEach(() => {
       comp.videos = communication.videoService.videoUrlsMock.videos;
-      comp.videos.map(video => {
-        video.controls.playedInShuffle = true;
-      });
+      comp.videos.map(video => video.playedInShuffle = true);
     });
 
     it('', () => {
       comp.resetShufflePlaying();
-      expect(comp.videos[0].controls.playedInShuffle).toBeFalsy();
-      expect(comp.videos[3].controls.playedInShuffle).toBeFalsy();
-    });
-  });
-
-  describe('changeStatePlayerSettings() should set playerSettings as its opposite', () => {
-    it('true to false', () => {
-      comp.playerSettings = true;
-      comp.changeStatePlayerSettings();
-      expect(comp.playerSettings).toBeFalsy();
-    });
-
-    it('false to true', () => {
-      comp.playerSettings = false;
-      comp.changeStatePlayerSettings();
-      expect(comp.playerSettings).toBeTruthy();
-    });
-  });
-
-  describe('toggleFullScreen()', () => {
-    describe('when isFullScreen is falsy', () => {
-      beforeEach(() => {
-        comp.isFullScreen = false;
-        comp.videoWrapper.nativeElement.webkitRequestFullScreen = undefined;
-        comp.videoWrapper.nativeElement.requestFullScreen = undefined;
-        comp.videoWrapper.nativeElement.mozRequestFullScreen = undefined;
-        comp.videoWrapper.nativeElement.msRequestFullscreen = undefined;
-      });
-      describe('and videoElement.nativeElement has method', () => {
-
-        it('webkitRequestFullScreen, should call it', () => {
-          comp.videoWrapper.nativeElement.webkitRequestFullScreen = () => { return; };
-          spyOn(comp.videoWrapper.nativeElement, 'webkitRequestFullScreen');
-          comp.toggleFullScreen();
-          expect(comp.videoWrapper.nativeElement.webkitRequestFullScreen).toHaveBeenCalled();
-        });
-
-        it('requestFullScreen, should call it', () => {
-          comp.videoWrapper.nativeElement.requestFullScreen = () => { return; };
-          spyOn(comp.videoWrapper.nativeElement, 'requestFullScreen');
-          comp.toggleFullScreen();
-          expect(comp.videoWrapper.nativeElement.requestFullScreen).toHaveBeenCalled();
-        });
-
-        it('mozRequestFullScreen, should call it', () => {
-          comp.videoWrapper.nativeElement.mozRequestFullScreen = () => { return; };
-          spyOn(comp.videoWrapper.nativeElement, 'mozRequestFullScreen');
-          comp.toggleFullScreen();
-          expect(comp.videoWrapper.nativeElement.mozRequestFullScreen).toHaveBeenCalled();
-        });
-
-        it('msRequestFullscreen, should call it', () => {
-          comp.videoWrapper.nativeElement.msRequestFullscreen = () => { return; };
-          spyOn(comp.videoWrapper.nativeElement, 'msRequestFullscreen');
-          comp.toggleFullScreen();
-          expect(comp.videoWrapper.nativeElement.msRequestFullscreen).toHaveBeenCalled();
-        });
-
-
-      });
-      describe('and videoElement.nativeElement hasn`t fullScreen methods', () => {
-        it('should return null', () => {
-          comp.videoWrapper.nativeElement.webkitRequestFullScreen = undefined;
-          comp.videoWrapper.nativeElement.requestFullScreen = undefined;
-          comp.videoWrapper.nativeElement.mozRequestFullScreen = undefined;
-          comp.videoWrapper.nativeElement.msRequestFullscreen = undefined;
-          expect(comp.toggleFullScreen()).toBeUndefined();
-        });
-      });
-    });
-
-    describe('when isFullScreen is truthy', () => {
-      beforeEach(() => {
-        comp.isFullScreen = true;
-        documentMock.nativeDocument.webkitExitFullscreen = undefined;
-        documentMock.nativeDocument.exitFullscreen = undefined;
-        documentMock.nativeDocument.mozCancelFullScreen = undefined;
-        documentMock.nativeDocument.msExitFullscreen = undefined;
-      });
-
-      it('and document has method webkitExitFullscreen, should call it', () => {
-        documentMock.nativeDocument.webkitExitFullscreen = () => { return; };
-        spyOn(documentMock.nativeDocument, 'webkitExitFullscreen');
-        comp.toggleFullScreen();
-        expect(documentMock.nativeDocument.webkitExitFullscreen).toHaveBeenCalled();
-      });
-
-      it('and document.nativeDocument has method exitFullscreen, should call it', () => {
-        documentMock.nativeDocument.exitFullscreen = () => { return; };
-        spyOn(documentMock.nativeDocument, 'exitFullscreen');
-        comp.toggleFullScreen();
-        expect(documentMock.nativeDocument.exitFullscreen).toHaveBeenCalled();
-      });
-
-      it('and document.nativeDocument has method mozCancelFullScreen, should call it', () => {
-        documentMock.nativeDocument.mozCancelFullScreen = () => { return; };
-        spyOn(documentMock.nativeDocument, 'mozCancelFullScreen');
-        comp.toggleFullScreen();
-        expect(documentMock.nativeDocument.mozCancelFullScreen).toHaveBeenCalled();
-      });
-
-      it('and document.nativeDocument has method msExitFullscreen, should call it', () => {
-        documentMock.nativeDocument.msExitFullscreen = () => { return; };
-        spyOn(documentMock.nativeDocument, 'msExitFullscreen');
-        comp.toggleFullScreen();
-        expect(documentMock.nativeDocument.msExitFullscreen).toHaveBeenCalled();
-      });
-
-      describe('and videoElement.nativeElement hasn`t fullScreen methods', () => {
-        it('should return null', () => {
-          expect(comp.toggleFullScreen()).toBeUndefined();
-        });
-      });
+      expect(comp.videos[0].playedInShuffle).toBeFalsy();
+      expect(comp.videos[3].playedInShuffle).toBeFalsy();
     });
   });
 

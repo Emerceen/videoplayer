@@ -15,36 +15,37 @@ import { DocumentMozMsPrefixesRefService } from './../services/document.service'
 export class PlayerControlsComponent {
   @Input() public controls: HoverInterface;
   @Input() public currentVideo: Video;
-  @Output() public currentVideoChange: EventEmitter<Video> = new EventEmitter();
   @Input() public videoControls: VideoControls;
-  @Output() public videoControlsChange: EventEmitter<VideoControls> = new EventEmitter();
   @Input() public isFullScreen: boolean = false;
-  @Output() public isFullScreenChange: EventEmitter<boolean> = new EventEmitter();
   @Input() public playerSettings: boolean;
-  @Output() public playerSettingsChange: EventEmitter<boolean> = new EventEmitter();
   @Input() public videoWrapperElement: ElementRef;
-  @Output() setCurrentVideo: EventEmitter<number> = new EventEmitter();
+  @Input() public videoElement: { nativeElement: HTMLVideoElement };
+  @Input() public posterUrl: string;
 
-  @Input() private videoElement: { nativeElement: HTMLVideoElement };
-  @Input() private posterUrl: string;
+  @Output() public currentVideoChange: EventEmitter<Video> = new EventEmitter();
+  @Output() public videoControlsChange: EventEmitter<VideoControls> = new EventEmitter();
+  @Output() public isFullScreenChange: EventEmitter<boolean> = new EventEmitter();
+  @Output() public playerSettingsChange: EventEmitter<boolean> = new EventEmitter();
+  @Output() setCurrentVideo: EventEmitter<number> = new EventEmitter();
 
   constructor(
     private document: DocumentMozMsPrefixesRefService
   ) { }
 
   playVideo(): void {
+    console.log(this.videoControls);
     this.videoControls.stopped = false;
     this.videoControls.played = true;
     this.videoElement.nativeElement.play();
     this.videoElement.nativeElement.poster = '';
-    this.emitCurrentVideo();
+    this.emitVideoControls();
   }
 
   pauseVideo(): void {
     this.videoControls.stopped = false;
     this.videoControls.played = false;
     this.videoElement.nativeElement.pause();
-    this.emitCurrentVideo();
+    this.emitVideoControls();
   }
 
   stopVideo(): void {
@@ -53,10 +54,10 @@ export class PlayerControlsComponent {
     this.videoElement.nativeElement.load();
     this.videoControls.stopped = true;
     this.videoControls.played = false;
-    this.emitCurrentVideo();
+    this.emitVideoControls();
   }
 
-  emitCurrentVideo(): void {
+  emitVideoControls(): void {
     this.videoControlsChange.emit(this.videoControls);
   }
 

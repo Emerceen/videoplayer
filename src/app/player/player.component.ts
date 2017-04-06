@@ -143,7 +143,7 @@ export class PlayerComponent implements OnInit {
         this.initialRandomVideo();
       }
       this._videoElement.nativeElement.onended = () => {
-        this.videoControls.playedInShuffle = true;
+        this.currentVideo.playedInShuffle = true;
         shuffleVideoArray = this.videos.filter(video => !video.playedInShuffle);
         if (shuffleVideoArray.length > 0) {
           randomNumber = Math.floor(Math.random() * shuffleVideoArray.length);

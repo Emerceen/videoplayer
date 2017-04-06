@@ -7,45 +7,25 @@ export class VideoMock {
       name: 'VIDEO 1',
       url: 'http://testwebapplication.cba.pl/674127941.mp4',
       type: 'video/mp4',
-      controls: {
-        played: false,
-        stopped: true,
-        repeated: false,
-        playedInShuffle: false
-      }
+      playedInShuffle: false
     },
     {
       name: 'VIDEO 2',
       url: 'http://testwebapplication.cba.pl/675076297.mp4',
       type: 'video/mp4',
-      controls: {
-        played: false,
-        stopped: true,
-        repeated: false,
-        playedInShuffle: false
-      }
+      playedInShuffle: false
     },
     {
       name: 'VIDEO 3',
       url: 'http://testwebapplication.cba.pl/675076800.mp4',
       type: 'video/mp4',
-      controls: {
-        played: false,
-        stopped: true,
-        repeated: false,
-        playedInShuffle: false
-      }
+      playedInShuffle: false
     },
     {
       name: 'VIDEO 4',
       url: 'http://testwebapplication.cba.pl/675077654.mp4',
       type: 'video/mp4',
-      controls: {
-        played: false,
-        stopped: true,
-        repeated: false,
-        playedInShuffle: false
-      }
+      playedInShuffle: false
     }
   ];
 }

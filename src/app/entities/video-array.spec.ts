@@ -16,4 +16,8 @@ describe('VideoArray', () => {
     expect(VideoArray.fromData(data) instanceof VideoArray).toBe(true);
     expect(VideoArray.fromData(data).videos[0] instanceof Video).toBe(true);
   });
+
+  it('should create Video instance with constructor and playedInShuffle value', () => {
+    expect(new Video('test', 'url', 'type', true) instanceof Video).toBe(true);
+  });
 });
