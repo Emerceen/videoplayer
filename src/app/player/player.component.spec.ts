@@ -1,5 +1,5 @@
 import { async, TestBed, ComponentFixture } from '@angular/core/testing';
-import { Component, ElementRef } from '@angular/core';
+import { Component, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { Communication } from '../services/communication';
@@ -21,6 +21,7 @@ class TestComponent {
 }
 
 let comp: PlayerComponent;
+let changeDetectorRef: ChangeDetectorRef;
 let fixture: ComponentFixture<PlayerComponent>;
 let communication: any;
 let sanitizer: DomSanitizer;
@@ -36,6 +37,7 @@ describe('PlayerComponent', () => {
       providers: [
         { provide: Communication, useClass: MockCommunication },
         DomSanitizer,
+        ChangeDetectorRef,
         { provide: DocumentMozMsPrefixesRefService, useClass: DocumentMock }
       ]
     }).compileComponents();
@@ -47,9 +49,10 @@ describe('PlayerComponent', () => {
     communication = fixture.debugElement.injector.get(Communication);
     sanitizer = fixture.debugElement.injector.get(DomSanitizer);
     documentMock = fixture.debugElement.injector.get(DocumentMozMsPrefixesRefService);
+    changeDetectorRef = fixture.debugElement.injector.get(ChangeDetectorRef);
     comp.videoElement = <ElementRef> element;
     comp.videoWrapperElement = <ElementRef> element;
-    comp.playerSettingsComponent = <ElementRef> element;
+    comp.playerSettingsElement = <ElementRef> element;
     comp.playerControlsComponent = <any> element;
   });
 
@@ -60,13 +63,16 @@ describe('PlayerComponent', () => {
   });
 
   describe('videoElement should', () => {
-    it('set private member and set onended event handler when element is defined', () => {
+    it('set private member and call defineOnendedFunction() when element is defined', () => {
       spyOn(comp, 'endedEventHandler');
+      spyOn(comp, 'defineOnendedFunction');
       comp.videoElement = <ElementRef> element;
       comp.videos = communication.videoService.videoUrlsMock.videos;
       expect(comp.videoElement.nativeElement.onended).toBeDefined();
+
       comp.videoElement.nativeElement.onended(mediaStreamErrorEvent);
       expect(comp.endedEventHandler).toHaveBeenCalled();
+      expect(comp.defineOnendedFunction).toHaveBeenCalled();
     });
 
     it('do nothing when element is undefined', () => {
@@ -202,7 +208,7 @@ describe('PlayerComponent', () => {
     beforeEach(() => {
       comp.playerSettings = true;
       eventStub.target.className.includesValue = false;
-      comp.playerSettingsComponent.nativeElement.containsValue = false;
+      comp.playerSettingsElement.nativeElement.containsValue = false;
     });
 
     it('... .contains and ... .includes return falsy', () => {
@@ -211,7 +217,7 @@ describe('PlayerComponent', () => {
     });
 
     it('... .contains return true', () => {
-      comp.playerSettingsComponent.nativeElement.containsValue = true;
+      comp.playerSettingsElement.nativeElement.containsValue = true;
       comp.clickout(eventStub);
       expect(comp.playerSettings).toBeTruthy();
     });
@@ -236,6 +242,22 @@ describe('PlayerComponent', () => {
     it('false', () => {
       comp.setPlayedInShuffle(false);
       expect(comp.currentVideo.playedInShuffle).toBeFalsy();
+    });
+  });
+
+  describe('initialOnendedFunction should return closure function, which can only define onended once', () => {
+    it('can only be done once', () => {
+      spyOn(comp, 'setEndedEventHandler');
+      let closure = comp.initialOnendedFunction();
+      closure();
+      expect(comp.setEndedEventHandler).toHaveBeenCalled();
+    });
+    it('can`t define onended more than one', () => {
+      let closure = comp.initialOnendedFunction();
+      closure();
+      spyOn(comp, 'setEndedEventHandler');
+      closure();
+      expect(comp.setEndedEventHandler).toHaveBeenCalledTimes(0);
     });
   });
 });
