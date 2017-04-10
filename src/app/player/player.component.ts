@@ -17,7 +17,7 @@ export class PlayerComponent implements OnInit {
   @ViewChild('mainVideo') set videoElement(element: { nativeElement: HTMLVideoElement }) {
     if (element) {
       this._videoElement = element;
-      this._videoElement.nativeElement.onended = () => this.endedEventHandler();
+      this.defineOnendedFunction();
       this.cdr.detectChanges();
     }
   };
@@ -27,7 +27,7 @@ export class PlayerComponent implements OnInit {
       this.cdr.detectChanges();
     }
   };
-  @ViewChild('playerSettingsComponent') playerSettingsComponent: ElementRef;
+  @ViewChild('playerSettingsElement') playerSettingsElement: ElementRef;
   @ViewChild(PlayerControlsComponent) playerControlsComponent: PlayerControlsComponent;
 
   get videoElement(): { nativeElement: HTMLVideoElement } {
@@ -48,17 +48,18 @@ export class PlayerComponent implements OnInit {
   public videos: Array<Video>;
   public posterUrl: string = 'https://images.pexels.com/photos/296878/pexels-photo-296878.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb';
   public playerSettings: boolean = false;
+  public defineOnendedFunction: () => void = this.initialOnendedFunction();
 
   private _videoElement: { nativeElement: HTMLVideoElement };
   private _videoWrapperElement: ElementRef;
 
   @HostListener('document:click', ['$event'])
-    clickout(event: any): void {
-      let disableString = 'document-click-disable';
-      if (!this.playerSettingsComponent.nativeElement.contains(event.target) && !event.target.className.includes(disableString)) {
-        this.playerSettings = false;
-      }
+  clickout(event: any): void {
+    let disableString = 'document-click-disable';
+    if (!this.playerSettingsElement.nativeElement.contains(event.target) && !event.target.className.includes(disableString)) {
+      this.playerSettings = false;
     }
+  }
 
   constructor(
     private _cm: Communication,
@@ -108,5 +109,15 @@ export class PlayerComponent implements OnInit {
 
   setPlayedInShuffle(value: boolean): void {
     this.currentVideo.playedInShuffle = value;
+  }
+
+  initialOnendedFunction(): () => void {
+    let executed = false;
+    return (): void => {
+      if (!executed) {
+        executed = true;
+        this._videoElement.nativeElement.onended = () => this.endedEventHandler();
+      }
+    };
   }
 }
