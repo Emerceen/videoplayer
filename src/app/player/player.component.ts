@@ -116,8 +116,12 @@ export class PlayerComponent implements OnInit {
     return (): void => {
       if (!executed) {
         executed = true;
-        this._videoElement.nativeElement.onended = () => this.endedEventHandler();
+        this.setEndedEventHandler();
       }
     };
+  }
+
+  setEndedEventHandler(): void {
+    this._videoElement.nativeElement.onended = () => this.endedEventHandler();
   }
 }
