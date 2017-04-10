@@ -1,6 +1,8 @@
 <div id="video-controls" [ngClass]="{hover: true}">
   <div class="controls-wrapper">
-    <as-player-progress-bar></as-player-progress-bar>
+    <as-player-progress-bar
+    [videoElement]="videoElement">
+    </as-player-progress-bar>
     <div class="control-icons">
       <i *ngIf="!videoControls.played" (click)="playVideo()" class="fa fa-play vc-main" aria-hidden="true"></i>
       <i *ngIf="videoControls.played" (click)="pauseVideo()" class="fa fa-pause vc-main" aria-hidden="true"></i>
