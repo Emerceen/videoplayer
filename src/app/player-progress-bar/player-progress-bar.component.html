@@ -1,11 +1,10 @@
-<div class="progress-bar-wrapper">
+<div class="progress-bar-wrapper" (click)="changeVideoTimeStamp($event)" #progressBarWrapper>
   <div class="progress-bar">
-    <div class="percentage-bar"
-    [style.width.%]="percentageCurrentTime">
+    <div class="percentage-bar" [style.width.%]="percentageCurrentTime">
 
     </div>
     <div class="time-stamp-wrapper">
-      <i class="fa fa-circle time-stamp" aria-hidden="true"></i>
+      <i class="fa fa-circle time-stamp" aria-hidden="true" (click)="stopPropagation($event)"></i>
     </div>
   </div>
 </div>

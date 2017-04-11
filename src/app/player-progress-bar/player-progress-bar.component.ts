@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   moduleId: module.id,
@@ -16,16 +16,34 @@ export class PlayerProgressBarComponent {
   public get videoElement(): { nativeElement: HTMLVideoElement } {
     return this._videoElement;
   };
+  @ViewChild('progressBarWrapper') progressBarWrapper: ElementRef;
 
   private _videoElement: { nativeElement: HTMLVideoElement };
 
   registerTimeUpdate(): void {
-    this.videoElement.nativeElement.ontimeupdate = () => {
-      this.getPercentageCurrentTime(this.videoElement.nativeElement.duration, this.videoElement.nativeElement.currentTime);
+    this._videoElement.nativeElement.ontimeupdate = () => {
+      this.getPercentageCurrentTime(this.videoElement.nativeElement.duration, this._videoElement.nativeElement.currentTime);
     };
   }
 
   getPercentageCurrentTime(duration: number, currentTime: number): void {
-    this.percentageCurrentTime = Math.floor((100 / duration) * currentTime);
+    this.percentageCurrentTime = (100 / duration) * currentTime;
+  }
+
+  changeVideoTimeStamp(event: any): void {
+    let videoDuration: number = this._videoElement.nativeElement.duration;
+    let progressBarWidth: number = this.progressBarWrapper.nativeElement.clientWidth;
+    let clickedPxOnProgressBar = event.offsetX;
+    this.videoElement.nativeElement.currentTime = this.calculateClickedPlace(videoDuration, progressBarWidth, clickedPxOnProgressBar);
+  }
+
+  calculateClickedPlace(videoDuration: number, progressBarWidth: number, clickedPxOnProgressBar: number): number {
+    let percentageStamp = (100 / progressBarWidth) * clickedPxOnProgressBar;
+    let timeStamp = videoDuration * (percentageStamp / 100);
+    return timeStamp;
+  }
+
+  stopPropagation(event: any): void {
+    event.stopPropagation();
   }
 }

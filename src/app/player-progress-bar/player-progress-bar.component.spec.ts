@@ -12,6 +12,7 @@ import { PlayerProgressBarComponent, PlayerProgressBarModule } from './index';
 
 import { DocumentMock } from './../mock/document-mock.spec';
 import { ElementStub } from './../mock/element-stub.spec';
+import { EventStub } from './../mock/event-stub.spec';
 
 @Component({
   selector: 'as-test',
@@ -25,6 +26,7 @@ let comp: PlayerProgressBarComponent;
 let fixture: ComponentFixture<PlayerProgressBarComponent>;
 let element = new ElementStub();
 let documentMock: DocumentMozMsPrefixesRefService;
+let eventStub = new EventStub();
 
 describe('PlayerProgressBarComponent', () => {
   beforeEach(async(() => {
@@ -42,6 +44,7 @@ describe('PlayerProgressBarComponent', () => {
     comp = fixture.componentInstance;
     documentMock = fixture.debugElement.injector.get(DocumentMozMsPrefixesRefService);
     comp.videoElement = <ElementRef> element;
+    eventStub.offsetX = 1000;
   });
 
   describe('videoElement setter', () => {
@@ -72,6 +75,32 @@ describe('PlayerProgressBarComponent', () => {
     it('should set percentageCurrentTime', () => {
       comp.getPercentageCurrentTime(100, 10);
       expect(comp.percentageCurrentTime).toBe(10);
+    });
+  });
+
+  describe('changeVideoTimeStamp() ', () => {
+    beforeEach(() => {
+      spyOn(comp, 'calculateClickedPlace');
+    });
+    it('should call calculateClickedPlace()', () => {
+      comp.changeVideoTimeStamp(eventStub);
+      expect(comp.calculateClickedPlace).toHaveBeenCalled();
+    });
+  });
+
+  describe('calculateClickedPlace() ', () => {
+    it('should return correct timeStamp', () => {
+      expect(comp.calculateClickedPlace(1000, 100, 30)).toBe(300);
+    });
+  });
+
+  describe('stopPropagation() ', () => {
+    beforeEach(() => {
+      spyOn(eventStub, 'stopPropagation');
+    });
+    it('should call event.stopPropagation', () => {
+      comp.stopPropagation(eventStub);
+      expect(eventStub.stopPropagation).toHaveBeenCalled();
     });
   });
 });
