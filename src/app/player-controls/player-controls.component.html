@@ -1,4 +1,4 @@
-<div id="video-controls" [ngClass]="{hover: true}">
+<div id="video-controls" [ngClass]="{hover: controls.isHover || playerSettings}">
   <div class="controls-wrapper">
     <as-player-progress-bar
     [videoElement]="videoElement">
