@@ -7,7 +7,7 @@ import { HoverInterface } from '../entities/hover';
 
 export class HoverDirective {
   private element: HoverInterface;
-  private el: ElementRef;
+  private el: HTMLElement;
 
   constructor(el: ElementRef) { this.el = el.nativeElement; }
 

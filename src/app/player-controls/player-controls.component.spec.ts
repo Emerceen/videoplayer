@@ -28,7 +28,7 @@ let fixture: ComponentFixture<PlayerControlsComponent>;
 let element = new ElementStub();
 let documentMock: DocumentMozMsPrefixesRefService;
 
-describe('PlayerComponent', () => {
+describe('PlayerControlsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [TestComponent],

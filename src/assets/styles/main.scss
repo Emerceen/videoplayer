@@ -8,6 +8,7 @@
 @import 'video-player';
 @import 'player-settings';
 @import 'materialize-colors';
+@import 'player-progress-bar';
 
 body {
   line-height: 0;
@@ -26,7 +27,7 @@ body {
   background-color: #000;
 }
 
-#video-wrapper .full-screen{
+#video-wrapper .full-screen {
   #main-video {
     max-width: 100%;
   }

@@ -15,10 +15,10 @@ class TestComponent {
   };
 }
 
-describe('HighlightDirective', () => {
+describe('HoverDirective', () => {
 
   let fixture: ComponentFixture<TestComponent>;
-  let des: DebugElement[];
+  let hoverElements: DebugElement[];
   let comp: TestComponent;
   let hoverElement: any;
 
@@ -30,12 +30,12 @@ describe('HighlightDirective', () => {
 
     comp = fixture.componentInstance;
     fixture.detectChanges();
-    des = fixture.debugElement.queryAll(By.directive(HoverDirective));
+    hoverElements = fixture.debugElement.queryAll(By.directive(HoverDirective));
     hoverElement = fixture.nativeElement.querySelector('.hover-div');
   });
 
   it('should have one hover element', () => {
-    expect(des.length).toBe(1);
+    expect(hoverElements.length).toBe(1);
   });
 
   describe('toggle Hover should change state of .isHover', () => {
