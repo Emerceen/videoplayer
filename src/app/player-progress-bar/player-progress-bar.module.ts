@@ -2,10 +2,12 @@ import { NgModule } from '@angular/core';
 
 import { PlayerProgressBarComponent } from './player-progress-bar.component';
 import { SharedModule } from '../shared/shared.module';
+import { HoverPositionDirective } from '../directives/hover-position.directive';
 
 @NgModule({
   declarations: [
-    PlayerProgressBarComponent
+    PlayerProgressBarComponent,
+    HoverPositionDirective
   ],
   imports: [
     SharedModule

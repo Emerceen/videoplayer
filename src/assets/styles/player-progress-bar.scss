@@ -16,6 +16,7 @@ $time-stamp-height: 13px;
     height: $bar-height;
     background-color: rgba(255, 255, 255, 0.3);
     display: flex;
+    box-shadow: none;
     .percentage-bar {
       height: $bar-height;
       background-color: $main-red;
@@ -29,12 +30,18 @@ $time-stamp-height: 13px;
       margin-left: -0.5 * ($time-stamp-height - $hover-bar-height);
       .time-stamp {
         position: absolute;
-        right: 0;
+        left: 0;
         height: $time-stamp-height;
+        line-height: $time-stamp-height;
         width: $time-stamp-height;
         color: $main-red;
       }
     }
+  }
+  .hover-bar {
+    margin-top: -1px;
+    height: $hover-bar-height;
+    background-color: rgba(255, 255, 255, 0.6);
   }
 }
 

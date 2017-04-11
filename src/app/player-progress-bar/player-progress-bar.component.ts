@@ -1,4 +1,5 @@
 import { Component, Input, ViewChild, ElementRef } from '@angular/core';
+import { MousePosition } from './../entities/mouse-position';
 
 @Component({
   moduleId: module.id,
@@ -8,6 +9,9 @@ import { Component, Input, ViewChild, ElementRef } from '@angular/core';
 
 export class PlayerProgressBarComponent {
   public percentageCurrentTime: number = 0;
+  public mousePosition: MousePosition = {
+    x: 0
+  };
   @Input() public set videoElement(element: { nativeElement: HTMLVideoElement }) {
     this._videoElement = element;
     this.registerTimeUpdate();
