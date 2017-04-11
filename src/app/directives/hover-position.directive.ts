@@ -16,7 +16,6 @@ export class HoverPositionDirective {
   }
 
   @HostListener('mousemove', ['$event']) onMouseMove(event: any): void {
-    console.log(event);
     this.getCurrentMousePositionX(event.offsetX);
   }
 

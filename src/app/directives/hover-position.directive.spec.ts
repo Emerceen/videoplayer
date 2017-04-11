@@ -61,7 +61,6 @@ describe('HoverPositionDirective', () => {
   describe('toggle Hover should change value of mousePosition.x', () => {
     it('when mouse is enter on div', () => {
       let event: any = new Event('mousemove');
-      console.log(event.offsetX);
       fixture.detectChanges();
       hoverElement.dispatchEvent(event);
       fixture.detectChanges();
