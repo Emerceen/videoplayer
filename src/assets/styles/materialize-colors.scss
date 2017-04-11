@@ -1,12 +1,9 @@
-$primary-color: #f44336;
-$primary-color-light: lighten($primary-color, 15%);
-$primary-color-dark: darken($primary-color, 15%);
-
+$main-red: rgb(243, 40, 33);
 
 .switch label input[type=checkbox]:checked + .lever {
-  background-color: $primary-color-light;
+  background-color: $main-red;
 }
 
 .switch label input[type=checkbox]:checked + .lever:after {
-  background-color: $primary-color;
+  background-color: #fff;
 }
