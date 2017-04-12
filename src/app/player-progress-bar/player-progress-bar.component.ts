@@ -9,12 +9,14 @@ import { MousePosition } from './../entities/mouse-position';
 
 export class PlayerProgressBarComponent {
   public percentageCurrentTime: number = 0;
+  public percentageBufferedVideo: number = 0;
   public mousePosition: MousePosition = {
     x: 0
   };
   @Input() public set videoElement(element: { nativeElement: HTMLVideoElement }) {
     this._videoElement = element;
     this.registerTimeUpdate();
+    this.registerProgress();
   };
 
   public get videoElement(): { nativeElement: HTMLVideoElement } {
@@ -30,12 +32,24 @@ export class PlayerProgressBarComponent {
     };
   }
 
+  registerProgress(): void {
+    this.videoElement.nativeElement.onprogress = () => {
+      if (this.videoElement.nativeElement.buffered.length > 0) {
+        this.getPercentageBufferedVideo(this.videoElement.nativeElement.duration, this.videoElement.nativeElement.buffered.end(0));
+      }
+    };
+  }
+
   getPercentageCurrentTime(duration: number, currentTime: number): void {
     if (!duration) {
       this.percentageCurrentTime = 0;
       return;
     }
     this.percentageCurrentTime = (100 / duration) * currentTime;
+  }
+
+  getPercentageBufferedVideo(duration: number, bufferedLength: number): void {
+    this.percentageBufferedVideo = (100 / duration) * bufferedLength;
   }
 
   changeVideoTimeStamp(event: any): void {

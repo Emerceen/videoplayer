@@ -39,9 +39,15 @@ $time-stamp-height: 13px;
     }
   }
   .hover-bar {
+    position: absolute;
     margin-top: -1px;
     height: $hover-bar-height;
     background-color: rgba(255, 255, 255, 0.6);
+  }
+  .buffered-bar {
+    position: absolute;
+    height: $bar-height;
+    background-color: rgba(255, 255, 255, 0.45);
   }
 }
 
@@ -50,10 +56,14 @@ $time-stamp-height: 13px;
     margin-top: -1px;
     height: $hover-bar-height;
     .percentage-bar {
-      height: $hover-bar-height
+      height: $hover-bar-height;
     }
     .time-stamp-wrapper {
       display: block;
     }
+  }
+  .buffered-bar {
+    margin-top: -1px;
+    height: $hover-bar-height;
   }
 }
