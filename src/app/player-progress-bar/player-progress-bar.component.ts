@@ -31,6 +31,10 @@ export class PlayerProgressBarComponent {
   }
 
   getPercentageCurrentTime(duration: number, currentTime: number): void {
+    if (!duration) {
+      this.percentageCurrentTime = 0;
+      return;
+    }
     this.percentageCurrentTime = (100 / duration) * currentTime;
   }
 
