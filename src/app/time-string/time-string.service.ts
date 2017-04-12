@@ -1,5 +1,8 @@
 export class TimeString {
   toHHMMSS(secNum: number): string {
+    if (secNum === 0) {
+      return '0:00';
+    }
     secNum = Math.ceil(secNum);
     let hours   = Math.floor(secNum / 3600);
     let minutes = Math.floor((secNum - (hours * 3600)) / 60);

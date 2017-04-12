@@ -9,14 +9,10 @@ import { Component, Input } from '@angular/core';
 
 export class VideoDurationComponent {
   @Input() public set currentTime(value: number) {
-    if (value > 0) {
-      this.currentTimeTimeString = this.timeString.toHHMMSS(value);
-    }
+    this.currentTimeTimeString = this.timeString.toHHMMSS(value);
   };
   @Input() public set duration(value: number) {
-    if (value > 0) {
-      this.durationTimeString = this.timeString.toHHMMSS(value);
-    }
+    this.durationTimeString = this.timeString.toHHMMSS(value);
   };
 
   public durationTimeString: string;
