@@ -28,20 +28,20 @@ export class PlayerProgressBarComponent {
 
   registerTimeUpdate(): void {
     this._videoElement.nativeElement.ontimeupdate = () => {
-      this.getPercentageCurrentTime(this.videoElement.nativeElement.duration, this._videoElement.nativeElement.currentTime);
+      this.getPercentageCurrentTime(this._videoElement.nativeElement.duration, this._videoElement.nativeElement.currentTime);
     };
   }
 
   registerProgress(): void {
-    this.videoElement.nativeElement.onprogress = () => {
-      if (this.videoElement.nativeElement.buffered.length > 0) {
-        this.getPercentageBufferedVideo(this.videoElement.nativeElement.duration, this.videoElement.nativeElement.buffered.end(0));
+    this._videoElement.nativeElement.onprogress = () => {
+      if (this._videoElement.nativeElement.buffered.length > 0) {
+        this.getPercentageBufferedVideo(this._videoElement.nativeElement.duration, this._videoElement.nativeElement.buffered.end(0));
       }
     };
   }
 
   getPercentageCurrentTime(duration: number, currentTime: number): void {
-    if (!duration) {
+    if (duration <= 0) {
       this.percentageCurrentTime = 0;
       return;
     }
@@ -56,7 +56,7 @@ export class PlayerProgressBarComponent {
     let videoDuration: number = this._videoElement.nativeElement.duration;
     let progressBarWidth: number = this.progressBarWrapper.nativeElement.clientWidth;
     let clickedPxOnProgressBar = event.offsetX;
-    this.videoElement.nativeElement.currentTime = this.calculateClickedPlace(videoDuration, progressBarWidth, clickedPxOnProgressBar);
+    this._videoElement.nativeElement.currentTime = this.calculateClickedPlace(videoDuration, progressBarWidth, clickedPxOnProgressBar);
   }
 
   calculateClickedPlace(videoDuration: number, progressBarWidth: number, clickedPxOnProgressBar: number): number {

@@ -50,13 +50,15 @@ describe('PlayerProgressBarComponent', () => {
   describe('videoElement setter', () => {
     beforeEach(() => {
       spyOn(comp, 'registerTimeUpdate');
+      spyOn(comp, 'registerProgress');
       comp.videoElement = undefined;
     });
 
-    it('should set videoElement, and call registerTimeUpdate()', () => {
+    it('should set videoElement, and call registerTimeUpdate() and registerProgress()', () => {
       comp.videoElement = <ElementRef> element;
       expect(comp.videoElement).toBe(<ElementRef> element);
       expect(comp.registerTimeUpdate).toHaveBeenCalled();
+      expect(comp.registerProgress).toHaveBeenCalled();
     });
   });
 
@@ -71,10 +73,64 @@ describe('PlayerProgressBarComponent', () => {
     });
   });
 
+  describe('registerProgress() ', () => {
+    beforeEach(() => {
+      spyOn(comp, 'getPercentageBufferedVideo');
+    });
+    describe('should set videoElement.nativeElement.onprogress', () => {
+      it('when videoElement.nativeElement.buffered.length is greather than 0', () => {
+        element.nativeElement.buffered.length = 0.1;
+        comp.registerProgress();
+        comp.videoElement.nativeElement.onprogress(null);
+        expect(comp.getPercentageBufferedVideo).toHaveBeenCalled();
+      });
+    });
+
+    describe('should do nothing', () => {
+      it('when videoElement.nativeElement.buffered.length is 0', () => {
+        element.nativeElement.buffered.length = 0;
+        comp.registerProgress();
+        comp.videoElement.nativeElement.onprogress(null);
+        expect(comp.getPercentageBufferedVideo).toHaveBeenCalledTimes(0);
+      });
+
+      it('when videoElement.nativeElement.buffered.length is less than 0', () => {
+        element.nativeElement.buffered.length = -1;
+        comp.registerProgress();
+        comp.videoElement.nativeElement.onprogress(null);
+        expect(comp.getPercentageBufferedVideo).toHaveBeenCalledTimes(0);
+      });
+    });
+  });
+
   describe('getPercentageCurrentTime() ', () => {
+    beforeEach(() => {
+      comp.percentageCurrentTime = 0;
+    });
     it('should set percentageCurrentTime', () => {
       comp.getPercentageCurrentTime(100, 10);
       expect(comp.percentageCurrentTime).toBe(10);
+    });
+
+    it('should do nothing, when duration is 0', () => {
+      expect(comp.getPercentageCurrentTime(0, 1)).toBeUndefined();
+      expect(comp.percentageCurrentTime).toBe(0);
+    });
+
+    it('should do nothing, when duration less than 0', () => {
+      expect(comp.getPercentageCurrentTime(-1, 1)).toBeUndefined();
+      expect(comp.percentageCurrentTime).toBe(0);
+    });
+  });
+
+  describe('getPercentageBufferedVideo() ', () => {
+    beforeEach(() => {
+      comp.percentageBufferedVideo = 0;
+    });
+
+    it('should set getPercentageBufferedVideo()', () => {
+      comp.getPercentageBufferedVideo(100, 10);
+      expect(comp.percentageBufferedVideo).toBe(10);
     });
   });
 
