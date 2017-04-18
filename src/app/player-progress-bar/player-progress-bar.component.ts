@@ -1,5 +1,7 @@
 import { Component, Input, ViewChild, ElementRef } from '@angular/core';
+
 import { MousePosition } from './../entities/mouse-position';
+import { VideoControls } from './../entities/video-controls';
 
 @Component({
   moduleId: module.id,
@@ -8,11 +10,14 @@ import { MousePosition } from './../entities/mouse-position';
 })
 
 export class PlayerProgressBarComponent {
+  public bufferLoadTime: number = 2;
   public percentageCurrentTime: number = 0;
   public percentageBufferedVideo: number = 0;
+  public bufferingVideo: boolean = false;
   public mousePosition: MousePosition = {
     x: 0
   };
+  @Input() public videoControls: VideoControls;
   @Input() public set videoElement(element: { nativeElement: HTMLVideoElement }) {
     this._videoElement = element;
     this.registerTimeUpdate();
@@ -36,6 +41,7 @@ export class PlayerProgressBarComponent {
     this._videoElement.nativeElement.onprogress = () => {
       if (this._videoElement.nativeElement.buffered.length > 0) {
         this.getPercentageBufferedVideo(this._videoElement.nativeElement.duration, this._videoElement.nativeElement.buffered.end(0));
+        this.checkBufferedLength(this._videoElement.nativeElement.currentTime, this._videoElement.nativeElement.buffered.end(0));
       }
     };
   }
@@ -50,6 +56,17 @@ export class PlayerProgressBarComponent {
 
   getPercentageBufferedVideo(duration: number, bufferedLength: number): void {
     this.percentageBufferedVideo = (100 / duration) * bufferedLength;
+  }
+
+  checkBufferedLength(currentTime: number, bufferedLength: number): void {
+    let buffLenCurTtimeDiference = bufferedLength - currentTime;
+    if (buffLenCurTtimeDiference < this.bufferLoadTime) {
+      this.bufferingVideo = true;
+      this._videoElement.nativeElement.pause();
+    } else if (!this.videoControls.stopped) {
+      this.bufferingVideo = false;
+      this._videoElement.nativeElement.play();
+    }
   }
 
   changeVideoTimeStamp(event: any): void {
