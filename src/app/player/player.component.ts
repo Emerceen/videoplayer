@@ -5,6 +5,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Video } from '../entities/video';
 import { HoverInterface } from './../entities/hover';
 import { Communication } from '../services/communication';
+import { BufferingStateService } from './../services/buffering-state.service';
 import { PlayerControlsComponent } from '../player-controls/index';
 
 @Component({
@@ -38,6 +39,7 @@ export class PlayerComponent implements OnInit {
     return this._videoWrapperElement;
   };
 
+  public bufferingState: boolean;
   public currentVideo: Video;
   public controls: HoverInterface = {
     isHover: false,
@@ -62,17 +64,19 @@ export class PlayerComponent implements OnInit {
   }
 
   constructor(
-    private _cm: Communication,
-    private _sanitizer: DomSanitizer,
-    private cdr: ChangeDetectorRef
+    private cm: Communication,
+    private sanitizer: DomSanitizer,
+    private cdr: ChangeDetectorRef,
+    private bufferingStateService: BufferingStateService
   ) { }
 
   ngOnInit(): void {
     this.getVideoUrls();
+    this.getBufferingState();
   }
 
   getVideoUrls(): void {
-    this._cm.videoService.getVideoUrls().subscribe(
+    this.cm.videoService.getVideoUrls().subscribe(
       res => {
         this.videos = res.videos;
         this.setCurrentVideo();
@@ -84,7 +88,7 @@ export class PlayerComponent implements OnInit {
   }
 
   setCurrentVideo(index: number = 0): void {
-    this.videos[index].safeUrl = this._sanitizer.bypassSecurityTrustUrl(this.videos[index].url);
+    this.videos[index].safeUrl = this.sanitizer.bypassSecurityTrustUrl(this.videos[index].url);
     this.currentVideo = this.videos[index];
   }
 
@@ -123,5 +127,13 @@ export class PlayerComponent implements OnInit {
 
   setEndedEventHandler(): void {
     this._videoElement.nativeElement.onended = () => this.endedEventHandler();
+  }
+
+  getBufferingState(): void {
+    this.bufferingStateService.event.subscribe(
+      data => {
+        this.bufferingState = data;
+      }
+    );
   }
 }
