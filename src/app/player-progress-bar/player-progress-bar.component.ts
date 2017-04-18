@@ -3,6 +3,8 @@ import { Component, Input, ViewChild, ElementRef } from '@angular/core';
 import { MousePosition } from './../entities/mouse-position';
 import { VideoControls } from './../entities/video-controls';
 
+import { BufferingStateService } from './../services/buffering-state.service';
+
 @Component({
   moduleId: module.id,
   selector: 'as-player-progress-bar',
@@ -13,7 +15,6 @@ export class PlayerProgressBarComponent {
   public bufferLoadTime: number = 2;
   public percentageCurrentTime: number = 0;
   public percentageBufferedVideo: number = 0;
-  public bufferingVideo: boolean = false;
   public mousePosition: MousePosition = {
     x: 0
   };
@@ -30,6 +31,10 @@ export class PlayerProgressBarComponent {
   @ViewChild('progressBarWrapper') progressBarWrapper: ElementRef;
 
   private _videoElement: { nativeElement: HTMLVideoElement };
+
+  constructor(
+    private bufferingStateService: BufferingStateService
+  ) { }
 
   registerTimeUpdate(): void {
     this._videoElement.nativeElement.ontimeupdate = () => {
@@ -59,14 +64,16 @@ export class PlayerProgressBarComponent {
   }
 
   checkBufferedLength(currentTime: number, bufferedLength: number): void {
+    let bufferingVideo;
     let buffLenCurTtimeDiference = bufferedLength - currentTime;
     if (buffLenCurTtimeDiference < this.bufferLoadTime) {
-      this.bufferingVideo = true;
+      bufferingVideo = true;
       this._videoElement.nativeElement.pause();
     } else if (!this.videoControls.stopped) {
-      this.bufferingVideo = false;
+      bufferingVideo = false;
       this._videoElement.nativeElement.play();
     }
+    this.bufferingStateService.publish(bufferingVideo);
   }
 
   changeVideoTimeStamp(event: any): void {
