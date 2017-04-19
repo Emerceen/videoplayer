@@ -12,7 +12,9 @@ import { BufferingStateService } from './../services/buffering-state.service';
 })
 
 export class PlayerProgressBarComponent {
-  public bufferLoadTime: number = 2;
+  public bufferLoadTime: number = 0.5;
+  public bufferRestartTime: number = 2;
+  public bufferingVideo: boolean;
   public percentageCurrentTime: number = 0;
   public percentageBufferedVideo: number = 0;
   public mousePosition: MousePosition = {
@@ -46,7 +48,11 @@ export class PlayerProgressBarComponent {
     this._videoElement.nativeElement.onprogress = () => {
       if (this._videoElement.nativeElement.buffered.length > 0) {
         this.getPercentageBufferedVideo(this._videoElement.nativeElement.duration, this._videoElement.nativeElement.buffered.end(0));
-        this.checkBufferedLength(this._videoElement.nativeElement.currentTime, this._videoElement.nativeElement.buffered.end(0));
+        this.checkBufferedLength(
+          this._videoElement.nativeElement.duration,
+          this._videoElement.nativeElement.currentTime,
+          this._videoElement.nativeElement.buffered.end(0)
+        );
       }
     };
   }
@@ -59,21 +65,32 @@ export class PlayerProgressBarComponent {
     this.percentageCurrentTime = (100 / duration) * currentTime;
   }
 
-  getPercentageBufferedVideo(duration: number, bufferedLength: number): void {
-    this.percentageBufferedVideo = (100 / duration) * bufferedLength;
+  getPercentageBufferedVideo(duration: number, bufferedEnd: number): void {
+    this.percentageBufferedVideo = (100 / duration) * bufferedEnd;
   }
 
-  checkBufferedLength(currentTime: number, bufferedLength: number): void {
-    let bufferingVideo;
-    let buffLenCurTtimeDiference = bufferedLength - currentTime;
-    if (buffLenCurTtimeDiference < this.bufferLoadTime) {
-      bufferingVideo = true;
+  checkBufferedLength(duration: number, currentTime: number, bufferedEnd: number): void {
+    let buffLenCurTimeDiference = bufferedEnd - currentTime;
+    if (!this.videoControls.stopped && buffLenCurTimeDiference < this.bufferLoadTime && currentTime > 0) {
+      this.pauseVideo();
+    } else if (this.bufferingVideo && buffLenCurTimeDiference > this.bufferRestartTime || bufferedEnd === duration) {
+      this.restartVideo();
+    }
+    this.bufferingStateService.publish(this.bufferingVideo);
+  }
+
+  pauseVideo(): void {
+    this.bufferingVideo = true;
+    if (this._videoElement.nativeElement.played) {
       this._videoElement.nativeElement.pause();
-    } else if (!this.videoControls.stopped) {
-      bufferingVideo = false;
+    }
+  }
+
+  restartVideo(): void {
+    this.bufferingVideo = false;
+    if (this.videoControls.played) {
       this._videoElement.nativeElement.play();
     }
-    this.bufferingStateService.publish(bufferingVideo);
   }
 
   changeVideoTimeStamp(event: any): void {
