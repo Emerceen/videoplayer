@@ -6,7 +6,10 @@ import {
 
 import { Component, ElementRef } from '@angular/core';
 
+import { VideoControls } from './../entities/video-controls';
+
 import { DocumentMozMsPrefixesRefService } from '../services/document.service';
+import { BufferingStateService } from './../services/buffering-state.service';
 
 import { PlayerProgressBarComponent, PlayerProgressBarModule } from './index';
 
@@ -34,7 +37,8 @@ describe('PlayerProgressBarComponent', () => {
       declarations: [TestComponent],
       imports: [PlayerProgressBarModule],
       providers: [
-        { provide: DocumentMozMsPrefixesRefService, useClass: DocumentMock }
+        { provide: DocumentMozMsPrefixesRefService, useClass: DocumentMock },
+        BufferingStateService
       ]
     }).compileComponents();
   }));
@@ -44,6 +48,7 @@ describe('PlayerProgressBarComponent', () => {
     comp = fixture.componentInstance;
     documentMock = fixture.debugElement.injector.get(DocumentMozMsPrefixesRefService);
     comp.videoElement = <ElementRef> element;
+    comp.videoControls = new VideoControls();
     eventStub.offsetX = 1000;
   });
 
