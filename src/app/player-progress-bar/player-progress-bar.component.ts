@@ -72,21 +72,21 @@ export class PlayerProgressBarComponent {
   checkBufferedLength(duration: number, currentTime: number, bufferedEnd: number): void {
     let buffLenCurTimeDiference = bufferedEnd - currentTime;
     if (!this.videoControls.stopped && buffLenCurTimeDiference < this.bufferLoadTime && currentTime > 0) {
-      this.pauseVideo();
+      this.bufferVideo();
     } else if (this.bufferingVideo && buffLenCurTimeDiference > this.bufferRestartTime || bufferedEnd === duration) {
-      this.restartVideo();
+      this.stopBufferVideo();
     }
     this.bufferingStateService.publish(this.bufferingVideo);
   }
 
-  pauseVideo(): void {
+  bufferVideo(): void {
     this.bufferingVideo = true;
     if (this._videoElement.nativeElement.played) {
       this._videoElement.nativeElement.pause();
     }
   }
 
-  restartVideo(): void {
+  stopBufferVideo(): void {
     this.bufferingVideo = false;
     if (this.videoControls.played) {
       this._videoElement.nativeElement.play();
