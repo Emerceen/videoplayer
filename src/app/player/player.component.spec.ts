@@ -3,9 +3,9 @@ import { Component, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { Communication } from '../services/communication';
-import { MockCommunication } from '../services/mock-communication';
 import { DocumentMozMsPrefixesRefService } from '../services/document.service';
 
+import { MockCommunication } from '../mock/communication-mock';
 import { ElementStub } from './../mock/element-stub.spec';
 import { EventStub } from './../mock/event-stub.spec';
 import { DocumentMock } from './../mock/document-mock.spec';

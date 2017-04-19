@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 
 import { HomeComponent, HomeModule } from './index';
 import { Communication } from '../services/communication';
-import { MockCommunication } from '../services/mock-communication';
+import { MockCommunication } from '../mock/communication-mock';
 
 @Component({
   selector: 'as-test',
