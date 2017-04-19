@@ -3,6 +3,11 @@
   position: relative;
   #player-wrapper {
     position: relative;
+    .video-loader {
+      position: absolute;
+      top: calc(50% - 20px);
+      left: calc(50% - 20px);
+    }
   }
 
   #video-controls {

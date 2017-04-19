@@ -1,12 +1,9 @@
-import {
-  async,
-  TestBed,
-  ComponentFixture
-} from '@angular/core/testing';
+import { async, TestBed, ComponentFixture } from '@angular/core/testing';
 
 import { Component, ElementRef } from '@angular/core';
 
 import { DocumentMozMsPrefixesRefService } from '../services/document.service';
+import { BufferingStateService } from './../services/buffering-state.service';
 
 import { PlayerControlsComponent, PlayerControlsModule } from './index';
 
@@ -18,7 +15,6 @@ import { ElementStub } from './../mock/element-stub.spec';
   selector: 'as-test',
   template: '<as-player-controls></as-player-controls>'
 })
-
 
 class TestComponent {
 }
@@ -34,7 +30,8 @@ describe('PlayerControlsComponent', () => {
       declarations: [TestComponent],
       imports: [PlayerControlsModule],
       providers: [
-        { provide: DocumentMozMsPrefixesRefService, useClass: DocumentMock }
+        { provide: DocumentMozMsPrefixesRefService, useClass: DocumentMock },
+        BufferingStateService
       ]
     }).compileComponents();
   }));

@@ -1,4 +1,4 @@
-import { VideoMockService } from '../mock/video-mock.service.spec';
+import { VideoMockService } from './video-mock.service.spec';
 
 export class MockCommunication {
   public videoService: VideoMockService = new VideoMockService();

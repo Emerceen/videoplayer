@@ -1,6 +1,9 @@
 <section class="main" *ngIf="currentVideo">
   <div id="video-wrapper" [asHover]="controls" #videoWrapper>
     <div id="player-wrapper" [ngClass]="{'full-screen': isFullScreen}">
+      <div class="video-loader" *ngIf="bufferingState">
+        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+      </div>
       <video
         id="main-video"
         #mainVideo

@@ -3,9 +3,10 @@ import { Component, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { Communication } from '../services/communication';
-import { MockCommunication } from '../services/mock-communication';
 import { DocumentMozMsPrefixesRefService } from '../services/document.service';
+import { BufferingStateService } from './../services/buffering-state.service';
 
+import { MockCommunication } from '../mock/communication-mock';
 import { ElementStub } from './../mock/element-stub.spec';
 import { EventStub } from './../mock/event-stub.spec';
 import { DocumentMock } from './../mock/document-mock.spec';
@@ -24,6 +25,7 @@ let comp: PlayerComponent;
 let changeDetectorRef: ChangeDetectorRef;
 let fixture: ComponentFixture<PlayerComponent>;
 let communication: any;
+let bufferingStateService: BufferingStateService;
 let sanitizer: DomSanitizer;
 let element = new ElementStub();
 let mediaStreamErrorEvent: MediaStreamErrorEvent = undefined;
@@ -38,6 +40,7 @@ describe('PlayerComponent', () => {
         { provide: Communication, useClass: MockCommunication },
         DomSanitizer,
         ChangeDetectorRef,
+        BufferingStateService,
         { provide: DocumentMozMsPrefixesRefService, useClass: DocumentMock }
       ]
     }).compileComponents();
@@ -47,6 +50,7 @@ describe('PlayerComponent', () => {
     fixture = TestBed.createComponent(PlayerComponent);
     comp = fixture.componentInstance;
     communication = fixture.debugElement.injector.get(Communication);
+    bufferingStateService = fixture.debugElement.injector.get(BufferingStateService);
     sanitizer = fixture.debugElement.injector.get(DomSanitizer);
     documentMock = fixture.debugElement.injector.get(DocumentMozMsPrefixesRefService);
     changeDetectorRef = fixture.debugElement.injector.get(ChangeDetectorRef);
@@ -258,6 +262,14 @@ describe('PlayerComponent', () => {
       spyOn(comp, 'setEndedEventHandler');
       closure();
       expect(comp.setEndedEventHandler).toHaveBeenCalledTimes(0);
+    });
+  });
+
+  describe('getBufferingState', () => {
+    it('should call event subscribe and set bufferingState to true', () => {
+      comp.getBufferingState();
+      bufferingStateService.publish(true);
+      expect(comp.bufferingState).toBeTruthy();
     });
   });
 });

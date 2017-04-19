@@ -1,24 +1,18 @@
-import { VideoControls } from './../entities/video-controls';
-import { ElementStub } from './../mock/element-stub.spec';
-import { MockCommunication } from './../services/mock-communication';
-import {
-  async,
-  TestBed,
-  ComponentFixture
-} from '@angular/core/testing';
+import { async, TestBed, ComponentFixture } from '@angular/core/testing';
 import { DebugElement, ElementRef } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 import { PlayerSettingsComponent, PlayerSettingsModule } from './index';
-
+import { VideoControls } from './../entities/video-controls';
+import { ElementStub } from './../mock/element-stub.spec';
+import { MockCommunication } from '../mock/communication-mock';
 
 @Component({
   selector: 'as-test',
   template: '<as-player-settings></as-player-settings>'
 })
-
 
 class TestComponent {
 }

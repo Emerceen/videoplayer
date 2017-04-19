@@ -1,5 +1,9 @@
 import { Component, Input, ViewChild, ElementRef } from '@angular/core';
+
 import { MousePosition } from './../entities/mouse-position';
+import { VideoControls } from './../entities/video-controls';
+
+import { BufferingStateService } from './../services/buffering-state.service';
 
 @Component({
   moduleId: module.id,
@@ -8,11 +12,15 @@ import { MousePosition } from './../entities/mouse-position';
 })
 
 export class PlayerProgressBarComponent {
+  public bufferLoadTime: number = 0.5;
+  public bufferRestartTime: number = 2;
+  public bufferingVideo: boolean;
   public percentageCurrentTime: number = 0;
   public percentageBufferedVideo: number = 0;
   public mousePosition: MousePosition = {
     x: 0
   };
+  @Input() public videoControls: VideoControls;
   @Input() public set videoElement(element: { nativeElement: HTMLVideoElement }) {
     this._videoElement = element;
     this.registerTimeUpdate();
@@ -26,6 +34,10 @@ export class PlayerProgressBarComponent {
 
   private _videoElement: { nativeElement: HTMLVideoElement };
 
+  constructor(
+    private bufferingStateService: BufferingStateService
+  ) { }
+
   registerTimeUpdate(): void {
     this._videoElement.nativeElement.ontimeupdate = () => {
       this.getPercentageCurrentTime(this._videoElement.nativeElement.duration, this._videoElement.nativeElement.currentTime);
@@ -36,6 +48,11 @@ export class PlayerProgressBarComponent {
     this._videoElement.nativeElement.onprogress = () => {
       if (this._videoElement.nativeElement.buffered.length > 0) {
         this.getPercentageBufferedVideo(this._videoElement.nativeElement.duration, this._videoElement.nativeElement.buffered.end(0));
+        this.checkBufferedLength(
+          this._videoElement.nativeElement.duration,
+          this._videoElement.nativeElement.currentTime,
+          this._videoElement.nativeElement.buffered.end(0)
+        );
       }
     };
   }
@@ -48,8 +65,32 @@ export class PlayerProgressBarComponent {
     this.percentageCurrentTime = (100 / duration) * currentTime;
   }
 
-  getPercentageBufferedVideo(duration: number, bufferedLength: number): void {
-    this.percentageBufferedVideo = (100 / duration) * bufferedLength;
+  getPercentageBufferedVideo(duration: number, bufferedEnd: number): void {
+    this.percentageBufferedVideo = (100 / duration) * bufferedEnd;
+  }
+
+  checkBufferedLength(duration: number, currentTime: number, bufferedEnd: number): void {
+    let buffLenCurTimeDiference = bufferedEnd - currentTime;
+    if (!this.videoControls.stopped && buffLenCurTimeDiference < this.bufferLoadTime && currentTime > 0) {
+      this.bufferVideo();
+    } else if (this.bufferingVideo && buffLenCurTimeDiference > this.bufferRestartTime || bufferedEnd === duration) {
+      this.stopBufferVideo();
+    }
+    this.bufferingStateService.publish(this.bufferingVideo);
+  }
+
+  bufferVideo(): void {
+    this.bufferingVideo = true;
+    if (this._videoElement.nativeElement.played) {
+      this._videoElement.nativeElement.pause();
+    }
+  }
+
+  stopBufferVideo(): void {
+    this.bufferingVideo = false;
+    if (this.videoControls.played) {
+      this._videoElement.nativeElement.play();
+    }
   }
 
   changeVideoTimeStamp(event: any): void {
