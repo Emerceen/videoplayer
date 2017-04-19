@@ -4,6 +4,7 @@ export class NativeElementStub {
   public containsValue: boolean = false;
   public poster: string = '';
   public buffered: BufferedStub = new BufferedStub();
+  public played: boolean = false;
   load(): void {
     return;
   };

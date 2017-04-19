@@ -139,6 +139,72 @@ describe('PlayerProgressBarComponent', () => {
     });
   });
 
+  describe('checkBufferedLength', () => {
+    beforeEach(() => {
+      spyOn(comp, 'bufferVideo');
+      spyOn(comp, 'stopBufferVideo');
+    });
+    it('should call bufferVideo() when bufferEnd is bigger 0.2 than currentTime', () => {
+      comp.videoControls.stopped = false;
+      comp.checkBufferedLength(10, 5, 5.2);
+      expect(comp.bufferVideo).toHaveBeenCalled();
+    });
+
+    it('should call stopBufferVideo() when bufferEnd is bigger 4 than currentTime and bufferingVideo is true', () => {
+      comp.bufferingVideo = true;
+      comp.checkBufferedLength(10, 5, 9);
+      expect(comp.stopBufferVideo).toHaveBeenCalled();
+    });
+
+    it('should call stopBufferVideo() when bufferEnd is equal to duration and bufferingVideo is false', () => {
+      comp.bufferingVideo = true;
+      comp.checkBufferedLength(10, 5, 10);
+      expect(comp.stopBufferVideo).toHaveBeenCalled();
+    });
+  });
+
+  describe('bufferVideo() should set bufferingVideo to true and when', () => {
+    beforeEach(() => {
+      spyOn(comp.videoElement.nativeElement, 'pause');
+    });
+
+    it('videoElement.nativeElement.played is true should call nativeElemenet.pause()', () => {
+      element.nativeElement.played = true;
+      comp.videoElement = <ElementRef> element;
+      comp.bufferVideo();
+      expect(comp.bufferingVideo).toBeTruthy();
+      expect(comp.videoElement.nativeElement.pause).toHaveBeenCalled();
+    });
+
+    it('videoElement.nativeElement.played is false should not call nativeElemenet.pause()', () => {
+      element.nativeElement.played = false;
+      comp.videoElement = <ElementRef> element;
+      comp.bufferVideo();
+      expect(comp.bufferingVideo).toBeTruthy();
+      expect(comp.videoElement.nativeElement.pause).toHaveBeenCalledTimes(0);
+    });
+  });
+
+   describe('stopBufferVideo() should set bufferingVideo to false and when', () => {
+    beforeEach(() => {
+      spyOn(comp.videoElement.nativeElement, 'play');
+    });
+
+    it('videoControls.played is true should call nativeElemenet.play()', () => {
+      comp.videoControls.played = true;
+      comp.stopBufferVideo();
+      expect(comp.bufferingVideo).toBeFalsy();
+      expect(comp.videoElement.nativeElement.play).toHaveBeenCalled();
+    });
+
+    it('videoElement.nativeElement.played is false should not call nativeElemenet.play()', () => {
+      comp.videoControls.played = false;
+      comp.stopBufferVideo();
+      expect(comp.bufferingVideo).toBeFalsy();
+      expect(comp.videoElement.nativeElement.play).toHaveBeenCalledTimes(0);
+    });
+  });
+
   describe('changeVideoTimeStamp() ', () => {
     beforeEach(() => {
       spyOn(comp, 'calculateClickedPlace');
