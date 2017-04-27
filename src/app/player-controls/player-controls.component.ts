@@ -1,9 +1,9 @@
-import { VideoControls } from './../entities/video-controls';
 import { Component, Input, Output, EventEmitter, ElementRef } from '@angular/core';
 
 import { HoverInterface } from './../entities/hover';
-
+import { VideoControls } from './../entities/video-controls';
 import { DocumentMozMsPrefixesRefService } from './../services/document.service';
+import { Communication } from './../services/communication';
 
 @Component({
   moduleId: module.id,
@@ -23,10 +23,10 @@ export class PlayerControlsComponent {
   @Output() public videoControlsChange: EventEmitter<VideoControls> = new EventEmitter();
   @Output() public isFullScreenChange: EventEmitter<boolean> = new EventEmitter();
   @Output() public playerSettingsChange: EventEmitter<boolean> = new EventEmitter();
-  @Output() public setCurrentVideo: EventEmitter<number> = new EventEmitter();
 
   constructor(
-    private document: DocumentMozMsPrefixesRefService
+    private document: DocumentMozMsPrefixesRefService,
+    private cm: Communication
   ) { }
 
   playVideo(): void {
@@ -46,7 +46,7 @@ export class PlayerControlsComponent {
 
   stopVideo(): void {
     this.videoElement.nativeElement.poster = this.posterUrl;
-    this.setCurrentVideo.emit();
+    this.cm.videoService.changeCurrentVideo();
     this.videoElement.nativeElement.load();
     this.videoControls.stopped = true;
     this.videoControls.played = false;

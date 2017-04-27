@@ -1,12 +1,11 @@
-import { VideoControls } from './../entities/video-controls';
-import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef, Input } from '@angular/core';
 
 import { Video } from '../entities/video';
 import { HoverInterface } from './../entities/hover';
-import { Communication } from '../services/communication';
+import { VideoControls } from './../entities/video-controls';
 import { BufferingStateService } from './../services/buffering-state.service';
 import { PlayerControlsComponent } from '../player-controls/index';
+import { Communication } from '../services/communication';
 
 @Component({
   moduleId: module.id,
@@ -15,6 +14,7 @@ import { PlayerControlsComponent } from '../player-controls/index';
 })
 
 export class PlayerComponent implements OnInit {
+
   @ViewChild('mainVideo') set videoElement(element: { nativeElement: HTMLVideoElement }) {
     if (element) {
       this._videoElement = element;
@@ -39,15 +39,14 @@ export class PlayerComponent implements OnInit {
     return this._videoWrapperElement;
   };
 
+  @Input() public currentVideo: Video;
+  @Input() public videos: Array<Video>;
   public bufferingState: boolean;
-  public currentVideo: Video;
   public controls: HoverInterface = {
     isHover: false,
   };
   public videoControls: VideoControls = new VideoControls();
-
   public isFullScreen: boolean = false;
-  public videos: Array<Video>;
   public posterUrl: string = 'https://images.pexels.com/photos/296878/pexels-photo-296878.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb';
   public playerSettings: boolean = false;
   public defineOnendedFunction: () => void = this.initialOnendedFunction();
@@ -64,37 +63,18 @@ export class PlayerComponent implements OnInit {
   }
 
   constructor(
-    private cm: Communication,
-    private sanitizer: DomSanitizer,
     private cdr: ChangeDetectorRef,
-    private bufferingStateService: BufferingStateService
+    private bufferingStateService: BufferingStateService,
+    private cm: Communication
   ) { }
 
   ngOnInit(): void {
-    this.getVideoUrls();
     this.getBufferingState();
-  }
-
-  getVideoUrls(): void {
-    this.cm.videoService.getVideoUrls().subscribe(
-      res => {
-        this.videos = res.videos;
-        this.setCurrentVideo();
-      },
-      () => {
-        return false;
-      }
-    );
-  }
-
-  setCurrentVideo(index: number = 0): void {
-    this.videos[index].safeUrl = this.sanitizer.bypassSecurityTrustUrl(this.videos[index].url);
-    this.currentVideo = this.videos[index];
   }
 
   endedEventHandler(index: number = this.videos.indexOf(this.currentVideo) + 1): void {
     if (index < this.videos.length) {
-      this.setCurrentVideo(index);
+      this.cm.videoService.changeCurrentVideo(index);
       this._videoElement.nativeElement.load();
       this.callPlayVideo();
     } else {

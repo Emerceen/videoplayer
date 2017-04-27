@@ -4,6 +4,7 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 
 import { apiUrl } from '../commons/api-url';
 
@@ -13,10 +14,16 @@ import { VideoArray } from '../entities/video-array';
 
 export class VideoService {
   public url: string;
+  public videoIndex: Subject<number> = new Subject<number>();
+  public videoIndexOnChange: Observable<number> = this.videoIndex.asObservable();
 
   constructor(
     private _http: Http
   ) {}
+
+  changeCurrentVideo(index: number = 0): void {
+    this.videoIndex.next(index);
+  }
 
   getVideoUrls(): Observable<VideoArray> {
     let reqUrl = 'videos-mock.json';
