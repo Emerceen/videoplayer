@@ -1,3 +1,4 @@
+import { Communication } from './../services/communication';
 import { async, TestBed, ComponentFixture } from '@angular/core/testing';
 import { DebugElement, ElementRef } from '@angular/core';
 import { By } from '@angular/platform-browser';
@@ -18,6 +19,7 @@ class TestComponent {
 }
 
 let comp: PlayerSettingsComponent;
+let communication: Communication;
 let fixture: ComponentFixture<PlayerSettingsComponent>;
 let de: DebugElement;
 let element = new ElementStub();
@@ -30,13 +32,17 @@ describe('PlayerSettingsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [TestComponent],
-      imports: [PlayerSettingsModule]
+      imports: [PlayerSettingsModule],
+      providers: [
+        { provide: Communication, useClass: MockCommunication }
+      ]
     }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PlayerSettingsComponent);
     comp = fixture.componentInstance;
+    communication = fixture.debugElement.injector.get(Communication);
     comp.playerSettings = false;
     comp.videoElement = <ElementRef> element;
     comp.videoControls = new VideoControls();
@@ -205,7 +211,7 @@ describe('PlayerSettingsComponent', () => {
 
   describe('endedRepeatedPlaylistEventHandler() should', () => {
     beforeEach(() => {
-      spyOn(comp.setCurrentVideo, 'emit');
+      spyOn(communication.videoService, 'changeCurrentVideo');
       spyOn(comp.callPlayVideo, 'emit');
       spyOn(comp, 'endedRepeatedCurrentVideoEventHandler');
       spyOn(comp.videoElement.nativeElement, 'load');
@@ -220,7 +226,7 @@ describe('PlayerSettingsComponent', () => {
     it('setCurrentVideo with parameter, load, call callPlayVideo() when index currentVideo of videos is 0', () => {
       comp.currentVideo = comp.videos[0];
       comp.endedRepeatedPlaylistEventHandler();
-      expect(comp.setCurrentVideo.emit).toHaveBeenCalledWith(1);
+      expect(communication.videoService.changeCurrentVideo).toHaveBeenCalledWith(1);
       expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
       expect(comp.callPlayVideo.emit).toHaveBeenCalled();
     });
@@ -228,7 +234,7 @@ describe('PlayerSettingsComponent', () => {
     it('setCurrentVideo without parameter, load, call callPlayVideo() when index currentVideo of videos is 3', () => {
       comp.currentVideo = comp.videos[3];
       comp.endedRepeatedPlaylistEventHandler();
-      expect(comp.setCurrentVideo.emit).toHaveBeenCalledWith();
+      expect(communication.videoService.changeCurrentVideo).toHaveBeenCalledWith();
       expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
       expect(comp.callPlayVideo.emit).toHaveBeenCalled();
     });
@@ -239,7 +245,6 @@ describe('PlayerSettingsComponent', () => {
       spyOn(comp, 'endedRepeatedCurrentVideoEventHandler');
       spyOn(comp, 'endedRepeatedPlaylistEventHandler');
       spyOn(comp.endedEventHandler, 'emit');
-      spyOn(comp, 'setCurrentVideo');
       comp.videos = new MockCommunication().videoService.videoUrlsMock.videos;
       comp.currentVideo = new MockCommunication().videoService.videoUrlsMock.videos[0];
     });

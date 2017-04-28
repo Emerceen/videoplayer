@@ -1,15 +1,18 @@
+
 import { async, TestBed, ComponentFixture } from '@angular/core/testing';
 
 import { Component, ElementRef } from '@angular/core';
 
 import { DocumentMozMsPrefixesRefService } from '../services/document.service';
 import { BufferingStateService } from './../services/buffering-state.service';
+import { Communication } from './../services/communication';
 
 import { PlayerControlsComponent, PlayerControlsModule } from './index';
 
 import { VideoControls } from './../entities/video-controls';
 import { DocumentMock } from './../mock/document-mock.spec';
 import { ElementStub } from './../mock/element-stub.spec';
+import { MockCommunication } from './../mock/communication-mock';
 
 @Component({
   selector: 'as-test',
@@ -20,6 +23,7 @@ class TestComponent {
 }
 
 let comp: PlayerControlsComponent;
+let communication: Communication;
 let fixture: ComponentFixture<PlayerControlsComponent>;
 let element = new ElementStub();
 let documentMock: DocumentMozMsPrefixesRefService;
@@ -30,6 +34,7 @@ describe('PlayerControlsComponent', () => {
       declarations: [TestComponent],
       imports: [PlayerControlsModule],
       providers: [
+        { provide: Communication, useClass: MockCommunication },
         { provide: DocumentMozMsPrefixesRefService, useClass: DocumentMock },
         BufferingStateService
       ]
@@ -40,6 +45,7 @@ describe('PlayerControlsComponent', () => {
     fixture = TestBed.createComponent(PlayerControlsComponent);
     comp = fixture.componentInstance;
     documentMock = fixture.debugElement.injector.get(DocumentMozMsPrefixesRefService);
+    communication = fixture.debugElement.injector.get(Communication);
     comp.videoElement = <ElementRef> element;
     comp.videoWrapperElement = <ElementRef> element;
     comp.videoControls = new VideoControls();
@@ -51,7 +57,7 @@ describe('PlayerControlsComponent', () => {
       spyOn(comp.videoElement.nativeElement, 'play');
       spyOn(comp.videoElement.nativeElement, 'pause');
       spyOn(comp, 'emitVideoControls');
-      spyOn(comp.setCurrentVideo, 'emit');
+      spyOn(communication.videoService, 'changeCurrentVideo');
     });
 
     afterEach(() => {
@@ -82,7 +88,7 @@ describe('PlayerControlsComponent', () => {
     it('in method stopVideo', () => {
       comp.stopVideo();
       expect(comp.videoElement.nativeElement.poster).toBe(comp.posterUrl);
-      expect(comp.setCurrentVideo.emit).toHaveBeenCalled();
+      expect(communication.videoService.changeCurrentVideo).toHaveBeenCalledWith();
       expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
       expect(comp.emitVideoControls).toHaveBeenCalled();
       expect(comp.videoControls.stopped).toBeTruthy();
