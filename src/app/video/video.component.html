@@ -1,10 +1,13 @@
-<div class="video">
-  <div class="poster">
-    
+<ng-container *ngFor="let video of videos" >
+  <div class="video" *ngIf="video !== currentVideo">
+    <div class="poster">
+      <img src="{{ video.poster }}" [alt]="video.name" width="168px" height="94px">
+      
+    </div>
+    <div class="info">
+      <span class="title">{{ video.name }}</span>
+      <span class="channel">{{ video.channel }}</span>
+      <span class="views">{{ video.views }}</span>
+    </div>
   </div>
-  <div class="info">
-    <h3 class="title"></h3>
-    <h4 class="channel"></h4>
-    <h4 class="views"></h4>
-  </div>
-</div>
+</ng-container>
