@@ -10,13 +10,18 @@
 @import 'materialize-colors';
 @import 'player-progress-bar';
 @import 'video-duration';
+@import 'videos-sidebar';
+@import 'video';
+@import url('https://fonts.googleapis.com/css?family=Roboto');
 
 body {
+  font-family: 'Roboto', sans-serif;
   line-height: 0;
   background-color: #F1F1F1;
 }
 
 #content {
+  display: flex;
   max-width: 1066px;
   margin: 0 auto;
 }
