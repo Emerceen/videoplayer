@@ -47,7 +47,7 @@ export class PlayerComponent implements OnInit {
   };
   public videoControls: VideoControls = new VideoControls();
   public isFullScreen: boolean = false;
-  public posterUrl: string = 'https://images.pexels.com/photos/296878/pexels-photo-296878.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb';
+  public posterUrl: string = 'http://i66.tinypic.com/24gu8o5.jpg';
   public playerSettings: boolean = false;
   public defineOnendedFunction: () => void = this.initialOnendedFunction();
 
