@@ -35,7 +35,14 @@ describe('VideosComponent', () => {
     communication = fixture.debugElement.injector.get(Communication);
   });
 
-  it('should be defined', () => {
-    expect(comp).toBeDefined();
+  describe('selectVideo', () => {
+    beforeEach(() => {
+      spyOn(communication.videoService, 'changePlayedVideo');
+    });
+
+    it('should call changePlayedVideo', () => {
+      comp.selectVideo(1);
+      expect(communication.videoService.changePlayedVideo).toHaveBeenCalledWith(1);
+    });
   });
 });

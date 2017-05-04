@@ -18,7 +18,6 @@ export class VideosComponent {
   ) { }
 
   selectVideo(index: number): void {
-    console.log(index);
     this.cm.videoService.changePlayedVideo(index);
   }
 }

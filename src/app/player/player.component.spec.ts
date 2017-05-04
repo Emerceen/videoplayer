@@ -225,4 +225,20 @@ describe('PlayerComponent', () => {
       expect(comp.bufferingState).toBeTruthy();
     });
   });
+
+  describe('getChangesPlayedVideo', () => {
+    beforeEach(() => {
+      spyOn(comp.playerControlsComponent, 'playVideo');
+      spyOn(comp.playerControlsComponent, 'stopVideo');
+      spyOn(communication.videoService, 'changeCurrentVideo');
+    });
+
+    it('should call playedVideoIndexOnChange subscribe and callchangeCurrentVideo, stopVideo, playVideo', () => {
+      comp.getChangesPlayedVideo();
+      communication.videoService.changePlayedVideo(1);
+      expect(comp.playerControlsComponent.stopVideo).toHaveBeenCalled();
+      expect(communication.videoService.changeCurrentVideo).toHaveBeenCalledWith(1);
+      expect(comp.playerControlsComponent.playVideo).toHaveBeenCalled();
+    });
+  });
 });

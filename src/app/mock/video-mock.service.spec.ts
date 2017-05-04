@@ -26,6 +26,6 @@ export class VideoMockService  {
   }
 
   changePlayedVideo(index: number): void {
-    this.currentVideoIndex.next(index);
+    this.playedVideoIndex.next(index);
   }
 }
