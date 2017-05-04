@@ -6,6 +6,8 @@ import { APP_PROVIDERS } from './app.providers';
 import { AppComponent } from './app.component';
 import { appRoutingProviders, routing } from './app.routing';
 
+import { TranslateModule } from 'ng2-translate';
+
 import { VideoService } from './services/video.service';
 
 import { PlayerModule } from './player/index';
@@ -17,6 +19,7 @@ import { HomeModule } from './home/index';
         AppComponent
     ],
     imports: [
+        TranslateModule.forRoot(),
         BrowserModule,
         PlayerModule,
         HomeModule,

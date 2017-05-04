@@ -68,7 +68,8 @@ module.exports = function(config) {
     createFilePattern(gulpConfig.tmpApp + '**/*.html', { included: false }),
     createFilePattern(gulpConfig.app + '**/*.css', { included: false }),
     createFilePattern(gulpConfig.app + '**/*.ts', { included: false, watched: false }),
-    createFilePattern(gulpConfig.tmpApp + '**/*.js.map', { included: false, watched: false })
+    createFilePattern(gulpConfig.tmpApp + '**/*.js.map', { included: false, watched: false }),
+    createFilePattern(gulpConfig.nodeModules + 'ng2-translate/**/*.js', { included: false, watched: false })
   ];
 
   configuration.files = configuration.files.concat(files);
