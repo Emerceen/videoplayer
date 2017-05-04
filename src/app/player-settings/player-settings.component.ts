@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { VideoControls } from './../entities/video-controls';
 import { Video } from './../entities/video';
+import { Communication } from './../services/communication';
 
 @Component({
   moduleId: module.id,
@@ -26,14 +27,14 @@ export class PlayerSettingsComponent {
   @Input() public videos: Array<Video>;
 
   @Output() public videoControlsChange: EventEmitter<VideoControls> = new EventEmitter();
-  @Output() public setCurrentVideo: EventEmitter<number> = new EventEmitter();
   @Output() public setPlayedInShuffle: EventEmitter<boolean> = new EventEmitter();
   @Output() public endedEventHandler: EventEmitter<number> = new EventEmitter();
   @Output() public callPlayVideo: EventEmitter<null> = new EventEmitter();
   @Output() public callStopVideo: EventEmitter<null> = new EventEmitter();
 
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private cm: Communication
   ) {
     this.playerSettingsForm = this.formBuilder.group({
       repeatVideo: false,
@@ -72,7 +73,7 @@ export class PlayerSettingsComponent {
 
   initialRandomVideo(): void {
     let randomNumber = Math.floor(Math.random() * this.videos.length);
-    this.setCurrentVideo.emit(randomNumber);
+    this.cm.videoService.changeCurrentVideo(randomNumber);
     this.videoElement.nativeElement.load();
     this.videoControls.stopped = true;
     this.videoControls.played = false;
@@ -144,9 +145,9 @@ export class PlayerSettingsComponent {
   endedRepeatedPlaylistEventHandler(): void {
     let index = this.videos.indexOf(this.currentVideo) + 1;
     if (index < this.videos.length) {
-      this.setCurrentVideo.emit(index);
+      this.cm.videoService.changeCurrentVideo(index);
     } else {
-      this.setCurrentVideo.emit();
+      this.cm.videoService.changeCurrentVideo();
     }
     this.videoElement.nativeElement.load();
     this.callPlayVideo.emit();

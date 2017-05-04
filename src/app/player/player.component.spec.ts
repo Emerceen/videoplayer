@@ -60,10 +60,10 @@ describe('PlayerComponent', () => {
     comp.playerControlsComponent = <any> element;
   });
 
-  it('ngOnInit should call getVideoUrls,', () => {
-    spyOn(comp, 'getVideoUrls');
+  it('ngOnInit should call getBufferingState,', () => {
+    spyOn(comp, 'getBufferingState');
     comp.ngOnInit();
-    expect(comp.getVideoUrls).toHaveBeenCalled();
+    expect(comp.getBufferingState).toHaveBeenCalled();
   });
 
   describe('videoElement should', () => {
@@ -72,6 +72,7 @@ describe('PlayerComponent', () => {
       spyOn(comp, 'defineOnendedFunction');
       comp.videoElement = <ElementRef> element;
       comp.videos = communication.videoService.videoUrlsMock.videos;
+      comp.currentVideo = communication.videoService.videoUrlsMock.videos[0];
       expect(comp.videoElement.nativeElement.onended).toBeDefined();
 
       comp.videoElement.nativeElement.onended(mediaStreamErrorEvent);
@@ -86,58 +87,9 @@ describe('PlayerComponent', () => {
     });
   });
 
-  describe('getVideoUrls should', () => {
-    beforeEach(() => {
-      spyOn(comp, 'setCurrentVideo');
-    });
-
-    afterEach(() => {
-      comp.videos = undefined;
-      communication.videoService.videoUrlsError = false;
-    });
-
-    it('get videos and call setCurrentVideo when response is success', () => {
-      comp.getVideoUrls();
-      expect(comp.videos).toBe(communication.videoService.videoUrlsMock.videos);
-      expect(comp.setCurrentVideo).toHaveBeenCalled();
-    });
-
-    it('return false when response is error', () => {
-      communication.videoService.videoUrlsError = true;
-      expect(comp.getVideoUrls()).toBeFalsy();
-    });
-  });
-
-  describe('setCurrentVideo should', () => {
-    describe('set safeUrl of video object, and define currentVideo of video object', () => {
-      beforeEach(() => {
-        comp.videos = communication.videoService.videoUrlsMock.videos;
-      });
-
-      afterEach(() => {
-        comp.videos.map(video => { video.safeUrl = undefined; });
-      });
-
-      afterAll(() => {
-        comp.currentVideo = undefined;
-        comp.videos = undefined;
-      });
-
-      it('when index parameter is not given', () => {
-        comp.setCurrentVideo();
-        expect(comp.currentVideo).toBe(comp.videos[0]);
-      });
-
-      it('when index parameter is 3', () => {
-        comp.setCurrentVideo(3);
-        expect(comp.currentVideo).toBe(comp.videos[3]);
-      });
-    });
-  });
-
   describe('endedEventHandler should call event.preventDefault and call', () => {
     beforeEach(() => {
-      spyOn(comp, 'setCurrentVideo');
+      spyOn(communication.videoService, 'changeCurrentVideo');
       spyOn(comp, 'callStopVideo');
       spyOn(comp, 'callPlayVideo');
       spyOn(comp.videoElement.nativeElement, 'load');
@@ -152,7 +104,7 @@ describe('PlayerComponent', () => {
     it('setCurrentVideo, load, play when index currentVideo of videos is 0', () => {
       comp.currentVideo = communication.videoService.videoUrlsMock.videos[0];
       comp.endedEventHandler();
-      expect(comp.setCurrentVideo).toHaveBeenCalledWith(1);
+      expect(communication.videoService.changeCurrentVideo).toHaveBeenCalledWith(1);
       expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
       expect(comp.callPlayVideo).toHaveBeenCalled();
     });
@@ -166,7 +118,7 @@ describe('PlayerComponent', () => {
 
     it('setCurrentVideo, load, play when argument is passed', () => {
       comp.endedEventHandler(1);
-      expect(comp.setCurrentVideo).toHaveBeenCalledWith(1);
+      expect(communication.videoService.changeCurrentVideo).toHaveBeenCalledWith(1);
       expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
       expect(comp.callPlayVideo).toHaveBeenCalled();
     });
@@ -177,7 +129,6 @@ describe('PlayerComponent', () => {
       spyOn(comp.playerControlsComponent, 'playVideo');
       spyOn(comp.playerControlsComponent, 'stopVideo');
       spyOn(comp, 'endedEventHandler');
-      spyOn(comp, 'setCurrentVideo');
       comp.videos = communication.videoService.videoUrlsMock.videos;
       comp.currentVideo = communication.videoService.videoUrlsMock.videos[0];
     });
@@ -196,10 +147,12 @@ describe('PlayerComponent', () => {
   describe('document click should call comp.clickout', () => {
     beforeEach(() => {
       spyOn(comp, 'clickout');
+      comp.currentVideo = communication.videoService.videoUrlsMock.videos[0];
     });
 
     it('', () => {
       fixture.detectChanges();
+      console.log(comp.currentVideo);
       let mainContainer = fixture.nativeElement.querySelector('.main');
       mainContainer.click();
       expect(comp.clickout).toHaveBeenCalled();
@@ -270,6 +223,22 @@ describe('PlayerComponent', () => {
       comp.getBufferingState();
       bufferingStateService.publish(true);
       expect(comp.bufferingState).toBeTruthy();
+    });
+  });
+
+  describe('getChangesPlayedVideo', () => {
+    beforeEach(() => {
+      spyOn(comp.playerControlsComponent, 'playVideo');
+      spyOn(comp.playerControlsComponent, 'stopVideo');
+      spyOn(communication.videoService, 'changeCurrentVideo');
+    });
+
+    it('should call playedVideoIndexOnChange subscribe and callchangeCurrentVideo, stopVideo, playVideo', () => {
+      comp.getChangesPlayedVideo();
+      communication.videoService.changePlayedVideo(1);
+      expect(comp.playerControlsComponent.stopVideo).toHaveBeenCalled();
+      expect(communication.videoService.changeCurrentVideo).toHaveBeenCalledWith(1);
+      expect(comp.playerControlsComponent.playVideo).toHaveBeenCalled();
     });
   });
 });
