@@ -70,6 +70,7 @@ export class PlayerComponent implements OnInit {
 
   ngOnInit(): void {
     this.getBufferingState();
+    this.getChangesPlayedVideo();
   }
 
   endedEventHandler(index: number = this.videos.indexOf(this.currentVideo) + 1): void {
@@ -113,6 +114,16 @@ export class PlayerComponent implements OnInit {
     this.bufferingStateService.event.subscribe(
       data => {
         this.bufferingState = data;
+      }
+    );
+  }
+
+  getChangesPlayedVideo(): void {
+    this.cm.videoService.playedVideoIndexOnChange.subscribe(
+      index => {
+        this.playerControlsComponent.stopVideo();
+        this.cm.videoService.changeCurrentVideo(index);
+        this.playerControlsComponent.playVideo();
       }
     );
   }

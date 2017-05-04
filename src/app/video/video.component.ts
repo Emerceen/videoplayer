@@ -19,6 +19,6 @@ export class VideoComponent {
 
   selectVideo(index: number): void {
     console.log(index);
-    this.cm.videoService.changeCurrentVideo(index);
+    this.cm.videoService.changePlayedVideo(index);
   }
 }
