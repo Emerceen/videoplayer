@@ -1,20 +1,20 @@
 import { NgModule } from '@angular/core';
 
-import { VideoComponent } from './video.component';
+import { VideosComponent } from './videos.component';
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
-    VideoComponent
+    VideosComponent
   ],
   imports: [
     SharedModule
   ],
   exports: [
-    VideoComponent
+    VideosComponent
   ]
 })
 
-export class VideoModule {
+export class VideosModule {
 
 }

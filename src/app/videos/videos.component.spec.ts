@@ -1,28 +1,28 @@
 import { async, TestBed, ComponentFixture } from '@angular/core/testing';
 import { Component } from '@angular/core';
 
-import { VideoComponent, VideoModule } from './index';
+import { VideosComponent, VideosModule } from './index';
 import { MockCommunication } from './../mock/communication-mock';
 import { Communication } from './../services/communication';
 
 @Component({
   selector: 'as-test',
-  template: '<as-video></as-video>'
+  template: '<as-videos></as-videos>'
 })
 
 class TestComponent {
 
 }
 
-let comp: VideoComponent;
-let fixture: ComponentFixture<VideoComponent>;
+let comp: VideosComponent;
+let fixture: ComponentFixture<VideosComponent>;
 let communication: any;
 
-describe('VideoComponent', () => {
+describe('VideosComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [TestComponent],
-      imports: [VideoModule],
+      imports: [VideosModule],
       providers: [
          { provide: Communication, useClass: MockCommunication }
       ]
@@ -30,7 +30,7 @@ describe('VideoComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(VideoComponent);
+    fixture = TestBed.createComponent(VideosComponent);
     comp = fixture.componentInstance;
     communication = fixture.debugElement.injector.get(Communication);
   });

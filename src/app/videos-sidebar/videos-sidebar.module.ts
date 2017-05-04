@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 
 import { VideosSidebarComponent } from './videos-sidebar.component';
-import { VideoModule } from './../video/video.module';
+import { VideosModule } from '../videos/videos.module';
 
 @NgModule({
   declarations: [
     VideosSidebarComponent
   ],
   imports: [
-    VideoModule
+    VideosModule
   ],
   exports: [
     VideosSidebarComponent

@@ -5,11 +5,11 @@ import { Communication } from '../services/communication';
 
 @Component({
   moduleId: module.id,
-  selector: 'as-video',
-  templateUrl: 'video.component.html'
+  selector: 'as-videos',
+  templateUrl: 'videos.component.html'
 })
 
-export class VideoComponent {
+export class VideosComponent {
   @Input() public currentVideo: Video;
   @Input() public videos: Array<Video>;
 

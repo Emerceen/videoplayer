@@ -7,6 +7,8 @@ export class VideoMockService  {
   public videoUrlsError: boolean =  false;
   public currentVideoIndex: Subject<number> = new Subject<number>();
   public currentVideoIndexOnChange: Observable<number> = this.currentVideoIndex.asObservable();
+  public playedVideoIndex: Subject<number> = new Subject<number>();
+  public playedVideoIndexOnChange: Observable<number> = this.playedVideoIndex.asObservable();
   public getVideoUrls(): Observable<any> {
     let error = `err`;
     return Observable.create(observer => {
@@ -18,7 +20,12 @@ export class VideoMockService  {
       observer.complete();
     });
   }
+
   changeCurrentVideo(index: number = 0): void {
+    this.currentVideoIndex.next(index);
+  }
+
+  changePlayedVideo(index: number): void {
     this.currentVideoIndex.next(index);
   }
 }
