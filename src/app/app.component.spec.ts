@@ -11,6 +11,7 @@ import { Component } from '@angular/core';
 
 import { AppComponent } from './app.component';
 
+import { TranslateService } from 'ng2-translate';
 
 @Component({
     selector: 'as-test',
@@ -21,6 +22,9 @@ class TestRouterComponent {
 
 let comp: AppComponent;
 let fixture: ComponentFixture<AppComponent>;
+let translateServiceStub = {
+  use: (userLang) => { return userLang; }
+};
 
 let config: Routes = [
     {
@@ -37,7 +41,8 @@ describe('AppComponent', () => {
             ],
             imports: [ RouterTestingModule, RouterModule ],
             providers: [
-                provideRoutes(config)
+                provideRoutes(config),
+                { provide: TranslateService, useValue: translateServiceStub }
             ]
         });
     });
