@@ -47,10 +47,10 @@ describe('HomeComponent', () => {
 
   it('ngOnInit should call getBufferingState,', () => {
     spyOn(comp, 'getVideoUrls');
-    spyOn(comp, 'getVideoIndex');
+    spyOn(comp, 'getCurrentVideoIndex');
     comp.ngOnInit();
     expect(comp.getVideoUrls).toHaveBeenCalled();
-    expect(comp.getVideoIndex).toHaveBeenCalled();
+    expect(comp.getCurrentVideoIndex).toHaveBeenCalled();
   });
 
   describe('getVideoUrls should', () => {
@@ -102,14 +102,14 @@ describe('HomeComponent', () => {
     });
   });
 
-  describe('getVideoIndex', () => {
+  describe('getCurrentVideoIndex', () => {
     beforeEach(() => {
       spyOn(comp, 'setCurrentVideo');
     });
 
     it('should call setCurrentVideo with index', () => {
       let index = 1;
-      comp.getVideoIndex();
+      comp.getCurrentVideoIndex();
       communication.videoService.changeCurrentVideo(index);
       expect(comp.setCurrentVideo).toHaveBeenCalledWith(index);
     });

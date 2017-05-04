@@ -14,16 +14,20 @@ import { VideoArray } from '../entities/video-array';
 
 export class VideoService {
   public url: string;
-  public videoIndex: Subject<number> = new Subject<number>();
-  public videoIndexOnChange: Observable<number> = this.videoIndex.asObservable();
+  public currentVideoIndex: Subject<number> = new Subject<number>();
+  public currentVideoIndexOnChange: Observable<number> = this.currentVideoIndex.asObservable();
 
   constructor(
     private _http: Http
   ) {}
 
   changeCurrentVideo(index: number = 0): void {
-    this.videoIndex.next(index);
+    this.currentVideoIndex.next(index);
   }
+
+  // changeVideo(index: number = 0): void {
+  //   this.videoIndex.next(index);
+  // }
 
   getVideoUrls(): Observable<VideoArray> {
     let reqUrl = 'videos-mock.json';

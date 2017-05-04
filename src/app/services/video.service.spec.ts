@@ -66,18 +66,18 @@ describe('Service: VideoService', () => {
 
   describe('changeCurrentVideo()', () => {
     beforeEach(() => {
-      spyOn(service.videoIndex, 'next');
+      spyOn(service.currentVideoIndex, 'next');
     });
 
     it('should call videoIndex.next() with index', () => {
       let index = 1;
       service.changeCurrentVideo(index);
-      expect(service.videoIndex.next).toHaveBeenCalledWith(index);
+      expect(service.currentVideoIndex.next).toHaveBeenCalledWith(index);
     });
 
     it('should call videoIndex.next() with 0 when parameter was not passsed', () => {
       service.changeCurrentVideo();
-      expect(service.videoIndex.next).toHaveBeenCalledWith(0);
+      expect(service.currentVideoIndex.next).toHaveBeenCalledWith(0);
     });
   });
 });

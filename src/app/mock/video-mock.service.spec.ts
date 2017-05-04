@@ -5,8 +5,8 @@ import { VideoMock } from './video-mock.spec';
 export class VideoMockService  {
   public videoUrlsMock: VideoMock = new VideoMock();
   public videoUrlsError: boolean =  false;
-  public videoIndex: Subject<number> = new Subject<number>();
-  public videoIndexOnChange: Observable<number> = this.videoIndex.asObservable();
+  public currentVideoIndex: Subject<number> = new Subject<number>();
+  public currentVideoIndexOnChange: Observable<number> = this.currentVideoIndex.asObservable();
   public getVideoUrls(): Observable<any> {
     let error = `err`;
     return Observable.create(observer => {
@@ -19,6 +19,6 @@ export class VideoMockService  {
     });
   }
   changeCurrentVideo(index: number = 0): void {
-    this.videoIndex.next(index);
+    this.currentVideoIndex.next(index);
   }
 }

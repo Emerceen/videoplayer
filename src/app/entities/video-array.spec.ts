@@ -6,7 +6,10 @@ let data: VideoArrayInterface = {
     {
       Name: 'test name',
       Url: 'test url',
-      Type: 'test type'
+      Type: 'test type',
+      Channel: 'xyz',
+      Poster: 'poster',
+      Views: 100
     }
   ]
 };
@@ -18,6 +21,6 @@ describe('VideoArray', () => {
   });
 
   it('should create Video instance with constructor and playedInShuffle value', () => {
-    expect(new Video('test', 'url', 'type', true) instanceof Video).toBe(true);
+    expect(new Video('test', 'url', 'type', 'xyz', 'poster', 100, true) instanceof Video).toBe(true);
   });
 });

@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.getVideoUrls();
-    this.getVideoIndex();
+    this.getCurrentVideoIndex();
   }
 
   getVideoUrls(): void {
@@ -41,8 +41,8 @@ export class HomeComponent implements OnInit {
     this.currentVideo = this.videos[index];
   }
 
-  getVideoIndex(): void {
-    this.cm.videoService.videoIndexOnChange.subscribe(index => {
+  getCurrentVideoIndex(): void {
+    this.cm.videoService.currentVideoIndexOnChange.subscribe(index => {
       this.setCurrentVideo(index);
     });
   }
