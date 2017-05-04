@@ -4,6 +4,7 @@ module.exports = function () {
     var root = '',
         src = root + 'src/',
         config = root + 'config/',
+        nodeModules = root + 'node_modules/',
         app = src + 'app/',
         test = src + 'test/',
         tmp = src + 'tmp/',
@@ -62,6 +63,7 @@ module.exports = function () {
     var gulpConfig = {
         root: root,
         config: config,
+        nodeModules: nodeModules,
         src: src,
         app: app,
         test: test,

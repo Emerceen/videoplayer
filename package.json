@@ -81,6 +81,7 @@
     "karma-sourcemap-loader": "^0.3.7",
     "lodash": "^4.17.4",
     "ng2-materialize": "^1.1.1",
+    "ng2-translate": "^5.0.0",
     "phantomjs-prebuilt": "^2.1.14",
     "remap-istanbul": "~0.9.5",
     "require-dir": "~0.3.1",
