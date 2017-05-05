@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+
+import { Video } from './../entities/video';
 
 @Component({
   moduleId: module.id,
@@ -7,5 +9,5 @@ import { Component } from '@angular/core';
 })
 
 export class VideoDetailsComponent {
-
+  @Input() currentVideo: Video;
 }
