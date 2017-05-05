@@ -2,15 +2,15 @@ import { NgModule } from '@angular/core';
 
 import { VideosComponent } from './videos.component';
 import { SharedModule } from '../shared/shared.module';
-import { NumberSpacingPipe } from '../number-spacing/number-spacing.pipe';
+import { NumberSpacingModule } from '../number-spacing/number-spacing.module';
 
 @NgModule({
   declarations: [
-    VideosComponent,
-    NumberSpacingPipe
+    VideosComponent
   ],
   imports: [
-    SharedModule
+    SharedModule,
+    NumberSpacingModule
   ],
   exports: [
     VideosComponent
