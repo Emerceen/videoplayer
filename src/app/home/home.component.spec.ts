@@ -5,6 +5,8 @@ import {
 } from '@angular/core/testing';
 import { Component } from '@angular/core';
 
+import { TranslateService, TranslateLoader, TranslateParser } from 'ng2-translate';
+
 import { HomeComponent, HomeModule } from './index';
 import { Communication } from '../services/communication';
 import { MockCommunication } from '../mock/communication-mock';
@@ -32,7 +34,10 @@ describe('HomeComponent', () => {
         HomeModule
       ],
       providers: [
-        { provide: Communication, useClass: MockCommunication }
+        { provide: Communication, useClass: MockCommunication },
+        TranslateService,
+        TranslateLoader,
+        TranslateParser
       ]
     }).compileComponents();
   }));

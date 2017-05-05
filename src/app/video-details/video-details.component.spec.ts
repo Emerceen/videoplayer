@@ -1,6 +1,8 @@
 import { async, TestBed, ComponentFixture } from '@angular/core/testing';
 import { Component } from '@angular/core';
 
+import { TranslateService, TranslateLoader, TranslateParser } from 'ng2-translate';
+
 import { VideoDetailsComponent, VideoDetailsModule } from './index';
 
 @Component({
@@ -19,7 +21,12 @@ describe('VideoDetailsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [TestComponent],
-      imports: [VideoDetailsModule]
+      imports: [VideoDetailsModule],
+      providers: [
+        TranslateService,
+        TranslateLoader,
+        TranslateParser
+      ]
     }).compileComponents();
   }));
 
