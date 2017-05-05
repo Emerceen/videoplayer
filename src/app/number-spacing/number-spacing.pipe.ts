@@ -6,6 +6,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 export class NumberSpacingPipe implements PipeTransform {
   transform(value: number): string {
-    return value.toLocaleString();
+    if (value > 0) {
+      return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    } else {
+      return null;
+    }
   }
 }
