@@ -1,9 +1,10 @@
-import { Component, Input, Output, EventEmitter, ElementRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
 
-import { HoverInterface } from './../entities/hover';
-import { VideoControls } from './../entities/video-controls';
-import { DocumentMozMsPrefixesRefService } from './../services/document.service';
-import { VideoService } from './../services/video.service';
+import { HoverInterface } from '../entities/hover';
+import { VideoControls } from '../entities/video-controls';
+import { DocumentMozMsPrefixesRefService } from '../services/document.service';
+import { VideoService } from '../services/video.service';
+import { PlayerProgressBarComponent } from '../player-progress-bar/player-progress-bar.component';
 
 @Component({
   moduleId: module.id,
@@ -23,6 +24,8 @@ export class PlayerControlsComponent {
   @Output() public videoControlsChange: EventEmitter<VideoControls> = new EventEmitter();
   @Output() public isFullScreenChange: EventEmitter<boolean> = new EventEmitter();
   @Output() public playerSettingsChange: EventEmitter<boolean> = new EventEmitter();
+
+  @ViewChild( PlayerProgressBarComponent ) playerProgressBar: PlayerProgressBarComponent;
 
   constructor(
     private document: DocumentMozMsPrefixesRefService,
@@ -45,6 +48,7 @@ export class PlayerControlsComponent {
   }
 
   stopVideo(): void {
+    this.playerProgressBar.resetProgressBar();
     this.videoElement.nativeElement.poster = this.posterUrl;
     this.videoService.changeCurrentVideo();
     this.videoElement.nativeElement.load();

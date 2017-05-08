@@ -109,4 +109,8 @@ export class PlayerProgressBarComponent {
   stopPropagation(event: any): void {
     event.stopPropagation();
   }
+
+  resetProgressBar(): void {
+    this.percentageCurrentTime = 0;
+  }
 }
