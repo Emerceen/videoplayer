@@ -111,7 +111,7 @@ export class PlayerSettingsComponent {
     let randomNumber: number;
     let shuffleVideoArray: Array<Video>;
     if (isEnable) {
-      if (!this.videoControls.played) {
+      if (this.videoControls.stopped) {
         this.initialRandomVideo();
       }
       this.videoElement.nativeElement.onended = () => {
