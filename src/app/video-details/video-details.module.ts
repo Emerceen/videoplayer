@@ -1,22 +1,22 @@
 import { NgModule } from '@angular/core';
 
-import { VideosComponent } from './videos.component';
+import { VideoDetailsComponent } from './video-details.component';
 import { SharedModule } from '../shared/shared.module';
 import { NumberSpacingModule } from '../number-spacing/number-spacing.module';
 
 @NgModule({
   declarations: [
-    VideosComponent
+    VideoDetailsComponent
   ],
   imports: [
     SharedModule,
     NumberSpacingModule
   ],
   exports: [
-    VideosComponent
+    VideoDetailsComponent
   ]
 })
 
-export class VideosModule {
+export class VideoDetailsModule {
 
 }

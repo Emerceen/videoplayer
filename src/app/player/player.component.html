@@ -1,4 +1,4 @@
-<section class="main main-container" *ngIf="currentVideo">
+<section *ngIf="currentVideo">
   <div id="video-wrapper" [asHover]="controls" #videoWrapper>
     <div id="player-wrapper" [ngClass]="{'full-screen': isFullScreen}">
       <div class="video-loader" *ngIf="bufferingState">

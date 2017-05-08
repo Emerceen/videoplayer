@@ -1,10 +1,17 @@
 <div id="content">
-  <as-player
-    [videos]="videos"
-    [currentVideo]="currentVideo">
-  </as-player>
-  <as-videos-sidebar
-    [videos]="videos"
-    [currentVideo]="currentVideo">
-  </as-videos-sidebar>
+  <section id="main-container">
+    <as-player
+      [videos]="videos"
+      [currentVideo]="currentVideo">
+    </as-player>
+    <as-video-details
+      [currentVideo]="currentVideo">
+    </as-video-details>
+  </section>
+  <div class="main-box">
+    <as-videos-sidebar
+      [videos]="videos"
+      [currentVideo]="currentVideo">
+    </as-videos-sidebar>
+  </div>
 </div>

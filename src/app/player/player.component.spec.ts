@@ -153,7 +153,7 @@ describe('PlayerComponent', () => {
     it('', () => {
       fixture.detectChanges();
       console.log(comp.currentVideo);
-      let mainContainer = fixture.nativeElement.querySelector('.main');
+      let mainContainer = fixture.nativeElement.querySelector('section');
       mainContainer.click();
       expect(comp.clickout).toHaveBeenCalled();
     });

@@ -1,0 +1,15 @@
+<div class="main-box">
+  <div class="video-details">
+    <div class="title">
+      {{ currentVideo?.name }}
+    </div>
+
+    <div class="channel">
+      {{ currentVideo?.channel }}
+    </div>
+
+    <div class="views">
+      {{ currentVideo?.views | numberSpacing }} {{ 'VIDEOS.VIEWS' | translate }}
+    </div>
+  </div>
+</div>
