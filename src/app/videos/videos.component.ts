@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 import { Video } from '../entities/video';
-import { Communication } from '../services/communication';
+import { VideoService } from '../services/video.service';
 
 @Component({
   moduleId: module.id,
@@ -14,10 +14,10 @@ export class VideosComponent {
   @Input() public videos: Array<Video>;
 
   constructor(
-    private cm: Communication
+    private videoService: VideoService
   ) { }
 
   selectVideo(index: number): void {
-    this.cm.videoService.changePlayedVideo(index);
+    this.videoService.changePlayedVideo(index);
   }
 }

@@ -2,7 +2,7 @@ import { async, TestBed, ComponentFixture } from '@angular/core/testing';
 import { Component, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
-import { Communication } from '../services/communication';
+import { VideoService } from '../services/video.service';
 import { DocumentMozMsPrefixesRefService } from '../services/document.service';
 import { BufferingStateService } from './../services/buffering-state.service';
 
@@ -24,7 +24,8 @@ class TestComponent {
 let comp: PlayerComponent;
 let changeDetectorRef: ChangeDetectorRef;
 let fixture: ComponentFixture<PlayerComponent>;
-let communication: any;
+let communication: MockCommunication = new MockCommunication();
+let videoService: VideoService;
 let bufferingStateService: BufferingStateService;
 let sanitizer: DomSanitizer;
 let element = new ElementStub();
@@ -37,11 +38,11 @@ describe('PlayerComponent', () => {
       declarations: [TestComponent],
       imports: [PlayerModule],
       providers: [
-        { provide: Communication, useClass: MockCommunication },
         DomSanitizer,
         ChangeDetectorRef,
         BufferingStateService,
-        { provide: DocumentMozMsPrefixesRefService, useClass: DocumentMock }
+        { provide: DocumentMozMsPrefixesRefService, useClass: DocumentMock },
+        VideoService
       ]
     }).compileComponents();
   }));
@@ -49,8 +50,8 @@ describe('PlayerComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PlayerComponent);
     comp = fixture.componentInstance;
-    communication = fixture.debugElement.injector.get(Communication);
     bufferingStateService = fixture.debugElement.injector.get(BufferingStateService);
+    videoService = fixture.debugElement.injector.get(VideoService);
     sanitizer = fixture.debugElement.injector.get(DomSanitizer);
     documentMock = fixture.debugElement.injector.get(DocumentMozMsPrefixesRefService);
     changeDetectorRef = fixture.debugElement.injector.get(ChangeDetectorRef);
@@ -71,8 +72,8 @@ describe('PlayerComponent', () => {
       spyOn(comp, 'endedEventHandler');
       spyOn(comp, 'defineOnendedFunction');
       comp.videoElement = <ElementRef> element;
-      comp.videos = communication.videoService.videoUrlsMock.videos;
-      comp.currentVideo = communication.videoService.videoUrlsMock.videos[0];
+      comp.videos = communication.videoDataService.videoUrlsMock.videos;
+      comp.currentVideo = communication.videoDataService.videoUrlsMock.videos[0];
       expect(comp.videoElement.nativeElement.onended).toBeDefined();
 
       comp.videoElement.nativeElement.onended(mediaStreamErrorEvent);
@@ -89,11 +90,11 @@ describe('PlayerComponent', () => {
 
   describe('endedEventHandler should call event.preventDefault and call', () => {
     beforeEach(() => {
-      spyOn(communication.videoService, 'changeCurrentVideo');
+      spyOn(videoService, 'changeCurrentVideo');
       spyOn(comp, 'callStopVideo');
       spyOn(comp, 'callPlayVideo');
       spyOn(comp.videoElement.nativeElement, 'load');
-      comp.videos = communication.videoService.videoUrlsMock.videos;
+      comp.videos = communication.videoDataService.videoUrlsMock.videos;
     });
 
     afterAll(() => {
@@ -102,15 +103,15 @@ describe('PlayerComponent', () => {
     });
 
     it('setCurrentVideo, load, play when index currentVideo of videos is 0', () => {
-      comp.currentVideo = communication.videoService.videoUrlsMock.videos[0];
+      comp.currentVideo = communication.videoDataService.videoUrlsMock.videos[0];
       comp.endedEventHandler();
-      expect(communication.videoService.changeCurrentVideo).toHaveBeenCalledWith(1);
+      expect(videoService.changeCurrentVideo).toHaveBeenCalledWith(1);
       expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
       expect(comp.callPlayVideo).toHaveBeenCalled();
     });
 
     it('load, stopVideo when index currentVideo of videos is 3', () => {
-      comp.currentVideo = communication.videoService.videoUrlsMock.videos[3];
+      comp.currentVideo = communication.videoDataService.videoUrlsMock.videos[3];
       comp.endedEventHandler();
       expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
       expect(comp.callStopVideo).toHaveBeenCalled();
@@ -118,7 +119,7 @@ describe('PlayerComponent', () => {
 
     it('setCurrentVideo, load, play when argument is passed', () => {
       comp.endedEventHandler(1);
-      expect(communication.videoService.changeCurrentVideo).toHaveBeenCalledWith(1);
+      expect(videoService.changeCurrentVideo).toHaveBeenCalledWith(1);
       expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
       expect(comp.callPlayVideo).toHaveBeenCalled();
     });
@@ -129,8 +130,8 @@ describe('PlayerComponent', () => {
       spyOn(comp.playerControlsComponent, 'playVideo');
       spyOn(comp.playerControlsComponent, 'stopVideo');
       spyOn(comp, 'endedEventHandler');
-      comp.videos = communication.videoService.videoUrlsMock.videos;
-      comp.currentVideo = communication.videoService.videoUrlsMock.videos[0];
+      comp.videos = communication.videoDataService.videoUrlsMock.videos;
+      comp.currentVideo = communication.videoDataService.videoUrlsMock.videos[0];
     });
 
     it('in method callPlayVideo', () => {
@@ -147,7 +148,7 @@ describe('PlayerComponent', () => {
   describe('document click should call comp.clickout', () => {
     beforeEach(() => {
       spyOn(comp, 'clickout');
-      comp.currentVideo = communication.videoService.videoUrlsMock.videos[0];
+      comp.currentVideo = communication.videoDataService.videoUrlsMock.videos[0];
     });
 
     it('', () => {
@@ -188,7 +189,7 @@ describe('PlayerComponent', () => {
 
   describe('setPlayedInShuffle should set playedInShuffle of currentVideo, to', () => {
     beforeEach(() => {
-      comp.currentVideo = communication.videoService.videoUrlsMock.videos[0];
+      comp.currentVideo = communication.videoDataService.videoUrlsMock.videos[0];
     });
 
     it('true', () => {
@@ -230,14 +231,14 @@ describe('PlayerComponent', () => {
     beforeEach(() => {
       spyOn(comp.playerControlsComponent, 'playVideo');
       spyOn(comp.playerControlsComponent, 'stopVideo');
-      spyOn(communication.videoService, 'changeCurrentVideo');
+      spyOn(videoService, 'changeCurrentVideo');
     });
 
     it('should call playedVideoIndexOnChange subscribe and callchangeCurrentVideo, stopVideo, playVideo', () => {
       comp.getChangesPlayedVideo();
-      communication.videoService.changePlayedVideo(1);
+      videoService.changePlayedVideo(1);
       expect(comp.playerControlsComponent.stopVideo).toHaveBeenCalled();
-      expect(communication.videoService.changeCurrentVideo).toHaveBeenCalledWith(1);
+      expect(videoService.changeCurrentVideo).toHaveBeenCalledWith(1);
       expect(comp.playerControlsComponent.playVideo).toHaveBeenCalled();
     });
   });

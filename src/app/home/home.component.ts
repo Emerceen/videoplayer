@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { Video } from '../entities/video';
-import { Communication } from '../services/communication';
+import { Communication } from '../data-services/communication';
+import { VideoService } from '../services/video.service';
 
 @Component({
   moduleId: module.id,
@@ -16,7 +17,8 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private cm: Communication,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private videoService: VideoService
   ) { }
 
   ngOnInit(): void {
@@ -25,7 +27,7 @@ export class HomeComponent implements OnInit {
   }
 
   getVideoUrls(): void {
-    this.cm.videoService.getVideoUrls().subscribe(
+    this.cm.videoDataService.getVideoUrls().subscribe(
       res => {
         this.videos = res.videos;
         this.setCurrentVideo();
@@ -42,7 +44,7 @@ export class HomeComponent implements OnInit {
   }
 
   getCurrentVideoIndex(): void {
-    this.cm.videoService.currentVideoIndexOnChange.subscribe(index => {
+    this.videoService.currentVideoIndexOnChange.subscribe(index => {
       this.setCurrentVideo(index);
     });
   }

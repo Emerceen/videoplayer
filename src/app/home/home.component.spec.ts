@@ -8,7 +8,8 @@ import { Component } from '@angular/core';
 import { TranslateService, TranslateLoader, TranslateParser } from 'ng2-translate';
 
 import { HomeComponent, HomeModule } from './index';
-import { Communication } from '../services/communication';
+import { Communication } from '../data-services/communication';
+import { VideoService } from '../services/video.service';
 import { MockCommunication } from '../mock/communication-mock';
 
 @Component({
@@ -22,6 +23,7 @@ class TestComponent {
 
 let comp: HomeComponent;
 let fixture: ComponentFixture<HomeComponent>;
+let videoService: VideoService;
 let communication: any;
 
 describe('HomeComponent', () => {
@@ -35,6 +37,7 @@ describe('HomeComponent', () => {
       ],
       providers: [
         { provide: Communication, useClass: MockCommunication },
+        VideoService,
         TranslateService,
         TranslateLoader,
         TranslateParser
@@ -45,8 +48,8 @@ describe('HomeComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(HomeComponent);
     comp = fixture.componentInstance;
-
     communication = fixture.debugElement.injector.get(Communication);
+    videoService = fixture.debugElement.injector.get(VideoService);
     expect(comp).toBeDefined();
   });
 
@@ -65,17 +68,17 @@ describe('HomeComponent', () => {
 
     afterEach(() => {
       comp.videos = undefined;
-      communication.videoService.videoUrlsError = false;
+      communication.videoDataService.videoUrlsError = false;
     });
 
     it('get videos and call setCurrentVideo when response is success', () => {
       comp.getVideoUrls();
-      expect(comp.videos).toBe(communication.videoService.videoUrlsMock.videos);
+      expect(comp.videos).toBe(communication.videoDataService.videoUrlsMock.videos);
       expect(comp.setCurrentVideo).toHaveBeenCalled();
     });
 
     it('return false when response is error', () => {
-      communication.videoService.videoUrlsError = true;
+      communication.videoDataService.videoUrlsError = true;
       expect(comp.getVideoUrls()).toBeFalsy();
     });
   });
@@ -83,7 +86,7 @@ describe('HomeComponent', () => {
   describe('setCurrentVideo should', () => {
     describe('set safeUrl of video object, and define currentVideo of video object', () => {
       beforeEach(() => {
-        comp.videos = communication.videoService.videoUrlsMock.videos;
+        comp.videos = communication.videoDataService.videoUrlsMock.videos;
       });
 
       afterEach(() => {
@@ -115,7 +118,7 @@ describe('HomeComponent', () => {
     it('should call setCurrentVideo with index', () => {
       let index = 1;
       comp.getCurrentVideoIndex();
-      communication.videoService.changeCurrentVideo(index);
+      videoService.changeCurrentVideo(index);
       expect(comp.setCurrentVideo).toHaveBeenCalledWith(index);
     });
   });
