@@ -12,6 +12,7 @@
 @import 'video-duration';
 @import 'video-details';
 @import 'video';
+@import 'videos-sidebar';
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
 body {
@@ -31,8 +32,7 @@ body {
 }
 
 .main-box {
-  margin-left: 10px;
-  margin-top: 10px;
+  margin: 10px 5px 0 5px;
   background-color: #fff;
   padding: 15px;
   height: 100%;
@@ -48,4 +48,27 @@ body {
 
 .pointer {
   cursor: pointer;
+}
+
+@media all and ( max-width: 1099px ) {
+  #content {
+    align-items: center;
+    flex-direction: column;
+    margin: 0 auto;
+    max-width: 650px;
+  }
+
+  #main-container {
+    align-items: center;
+  }
+
+  .main-box {
+    align-self: stretch;
+    width: auto;
+  }
+
+  .main-container {
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
