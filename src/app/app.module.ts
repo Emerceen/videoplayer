@@ -8,7 +8,7 @@ import { appRoutingProviders, routing } from './app.routing';
 
 import { TranslateModule } from 'ng2-translate';
 
-import { VideoService } from './services/video.service';
+import { VideoDataService } from './data-services/video.service';
 
 import { PlayerModule } from './player/index';
 import { HomeModule } from './home/index';
@@ -30,9 +30,9 @@ import { HomeModule } from './home/index';
         APP_PROVIDERS,
         appRoutingProviders,
         {
-            provide: VideoService,
+            provide: VideoDataService,
             useFactory: (http) => {
-                return new VideoService(http);
+                return new VideoDataService(http);
             },
             deps: [Http]
         },

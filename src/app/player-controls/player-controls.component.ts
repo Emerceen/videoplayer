@@ -3,7 +3,7 @@ import { Component, Input, Output, EventEmitter, ElementRef } from '@angular/cor
 import { HoverInterface } from './../entities/hover';
 import { VideoControls } from './../entities/video-controls';
 import { DocumentMozMsPrefixesRefService } from './../services/document.service';
-import { Communication } from './../services/communication';
+import { VideoService } from './../services/video.service';
 
 @Component({
   moduleId: module.id,
@@ -26,7 +26,7 @@ export class PlayerControlsComponent {
 
   constructor(
     private document: DocumentMozMsPrefixesRefService,
-    private cm: Communication
+    private videoService: VideoService
   ) { }
 
   playVideo(): void {
@@ -46,7 +46,7 @@ export class PlayerControlsComponent {
 
   stopVideo(): void {
     this.videoElement.nativeElement.poster = this.posterUrl;
-    this.cm.videoService.changeCurrentVideo();
+    this.videoService.changeCurrentVideo();
     this.videoElement.nativeElement.load();
     this.videoControls.stopped = true;
     this.videoControls.played = false;

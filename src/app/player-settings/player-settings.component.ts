@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { VideoControls } from './../entities/video-controls';
 import { Video } from './../entities/video';
-import { Communication } from './../services/communication';
+import { VideoService } from './../services/video.service';
 
 @Component({
   moduleId: module.id,
@@ -34,7 +34,7 @@ export class PlayerSettingsComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    private cm: Communication
+    private videoService: VideoService
   ) {
     this.playerSettingsForm = this.formBuilder.group({
       repeatVideo: false,
@@ -73,7 +73,7 @@ export class PlayerSettingsComponent {
 
   initialRandomVideo(): void {
     let randomNumber = Math.floor(Math.random() * this.videos.length);
-    this.cm.videoService.changeCurrentVideo(randomNumber);
+    this.videoService.changeCurrentVideo(randomNumber);
     this.videoElement.nativeElement.load();
     this.videoControls.stopped = true;
     this.videoControls.played = false;
@@ -145,9 +145,9 @@ export class PlayerSettingsComponent {
   endedRepeatedPlaylistEventHandler(): void {
     let index = this.videos.indexOf(this.currentVideo) + 1;
     if (index < this.videos.length) {
-      this.cm.videoService.changeCurrentVideo(index);
+      this.videoService.changeCurrentVideo(index);
     } else {
-      this.cm.videoService.changeCurrentVideo();
+      this.videoService.changeCurrentVideo();
     }
     this.videoElement.nativeElement.load();
     this.callPlayVideo.emit();

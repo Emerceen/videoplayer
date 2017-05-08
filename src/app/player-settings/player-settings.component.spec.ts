@@ -1,4 +1,3 @@
-import { Communication } from './../services/communication';
 import { async, TestBed, ComponentFixture } from '@angular/core/testing';
 import { DebugElement, ElementRef } from '@angular/core';
 import { By } from '@angular/platform-browser';
@@ -9,6 +8,7 @@ import { PlayerSettingsComponent, PlayerSettingsModule } from './index';
 import { VideoControls } from './../entities/video-controls';
 import { ElementStub } from './../mock/element-stub.spec';
 import { MockCommunication } from '../mock/communication-mock';
+import { VideoService } from './../services/video.service';
 
 @Component({
   selector: 'as-test',
@@ -19,7 +19,7 @@ class TestComponent {
 }
 
 let comp: PlayerSettingsComponent;
-let communication: Communication;
+let videoService: VideoService;
 let fixture: ComponentFixture<PlayerSettingsComponent>;
 let de: DebugElement;
 let element = new ElementStub();
@@ -34,7 +34,7 @@ describe('PlayerSettingsComponent', () => {
       declarations: [TestComponent],
       imports: [PlayerSettingsModule],
       providers: [
-        { provide: Communication, useClass: MockCommunication }
+        VideoService
       ]
     }).compileComponents();
   }));
@@ -42,11 +42,12 @@ describe('PlayerSettingsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PlayerSettingsComponent);
     comp = fixture.componentInstance;
-    communication = fixture.debugElement.injector.get(Communication);
+    // communication = fixture.debugElement.injector.get(Communication);
+    videoService = fixture.debugElement.injector.get(VideoService);
     comp.playerSettings = false;
     comp.videoElement = <ElementRef> element;
     comp.videoControls = new VideoControls();
-    comp.videos = new MockCommunication().videoService.videoUrlsMock.videos;
+    comp.videos = new MockCommunication().videoDataService.videoUrlsMock.videos;
   });
 
   it('constructor() should create FormGroup', () => {
@@ -211,11 +212,11 @@ describe('PlayerSettingsComponent', () => {
 
   describe('endedRepeatedPlaylistEventHandler() should', () => {
     beforeEach(() => {
-      spyOn(communication.videoService, 'changeCurrentVideo');
+      spyOn(videoService, 'changeCurrentVideo');
       spyOn(comp.callPlayVideo, 'emit');
       spyOn(comp, 'endedRepeatedCurrentVideoEventHandler');
       spyOn(comp.videoElement.nativeElement, 'load');
-      comp.videos = new MockCommunication().videoService.videoUrlsMock.videos;
+      comp.videos = new MockCommunication().videoDataService.videoUrlsMock.videos;
     });
 
     afterAll(() => {
@@ -226,7 +227,7 @@ describe('PlayerSettingsComponent', () => {
     it('setCurrentVideo with parameter, load, call callPlayVideo() when index currentVideo of videos is 0', () => {
       comp.currentVideo = comp.videos[0];
       comp.endedRepeatedPlaylistEventHandler();
-      expect(communication.videoService.changeCurrentVideo).toHaveBeenCalledWith(1);
+      expect(videoService.changeCurrentVideo).toHaveBeenCalledWith(1);
       expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
       expect(comp.callPlayVideo.emit).toHaveBeenCalled();
     });
@@ -234,7 +235,7 @@ describe('PlayerSettingsComponent', () => {
     it('setCurrentVideo without parameter, load, call callPlayVideo() when index currentVideo of videos is 3', () => {
       comp.currentVideo = comp.videos[3];
       comp.endedRepeatedPlaylistEventHandler();
-      expect(communication.videoService.changeCurrentVideo).toHaveBeenCalledWith();
+      expect(videoService.changeCurrentVideo).toHaveBeenCalledWith();
       expect(comp.videoElement.nativeElement.load).toHaveBeenCalled();
       expect(comp.callPlayVideo.emit).toHaveBeenCalled();
     });
@@ -245,8 +246,8 @@ describe('PlayerSettingsComponent', () => {
       spyOn(comp, 'endedRepeatedCurrentVideoEventHandler');
       spyOn(comp, 'endedRepeatedPlaylistEventHandler');
       spyOn(comp.endedEventHandler, 'emit');
-      comp.videos = new MockCommunication().videoService.videoUrlsMock.videos;
-      comp.currentVideo = new MockCommunication().videoService.videoUrlsMock.videos[0];
+      comp.videos = new MockCommunication().videoDataService.videoUrlsMock.videos;
+      comp.currentVideo = new MockCommunication().videoDataService.videoUrlsMock.videos[0];
     });
 
     describe('in method repeatCurrentVideo, and when', () => {
@@ -293,7 +294,7 @@ describe('PlayerSettingsComponent', () => {
 
   describe('resetShufflePlaying() should map array videos, anvideoControls.playedInShuffle set to falsy', () => {
     beforeEach(() => {
-      comp.videos = new MockCommunication().videoService.videoUrlsMock.videos;
+      comp.videos = new MockCommunication().videoDataService.videoUrlsMock.videos;
       comp.videos.map(video => video.playedInShuffle = true);
     });
 
@@ -307,7 +308,7 @@ describe('PlayerSettingsComponent', () => {
   describe('shufflePlay()', () => {
 
     beforeEach(() => {
-      comp.videos = new MockCommunication().videoService.videoUrlsMock.videos;
+      comp.videos = new MockCommunication().videoDataService.videoUrlsMock.videos;
       comp.currentVideo = comp.videos[0];
       spyOn(comp, 'initialRandomVideo');
       spyOn(comp.endedEventHandler, 'emit');

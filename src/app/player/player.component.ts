@@ -5,7 +5,7 @@ import { HoverInterface } from './../entities/hover';
 import { VideoControls } from './../entities/video-controls';
 import { BufferingStateService } from './../services/buffering-state.service';
 import { PlayerControlsComponent } from '../player-controls/index';
-import { Communication } from '../services/communication';
+import { VideoService } from '../services/video.service';
 
 @Component({
   moduleId: module.id,
@@ -65,7 +65,7 @@ export class PlayerComponent implements OnInit {
   constructor(
     private cdr: ChangeDetectorRef,
     private bufferingStateService: BufferingStateService,
-    private cm: Communication
+    private videoService: VideoService
   ) { }
 
   ngOnInit(): void {
@@ -75,7 +75,7 @@ export class PlayerComponent implements OnInit {
 
   endedEventHandler(index: number = this.videos.indexOf(this.currentVideo) + 1): void {
     if (index < this.videos.length) {
-      this.cm.videoService.changeCurrentVideo(index);
+      this.videoService.changeCurrentVideo(index);
       this._videoElement.nativeElement.load();
       this.callPlayVideo();
     } else {
@@ -119,10 +119,10 @@ export class PlayerComponent implements OnInit {
   }
 
   getChangesPlayedVideo(): void {
-    this.cm.videoService.playedVideoIndexOnChange.subscribe(
+    this.videoService.playedVideoIndexOnChange.subscribe(
       index => {
         this.playerControlsComponent.stopVideo();
-        this.cm.videoService.changeCurrentVideo(index);
+        this.videoService.changeCurrentVideo(index);
         this.playerControlsComponent.playVideo();
       }
     );

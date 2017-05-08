@@ -2,8 +2,7 @@ import { async, TestBed, ComponentFixture } from '@angular/core/testing';
 import { Component } from '@angular/core';
 
 import { VideosComponent, VideosModule } from './index';
-import { MockCommunication } from './../mock/communication-mock';
-import { Communication } from './../services/communication';
+import { VideoService } from './../services/video.service';
 
 @Component({
   selector: 'as-test',
@@ -16,7 +15,7 @@ class TestComponent {
 
 let comp: VideosComponent;
 let fixture: ComponentFixture<VideosComponent>;
-let communication: any;
+let videoService: VideoService;
 
 describe('VideosComponent', () => {
   beforeEach(async(() => {
@@ -24,7 +23,7 @@ describe('VideosComponent', () => {
       declarations: [TestComponent],
       imports: [VideosModule],
       providers: [
-         { provide: Communication, useClass: MockCommunication }
+         VideoService
       ]
     }).compileComponents();
   }));
@@ -32,17 +31,17 @@ describe('VideosComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(VideosComponent);
     comp = fixture.componentInstance;
-    communication = fixture.debugElement.injector.get(Communication);
+    videoService = fixture.debugElement.injector.get(VideoService);
   });
 
   describe('selectVideo', () => {
     beforeEach(() => {
-      spyOn(communication.videoService, 'changePlayedVideo');
+      spyOn(videoService, 'changePlayedVideo');
     });
 
     it('should call changePlayedVideo', () => {
       comp.selectVideo(1);
-      expect(communication.videoService.changePlayedVideo).toHaveBeenCalledWith(1);
+      expect(videoService.changePlayedVideo).toHaveBeenCalledWith(1);
     });
   });
 });

@@ -1,9 +1,8 @@
 import { async, TestBed, ComponentFixture } from '@angular/core/testing';
 import { Component } from '@angular/core';
+import { VideoService } from './../services/video.service';
 
 import { VideosSidebarComponent, VideosSidebarModule } from './index';
-import { MockCommunication } from './../mock/communication-mock';
-import { Communication } from './../services/communication';
 
 @Component({
   selector: 'as-test',
@@ -16,7 +15,6 @@ class TestComponent {
 
 let comp: VideosSidebarComponent;
 let fixture: ComponentFixture<VideosSidebarComponent>;
-let communication: any;
 
 describe('VideosSidebarComponent', () => {
   beforeEach(async(() => {
@@ -24,7 +22,7 @@ describe('VideosSidebarComponent', () => {
       declarations: [TestComponent],
       imports: [VideosSidebarModule],
       providers: [
-         { provide: Communication, useClass: MockCommunication }
+        VideoService
       ]
     }).compileComponents();
   }));
@@ -32,7 +30,6 @@ describe('VideosSidebarComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(VideosSidebarComponent);
     comp = fixture.componentInstance;
-    communication = fixture.debugElement.injector.get(Communication);
   });
 
   it('should be defined', () => {
