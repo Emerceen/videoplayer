@@ -316,16 +316,16 @@ describe('PlayerSettingsComponent', () => {
     });
 
     describe('when parameter isEnable is truthy', () => {
-      describe('and when comp.videoControls.played is', () => {
+      describe('and when comp.videoControls.stopped is', () => {
 
-        it('falsy should call initialRandomVideo()', () => {
-          comp.videoControls.played = false;
+        it('truthy should call initialRandomVideo()', () => {
+          comp.videoControls.stopped = true;
           comp.shufflePlay(true);
           expect(comp.initialRandomVideo).toHaveBeenCalled();
         });
 
-        it('truthy should not call initialRandomVideo()', () => {
-          comp.videoControls.played = true;
+        it('falsy should not call initialRandomVideo()', () => {
+          comp.videoControls.stopped = false;
           comp.shufflePlay(true);
           expect(comp.initialRandomVideo).toHaveBeenCalledTimes(0);
         });
