@@ -5,7 +5,6 @@ import { ChannelDataService } from './channel.service';
 
 @Injectable()
 
-
 export class Communication {
   constructor(
     public videoDataService: VideoDataService,
