@@ -51,7 +51,12 @@ module.exports = function(config) {
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
-    autoWatch: true
+    autoWatch: true,
+    browserConsoleLogOptions: {
+      level: 'log',
+      format: '%b %T: %m',
+      terminal: true
+    }
   };
 
   configuration.preprocessors[gulpConfig.tmpApp + '**/!(*.spec)+(.js)'] = ['coverage'];
