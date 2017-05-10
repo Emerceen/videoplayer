@@ -1,6 +1,5 @@
 import { Video, VideoInterface } from '../entities/video';
 
-
 export class VideoMock {
   public videos: Array<Video> = [
     {

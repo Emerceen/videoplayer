@@ -9,6 +9,7 @@ import { appRoutingProviders, routing } from './app.routing';
 import { TranslateModule } from 'ng2-translate';
 
 import { VideoDataService } from './data-services/video.service';
+import { ChannelDataService } from './data-services/channel.service';
 
 import { PlayerModule } from './player/index';
 import { HomeModule } from './home/index';
@@ -36,6 +37,13 @@ import { HomeModule } from './home/index';
             },
             deps: [Http]
         },
+        {
+            provide: ChannelDataService,
+            useFactory: (http) => {
+                return new ChannelDataService(http);
+            },
+            deps: [Http]
+        }
     ],
     bootstrap: [ AppComponent ]
 })

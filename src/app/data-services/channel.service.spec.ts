@@ -2,18 +2,18 @@ import { async, getTestBed, TestBed } from '@angular/core/testing';
 import { BaseRequestOptions, Http,  XHRBackend } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
 
-import { VideoDataService } from './video.service';
+import { ChannelDataService } from './channel.service';
 
-import { VideoMockPascalCase } from '../mock/video-mock.spec';
+import { ChannelMockPascalCase } from './../mock/channel-mock.spec';
 import { ConnectionsMock } from '../mock/connections-mock.service.spec';
 
-import { VideoArray } from '../entities/video-array';
-import { Video } from '../entities/video';
+import { ChannelArray } from './../entities/channel-array';
+import { Channel } from './../entities/channel';
 
 
-describe('Service: VideoDataService', () => {
+describe('Service: ChannelDataService', () => {
   let backend: MockBackend;
-  let service: VideoDataService;
+  let service: ChannelDataService;
   let http: Http;
 
   beforeEach(async(() => {
@@ -21,7 +21,7 @@ describe('Service: VideoDataService', () => {
       providers: [
         BaseRequestOptions,
         MockBackend,
-        VideoDataService,
+        ChannelDataService,
         {
           deps: [
             MockBackend,
@@ -38,27 +38,25 @@ describe('Service: VideoDataService', () => {
     const testbed = getTestBed();
     backend = testbed.get(MockBackend);
     http = testbed.get(Http);
-    service = testbed.get(VideoDataService);
+    service = testbed.get(ChannelDataService);
   }));
 
-  describe('getVideoUrls()', () => {
+  describe('getChannels', () => {
 
     beforeEach(() => {
       service.url = undefined;
       ConnectionsMock.setup(backend,
         {
-          body: new VideoMockPascalCase(),
+          body: new ChannelMockPascalCase(),
           status: 200
         }
       );
     });
 
     it('should create request and map response array', () => {
-      service.getVideoUrls().subscribe((data: VideoArray) => {
-        expect(data instanceof VideoArray).toBeTruthy();
-        expect(data.videos[0] instanceof Video).toBeTruthy();
-        expect(data.videos.length).toBe(3);
-        expect(data.videos[0].name).toBe('VIDEO 2');
+      service.getChannels().subscribe(data => {
+        expect(data instanceof ChannelArray).toBeTruthy();
+        expect(data.channels[0] instanceof Channel).toBeTruthy();
       });
     });
   });
