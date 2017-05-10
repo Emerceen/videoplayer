@@ -11,7 +11,7 @@ import { VideoArray } from '../entities/video-array';
 import { Video } from '../entities/video';
 
 
-describe('Service: VideoService', () => {
+describe('Service: VideoDataService', () => {
   let backend: MockBackend;
   let service: VideoDataService;
   let http: Http;
