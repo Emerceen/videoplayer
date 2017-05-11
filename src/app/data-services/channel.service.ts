@@ -8,6 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import { apiUrl } from '../commons/api-url';
 
 import { ChannelArray } from '../entities/channel-array';
+import { Channel } from '../entities/channel';
 
 @Injectable()
 
@@ -24,5 +25,13 @@ export class ChannelDataService {
 
     return this.http.get(this.url)
       .map(response => ChannelArray.fromData(response.json()));
+  }
+
+  getChannelById(id: string): Observable<Channel> {
+    let reqUrl = `channel${id}.json`;
+    this.url = apiUrl(reqUrl);
+
+    return this.http.get(this.url)
+      .map(response => Channel.fromData(response.json()));
   }
 }
