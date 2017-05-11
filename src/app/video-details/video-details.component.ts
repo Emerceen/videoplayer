@@ -13,9 +13,11 @@ export class VideoDetailsComponent {
   public video: Video;
 
   @Input() set currentVideo(video: Video) {
-    if (video && video.channel) {
+    if (video) {
       this.video = video;
-      this.getChannelDetails(video.channel.id);
+      if (video.channel) {
+        this.getChannelDetails(video.channel.id);
+      }
     }
   };
 
