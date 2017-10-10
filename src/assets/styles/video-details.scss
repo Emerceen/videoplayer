@@ -1,5 +1,30 @@
 .video-details {
   .title {
     font-size: 20px;
+    margin-bottom: 10px;
+    color: black;
   }
+  .details-flex-box {
+    display: flex;
+    justify-content: space-between;
+    .channel-wrapper {
+      display: flex;
+      .channel-image img {
+        width: 48px;
+        height: 48px;
+      }
+      .channel-title {
+        height: 22px;
+        font-size: 100%;
+        font-weight: 500;
+        margin-left: 10px;
+      }
+    }
+    .views {
+      font-size: 19px;
+      align-self: flex-end;
+      color: #666;
+    }
+  }
+ 
 }

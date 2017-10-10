@@ -34,10 +34,33 @@ gulp.task('build-assets', function (done) {
         gulp.src(config.src + 'videos-mock.json')
         .pipe(gulp.dest(config.build.path));
 
+        gulp.src(config.src + 'channels-mock.json')
+        .pipe(gulp.dest(config.build.path));
+
+        gulp.src(config.src + 'channel00001.json')
+        .pipe(gulp.dest(config.build.path));
+
+        gulp.src(config.src + 'channel00002.json')
+        .pipe(gulp.dest(config.build.path));
+
+        gulp.src(config.src + 'channel00003.json')
+        .pipe(gulp.dest(config.build.path));
+
+        gulp.src(config.src + 'channel00004.json')
+        .pipe(gulp.dest(config.build.path));
+
+        gulp.src(config.src + 'i18n/*.json')
+        .pipe(gulp.dest(config.build.path + 'i18n'));
+
         gulp.src(config.assetsPath.images + '**/*.*', {
             base: config.assetsPath.images
         })
         .pipe(gulp.dest(config.build.assetPath + 'images'));
+
+        gulp.src(config.assetsPath.fonts + '**/*.*', {
+            base: config.assetsPath.fonts
+        })
+        .pipe(gulp.dest(config.build.assetPath + 'fonts'));
 
         gulp.src(config.index)
             .pipe(useref())
@@ -52,13 +75,13 @@ gulp.task('build-assets', function (done) {
 
 /* Copy fonts in packages */
 gulp.task('fonts', function () {
-    gulp.src(config.assetsPath.fonts + '**/*.*', {
-        base: config.assetsPath.fonts
-    })
+    gulp.src([
+        'node_modules/font-awesome/fonts/*.*'
+    ])
     .pipe(gulp.dest(config.build.fonts));
 
     gulp.src([
-        'node_modules/font-awesome/fonts/*.*'
+        'node_modules/materialize-css/fonts/*/*.*',
     ])
     .pipe(gulp.dest(config.build.fonts));
 });

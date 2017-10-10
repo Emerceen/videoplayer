@@ -1,8 +1,9 @@
+// @import 'materialize';
 @import 'bootstrap';
+// @import url('https://fonts.googleapis.com/css?family=Roboto:400,500');
 @import 'variables';
 @import 'mixins';
 @import 'functions';
-@import 'fonts';
 @import 'overrides';
 @import 'module';
 @import 'video-player';
@@ -13,7 +14,6 @@
 @import 'video-details';
 @import 'video';
 @import 'videos-sidebar';
-@import url('https://fonts.googleapis.com/css?family=Roboto');
 
 body {
   font-family: 'Roboto', sans-serif;
