@@ -1,7 +1,7 @@
 <ng-container *ngFor="let video of videos; let i = index" >
   <div class="video pointer" *ngIf="video !== currentVideo" (click)="selectVideo(i)">
     <div class="poster">
-      <img src="{{ video.poster }}" [alt]="video.name" width="168px" height="94px">
+      <img [src]="video.poster" [alt]="video.name" width="168px" height="94px">
       
     </div>
     <div class="info">

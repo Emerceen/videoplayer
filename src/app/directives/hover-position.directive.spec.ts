@@ -7,7 +7,7 @@ import { MousePosition } from './../entities/mouse-position';
 
 @Component({
   template: `
-  <div class="hover-div" [asHoverPosition]="mousePosition">hover test</div>`
+  <div class="hover-div" [appHoverPosition]="mousePosition">hover test</div>`
 })
 
 class TestComponent {
@@ -22,7 +22,7 @@ describe('HoverPositionDirective', () => {
   let elements: DebugElement[];
   let comp: TestComponent;
   let hoverElement: any;
-  let mouseMoveEvent = document.createEvent('MouseEvents');
+  const mouseMoveEvent = document.createEvent('MouseEvents');
 
   mouseMoveEvent.initMouseEvent(
     'mousemove',
@@ -60,14 +60,14 @@ describe('HoverPositionDirective', () => {
 
   describe('toggle Hover should change value of mousePosition.x', () => {
     it('when mouse is enter on div', () => {
-      let event: any = new Event('mousemove');
+      const event: any = new Event('mousemove');
       fixture.detectChanges();
       hoverElement.dispatchEvent(event);
       fixture.detectChanges();
     });
 
     it('when mouse is leave of div', () => {
-      let event = new Event('mouseleave');
+      const event = new Event('mouseleave');
       fixture.detectChanges();
       hoverElement.dispatchEvent(event);
       fixture.detectChanges();

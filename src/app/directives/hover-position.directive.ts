@@ -2,7 +2,7 @@ import { Directive, HostListener, ElementRef, Input } from '@angular/core';
 import { MousePosition } from './../entities/mouse-position';
 
 @Directive({
-  selector: '[asHoverPosition]'
+  selector: '[appHoverPosition]'
 })
 
 export class HoverPositionDirective {
@@ -11,7 +11,7 @@ export class HoverPositionDirective {
 
   constructor(el: ElementRef) { this.el = el.nativeElement; }
 
-  @Input() set asHoverPosition(mousePosition: MousePosition) {
+  @Input() set appHoverPosition(mousePosition: MousePosition) {
     this.mousePosition = mousePosition;
   }
 
@@ -28,8 +28,8 @@ export class HoverPositionDirective {
   }
 
   calculatePercentageValue(xPosition: number): number {
-    let elementWidth = this.el.clientWidth;
-    let percentageValue = (xPosition / elementWidth) * 100;
+    const elementWidth = this.el.clientWidth;
+    const percentageValue = (xPosition / elementWidth) * 100;
     return percentageValue;
   }
 }

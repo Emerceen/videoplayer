@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-
-import { TranslateService } from 'ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  moduleId: module.id,
-  selector: 'as-main-app',
-  templateUrl: 'app.html'
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   constructor(public translate: TranslateService) {

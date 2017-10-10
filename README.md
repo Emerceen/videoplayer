@@ -1,30 +1,27 @@
-# Videoplayer
-Simple player app
+# VideoplayerAngularCli
 
-## Installation
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.4.4.
 
-Go to the videoplayer directory and install the packages:
-```bash
-npm install
-```
+## Development server
 
-## Start
-Let's start up the server, run:
-```bash
-npm start
-```
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-and done! The browser will popup and you can start trying videoplayer!
-Every changes to the file will refresh the browser automatically
-and it'll also compile your changed TypeScripts files to Javascript files.
+## Code scaffolding
 
-## Production
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-You can create production build by running:
-```bash
-npm run build
-```
-or you can create production build and then serve it using Browsersync by running:
-```bash
-npm run serve-build
-```
+## Build
+
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+
+## Running unit tests
+
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+## Running end-to-end tests
+
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+
+## Further help
+
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).

@@ -1,51 +1,44 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { HttpModule, Http } from '@angular/http';
-
-import { APP_PROVIDERS } from './app.providers';
-import { AppComponent } from './app.component';
-import { appRoutingProviders, routing } from './app.routing';
-
-import { TranslateModule } from 'ng2-translate';
-
-import { VideoDataService } from './data-services/video.service';
+import { HttpModule } from '@angular/http';
 import { ChannelDataService } from './data-services/channel.service';
+import { VideoDataService } from './data-services/video.service';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { routing } from './app.routing';
 
-import { PlayerModule } from './player/index';
-import { HomeModule } from './home/index';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { AppComponent } from './app.component';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HomeModule } from './home/home.module';
+import { PlayerModule } from './player/player.module';
 
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
+  return new TranslateHttpLoader(http, '/i18n/', '.json');
+}
 
 @NgModule({
-    declarations: [
-        AppComponent
-    ],
-    imports: [
-        TranslateModule.forRoot(),
-        BrowserModule,
-        PlayerModule,
-        HomeModule,
-        HttpModule,
-        routing
-    ],
-    providers: [
-        APP_PROVIDERS,
-        appRoutingProviders,
-        {
-            provide: VideoDataService,
-            useFactory: (http) => {
-                return new VideoDataService(http);
-            },
-            deps: [Http]
-        },
-        {
-            provide: ChannelDataService,
-            useFactory: (http) => {
-                return new ChannelDataService(http);
-            },
-            deps: [Http]
-        }
-    ],
-    bootstrap: [ AppComponent ]
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
+    BrowserModule,
+    HttpClientModule,
+    PlayerModule,
+    HomeModule,
+    HttpModule,
+    routing
+  ],
+  providers: [
+    VideoDataService,
+    ChannelDataService
+  ],
+  bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule { }

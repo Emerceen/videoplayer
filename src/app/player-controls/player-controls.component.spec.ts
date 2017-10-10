@@ -14,8 +14,8 @@ import { DocumentMock } from './../mock/document-mock.spec';
 import { ElementStub } from './../mock/element-stub.spec';
 
 @Component({
-  selector: 'as-test',
-  template: '<as-player-controls></as-player-controls>'
+  selector: 'app-test',
+  template: '<app-player-controls></app-player-controls>'
 })
 
 class TestComponent {
@@ -24,7 +24,7 @@ class TestComponent {
 let comp: PlayerControlsComponent;
 let videoService: VideoService;
 let fixture: ComponentFixture<PlayerControlsComponent>;
-let element = new ElementStub();
+const element = new ElementStub();
 let documentMock: DocumentMozMsPrefixesRefService;
 
 describe('PlayerControlsComponent', () => {

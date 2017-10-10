@@ -4,8 +4,7 @@ import { Communication } from '../data-services/communication';
 import { Video } from '../entities/video';
 
 @Component({
-  moduleId: module.id,
-  selector: 'as-video-details',
+  selector: 'app-video-details',
   templateUrl: 'video-details.component.html'
 })
 
@@ -19,7 +18,7 @@ export class VideoDetailsComponent {
         this.getChannelDetails(video.channel.id);
       }
     }
-  };
+  }
 
   constructor(private cm: Communication) { }
 

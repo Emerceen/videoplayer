@@ -6,7 +6,7 @@ import { HoverDirective } from './hover.directive';
 
 @Component({
   template: `
-  <div class="hover-div" [asHover]="controls">hover test</div>`
+  <div class="hover-div" [appHover]="controls">hover test</div>`
 })
 
 class TestComponent {
@@ -41,7 +41,7 @@ describe('HoverDirective', () => {
   describe('toggle Hover should change state of .isHover', () => {
     it('when mouse is enter on div', () => {
       comp.controls.isHover = false;
-      let event = new Event('mouseenter');
+      const event = new Event('mouseenter');
       fixture.detectChanges();
       hoverElement.dispatchEvent(event);
       fixture.detectChanges();
@@ -50,7 +50,7 @@ describe('HoverDirective', () => {
 
     it('when mouse is leave of div', () => {
       comp.controls.isHover = true;
-      let event = new Event('mouseleave');
+      const event = new Event('mouseleave');
       fixture.detectChanges();
       hoverElement.dispatchEvent(event);
       fixture.detectChanges();

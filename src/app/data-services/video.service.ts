@@ -19,7 +19,7 @@ export class VideoDataService {
   ) {}
 
   getVideoUrls(): Observable<VideoArray> {
-    let reqUrl = 'videos-mock.json';
+    const reqUrl = 'videos-mock.json';
     this.url = apiUrl(reqUrl);
 
     return this.http.get(this.url)

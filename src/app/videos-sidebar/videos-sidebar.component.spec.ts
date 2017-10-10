@@ -5,8 +5,8 @@ import { VideoService } from './../services/video.service';
 import { VideosSidebarComponent, VideosSidebarModule } from './index';
 
 @Component({
-  selector: 'as-test',
-  template: '<as-videos-sidebar></as-videos-sidebar>'
+  selector: 'app-test',
+  template: '<app-videos-sidebar></app-videos-sidebar>'
 })
 
 class TestComponent {

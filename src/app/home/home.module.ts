@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import { HomeComponent } from './index';
+import { HomeComponent } from './home.component';
 import { PlayerModule } from '../player/index';
 import { VideosSidebarModule } from '../videos-sidebar/index';
 import { Communication } from './../data-services/communication';

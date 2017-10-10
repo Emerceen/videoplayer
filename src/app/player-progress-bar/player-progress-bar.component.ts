@@ -6,8 +6,7 @@ import { VideoControls } from './../entities/video-controls';
 import { BufferingStateService } from './../services/buffering-state.service';
 
 @Component({
-  moduleId: module.id,
-  selector: 'as-player-progress-bar',
+  selector: 'app-player-progress-bar',
   templateUrl: 'player-progress-bar.component.html'
 })
 
@@ -25,11 +24,11 @@ export class PlayerProgressBarComponent {
     this._videoElement = element;
     this.registerTimeUpdate();
     this.registerProgress();
-  };
+  }
 
   public get videoElement(): { nativeElement: HTMLVideoElement } {
     return this._videoElement;
-  };
+  }
   @ViewChild('progressBarWrapper') progressBarWrapper: ElementRef;
 
   private _videoElement: { nativeElement: HTMLVideoElement };
@@ -70,7 +69,7 @@ export class PlayerProgressBarComponent {
   }
 
   checkBufferedLength(duration: number, currentTime: number, bufferedEnd: number): void {
-    let buffLenCurTimeDiference = bufferedEnd - currentTime;
+    const buffLenCurTimeDiference = bufferedEnd - currentTime;
     if (!this.videoControls.stopped && buffLenCurTimeDiference < this.bufferLoadTime && currentTime > 0) {
       this.bufferVideo();
     } else if (this.bufferingVideo && buffLenCurTimeDiference > this.bufferRestartTime || bufferedEnd === duration) {
@@ -94,15 +93,15 @@ export class PlayerProgressBarComponent {
   }
 
   changeVideoTimeStamp(event: any): void {
-    let videoDuration: number = this._videoElement.nativeElement.duration;
-    let progressBarWidth: number = this.progressBarWrapper.nativeElement.clientWidth;
-    let clickedPxOnProgressBar = event.offsetX;
+    const videoDuration: number = this._videoElement.nativeElement.duration;
+    const progressBarWidth: number = this.progressBarWrapper.nativeElement.clientWidth;
+    const clickedPxOnProgressBar = event.offsetX;
     this._videoElement.nativeElement.currentTime = this.calculateClickedPlace(videoDuration, progressBarWidth, clickedPxOnProgressBar);
   }
 
   calculateClickedPlace(videoDuration: number, progressBarWidth: number, clickedPxOnProgressBar: number): number {
-    let percentageStamp = (100 / progressBarWidth) * clickedPxOnProgressBar;
-    let timeStamp = videoDuration * (percentageStamp / 100);
+    const percentageStamp = (100 / progressBarWidth) * clickedPxOnProgressBar;
+    const timeStamp = videoDuration * (percentageStamp / 100);
     return timeStamp;
   }
 

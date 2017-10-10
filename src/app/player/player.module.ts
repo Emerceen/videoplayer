@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import { PlayerComponent } from './index';
+import { PlayerComponent } from './player.component';
 
 import { PlayerSettingsModule } from '../player-settings/index';
 import { PlayerControlsModule } from '../player-controls/index';

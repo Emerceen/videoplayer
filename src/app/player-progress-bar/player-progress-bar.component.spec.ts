@@ -18,8 +18,8 @@ import { ElementStub } from './../mock/element-stub.spec';
 import { EventStub } from './../mock/event-stub.spec';
 
 @Component({
-  selector: 'as-test',
-  template: '<as-player-progress-bar></as-player-progress-bar>'
+  selector: 'app-test',
+  template: '<app-player-progress-bar></app-player-progress-bar>'
 })
 
 class TestComponent {
@@ -27,9 +27,9 @@ class TestComponent {
 
 let comp: PlayerProgressBarComponent;
 let fixture: ComponentFixture<PlayerProgressBarComponent>;
-let element = new ElementStub();
+const element = new ElementStub();
 let documentMock: DocumentMozMsPrefixesRefService;
-let eventStub = new EventStub();
+const eventStub = new EventStub();
 
 describe('PlayerProgressBarComponent', () => {
   beforeEach(async(() => {

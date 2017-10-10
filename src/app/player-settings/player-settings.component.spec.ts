@@ -11,8 +11,8 @@ import { MockCommunication } from '../mock/communication-mock';
 import { VideoService } from './../services/video.service';
 
 @Component({
-  selector: 'as-test',
-  template: '<as-player-settings></as-player-settings>'
+  selector: 'app-test',
+  template: '<app-player-settings></app-player-settings>'
 })
 
 class TestComponent {
@@ -22,11 +22,11 @@ let comp: PlayerSettingsComponent;
 let videoService: VideoService;
 let fixture: ComponentFixture<PlayerSettingsComponent>;
 let de: DebugElement;
-let element = new ElementStub();
-let repeatVideoLiteral = 'repeatVideo';
-let shufflePlayLiteral = 'shufflePlay';
-let repeatPlaylistLiteral = 'repeatPlaylist';
-let mediaStreamErrorEvent: MediaStreamErrorEvent = undefined;
+const element = new ElementStub();
+const repeatVideoLiteral = 'repeatVideo';
+const shufflePlayLiteral = 'shufflePlay';
+const repeatPlaylistLiteral = 'repeatPlaylist';
+const mediaStreamErrorEvent: MediaStreamErrorEvent = undefined;
 
 describe('PlayerSettingsComponent', () => {
   beforeEach(async(() => {
@@ -52,8 +52,8 @@ describe('PlayerSettingsComponent', () => {
 
   it('constructor() should create FormGroup', () => {
     expect(comp.playerSettingsForm instanceof FormGroup).toBeTruthy();
-    expect(comp.playerSettingsForm.controls[repeatVideoLiteral]).toBeDefined;
-    expect(comp.playerSettingsForm.controls[repeatPlaylistLiteral]).toBeDefined;
+    expect(comp.playerSettingsForm.controls[repeatVideoLiteral]).toBeDefined();
+    expect(comp.playerSettingsForm.controls[repeatPlaylistLiteral]).toBeDefined();
   });
 
   describe('when playerSettings input is', () => {
@@ -120,7 +120,7 @@ describe('PlayerSettingsComponent', () => {
       expect(comp.playerSettingsForm.controls[shufflePlayLiteral].value).toBeFalsy();
     });
 
-    it(`and value is true and repeatPlaylist, shufflePalylist values are true then emit() 
+    it(`and value is true and repeatPlaylist, shufflePalylist values are true then emit()
     method of repeatCurrentVideo Output should call`, () => {
       comp.playerSettingsForm.controls[repeatPlaylistLiteral].setValue(true);
       comp.playerSettingsForm.controls[repeatVideoLiteral].setValue(true);

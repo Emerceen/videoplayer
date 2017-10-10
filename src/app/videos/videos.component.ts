@@ -4,8 +4,7 @@ import { Video } from '../entities/video';
 import { VideoService } from '../services/video.service';
 
 @Component({
-  moduleId: module.id,
-  selector: 'as-videos',
+  selector: 'app-videos',
   templateUrl: 'videos.component.html'
 })
 

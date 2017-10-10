@@ -6,8 +6,7 @@ import { Communication } from '../data-services/communication';
 import { VideoService } from '../services/video.service';
 
 @Component({
-  moduleId: module.id,
-  selector: 'as-home',
+  selector: 'app-home',
   templateUrl: 'home.component.html'
 })
 

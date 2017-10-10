@@ -20,7 +20,7 @@ export class ChannelDataService {
   ) {}
 
   getChannels(): Observable<ChannelArray> {
-    let reqUrl = 'channels-mock.json';
+    const reqUrl = 'channels-mock.json';
     this.url = apiUrl(reqUrl);
 
     return this.http.get(this.url)
@@ -28,7 +28,7 @@ export class ChannelDataService {
   }
 
   getChannelById(id: string): Observable<Channel> {
-    let reqUrl = `channel${id}.json`;
+    const reqUrl = `channel${id}.json`;
     this.url = apiUrl(reqUrl);
 
     return this.http.get(this.url)

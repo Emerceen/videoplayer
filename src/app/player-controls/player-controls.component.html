@@ -1,17 +1,17 @@
 <div id="video-controls" [ngClass]="{hover: controls.isHover || playerSettings}">
   <div class="controls-wrapper">
-    <as-player-progress-bar
+    <app-player-progress-bar
     [videoElement]="videoElement"
     [videoControls]="videoControls">
-    </as-player-progress-bar>
+    </app-player-progress-bar>
     <div class="control-icons">
       <i *ngIf="!videoControls.played" (click)="playVideo()" class="fa fa-play vc-main" aria-hidden="true"></i>
       <i *ngIf="videoControls.played" (click)="pauseVideo()" class="fa fa-pause vc-main" aria-hidden="true"></i>
       <i (click)="stopVideo()" class="fa fa-stop vc-main" aria-hidden="true"></i>
-      <as-video-duration
+      <app-video-duration
         [currentTime]="videoElement.nativeElement.currentTime"
         [duration]="videoElement.nativeElement.duration">
-      </as-video-duration>
+      </app-video-duration>
       <i (click)="changeStatePlayerSettings()" class="fa fa-cog document-click-disable" aria-hidden="true"></i>
       <i *ngIf="!isFullScreen" (click)="toggleFullScreen()" class="fa fa-arrows-alt" aria-hidden="true"></i>
       <i *ngIf="isFullScreen" (click)="toggleFullScreen()" class="fa fa-compress" aria-hidden="true"></i>

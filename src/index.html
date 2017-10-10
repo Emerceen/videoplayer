@@ -1,54 +1,21 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Videoplayer</title>
-    <base href="/">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <!-- build:css assets/bundle.css -->
-    <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.css">
-    <!-- app:css -->
-    <link rel="stylesheet" href="/assets/styles/main.css">
-    <!-- endinject --> 
-   
-    <!-- endbuild -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/fav/apple-touch-icon.png">
-    <link rel="icon" type="image/png" href="/assets/images/fav/favicon-32x32.png" sizes="32x32">
-    <link rel="icon" type="image/png" href="/assets/images/fav/favicon-16x16.png" sizes="16x16">
-    <link rel="manifest" href="/assets/images/fav/manifest.json">
-    <link rel="mask-icon" href="/assets/images/fav/safari-pinned-tab.svg" color="#5bbad5">
-    <meta name="theme-color" content="#000">
-  </head>
-  <body>
-    <as-main-app>
-      <i class="center-fix main-spinner fa fa-spin fa-spinner"></i>
-    </as-main-app>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>VideoplayerAngularCli</title>
+  <base href="/">
 
-    <!-- build:js assets/lib.js -->
-
-    <!-- Non-module JS libs -->
-    <script src="../node_modules/jquery/dist/jquery.js"></script>
-    <script src="../node_modules/bootstrap-sass/assets/javascripts/bootstrap.js"></script>
-
-    <!-- Polyfill(s) for older browsers -->
-    <script src="../node_modules/core-js/client/shim.min.js"></script>
-
-    <!-- Load libraries -->
-    <script src="../node_modules/zone.js/dist/zone.js"></script>
-
-    <!-- endbuild -->
-
-    <!-- build:js assets/app.js -->
-    <script src="tmp/app/bundle.js"></script>
-    <!-- endbuild -->
-
-    <!-- build:remove -->
-    <script src="../node_modules/systemjs/dist/system.js"></script>
-    <script src="systemjs.conf.js"></script>
-    <script>
-      System.import('app/main.js')
-        .catch(function(err) { console.error(err); });
-    </script>
-    <!-- endbuild -->
-  </body>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/images/fav/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="assets/images/fav/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="assets/images/fav/favicon-16x16.png" sizes="16x16">
+  <link rel="manifest" href="assets/images/fav/manifest.json">
+  <link rel="mask-icon" href="assets/images/fav/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="theme-color" content="#357CA5">
+</head>
+<body>
+  <app-root>
+    <i class="center-fix main-spinner fa fa-spin fa-spinner"></i>
+  </app-root>
+</body>
 </html>

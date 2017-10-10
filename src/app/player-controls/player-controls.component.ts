@@ -7,8 +7,7 @@ import { VideoService } from '../services/video.service';
 import { PlayerProgressBarComponent } from '../player-progress-bar/player-progress-bar.component';
 
 @Component({
-  moduleId: module.id,
-  selector: 'as-player-controls',
+  selector: 'app-player-controls',
   templateUrl: 'player-controls.component.html'
 })
 

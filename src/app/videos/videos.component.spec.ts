@@ -5,8 +5,8 @@ import { VideosComponent, VideosModule } from './index';
 import { VideoService } from './../services/video.service';
 
 @Component({
-  selector: 'as-test',
-  template: '<as-videos></as-videos>'
+  selector: 'app-test',
+  template: '<app-videos></app-videos>'
 })
 
 class TestComponent {

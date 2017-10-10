@@ -2,7 +2,7 @@ import { Directive, HostListener, ElementRef, Input } from '@angular/core';
 import { HoverInterface } from '../entities/hover';
 
 @Directive({
-  selector: '[asHover]'
+  selector: '[appHover]'
 })
 
 export class HoverDirective {
@@ -11,7 +11,7 @@ export class HoverDirective {
 
   constructor(el: ElementRef) { this.el = el.nativeElement; }
 
-  @Input() set asHover(element: HoverInterface) {
+  @Input() set appHover(element: HoverInterface) {
     this.element = element;
   }
 

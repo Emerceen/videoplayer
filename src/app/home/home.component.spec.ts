@@ -5,7 +5,7 @@ import {
 } from '@angular/core/testing';
 import { Component } from '@angular/core';
 
-import { TranslateService, TranslateLoader, TranslateParser } from 'ng2-translate';
+import { TranslateModule, TranslateLoader, TranslateFakeLoader } from '@ngx-translate/core';
 
 import { HomeComponent, HomeModule } from './index';
 import { Communication } from '../data-services/communication';
@@ -13,8 +13,8 @@ import { VideoService } from '../services/video.service';
 import { MockCommunication } from '../mock/communication-mock';
 
 @Component({
-  selector: 'as-test',
-  template: '<as-home></as-home>'
+  selector: 'app-test',
+  template: '<app-home></app-home>'
 })
 
 class TestComponent {
@@ -33,14 +33,14 @@ describe('HomeComponent', () => {
         TestComponent
       ],
       imports: [
-        HomeModule
+        HomeModule,
+        TranslateModule.forRoot({
+          loader: { provide: TranslateLoader, useClass: TranslateFakeLoader }
+        })
       ],
       providers: [
         { provide: Communication, useClass: MockCommunication },
-        VideoService,
-        TranslateService,
-        TranslateLoader,
-        TranslateParser
+        VideoService
       ]
     }).compileComponents();
   }));
@@ -116,7 +116,7 @@ describe('HomeComponent', () => {
     });
 
     it('should call setCurrentVideo with index', () => {
-      let index = 1;
+      const index = 1;
       comp.getCurrentVideoIndex();
       videoService.changeCurrentVideo(index);
       expect(comp.setCurrentVideo).toHaveBeenCalledWith(index);

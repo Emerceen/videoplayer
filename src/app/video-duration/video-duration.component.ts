@@ -2,8 +2,7 @@ import { TimeString } from './../time-string/time-string.service';
 import { Component, Input } from '@angular/core';
 
 @Component({
-  moduleId: module.id,
-  selector: 'as-video-duration',
+  selector: 'app-video-duration',
   templateUrl: 'video-duration.component.html'
 })
 

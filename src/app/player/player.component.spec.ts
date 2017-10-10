@@ -14,8 +14,8 @@ import { DocumentMock } from './../mock/document-mock.spec';
 import { PlayerComponent, PlayerModule } from './index';
 
 @Component({
-  selector: 'as-test',
-  template: '<as-player></as-player>'
+  selector: 'app-test',
+  template: '<app-player></app-player>'
 })
 
 class TestComponent {
@@ -24,12 +24,12 @@ class TestComponent {
 let comp: PlayerComponent;
 let changeDetectorRef: ChangeDetectorRef;
 let fixture: ComponentFixture<PlayerComponent>;
-let communication: MockCommunication = new MockCommunication();
+const communication: MockCommunication = new MockCommunication();
 let videoService: VideoService;
 let bufferingStateService: BufferingStateService;
 let sanitizer: DomSanitizer;
-let element = new ElementStub();
-let mediaStreamErrorEvent: MediaStreamErrorEvent = undefined;
+const element = new ElementStub();
+const mediaStreamErrorEvent: MediaStreamErrorEvent = undefined;
 let documentMock: DocumentMozMsPrefixesRefService;
 
 describe('PlayerComponent', () => {
@@ -153,14 +153,14 @@ describe('PlayerComponent', () => {
 
     it('', () => {
       fixture.detectChanges();
-      let mainContainer = fixture.nativeElement.querySelector('section');
+      const mainContainer = fixture.nativeElement.querySelector('section');
       mainContainer.click();
       expect(comp.clickout).toHaveBeenCalled();
     });
   });
 
   describe('clickout should set playerSetting to false, when', () => {
-    let eventStub = new EventStub();
+    const eventStub = new EventStub();
 
     beforeEach(() => {
       comp.playerSettings = true;
@@ -205,12 +205,12 @@ describe('PlayerComponent', () => {
   describe('initialOnendedFunction should return closure function, which can only define onended once', () => {
     it('can only be done once', () => {
       spyOn(comp, 'setEndedEventHandler');
-      let closure = comp.initialOnendedFunction();
+      const closure = comp.initialOnendedFunction();
       closure();
       expect(comp.setEndedEventHandler).toHaveBeenCalled();
     });
     it('can`t define onended more than one', () => {
-      let closure = comp.initialOnendedFunction();
+      const closure = comp.initialOnendedFunction();
       closure();
       spyOn(comp, 'setEndedEventHandler');
       closure();

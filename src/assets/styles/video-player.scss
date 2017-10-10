@@ -7,6 +7,7 @@ as-player {
   display: inline-block;
   position: relative;
   #player-wrapper {
+    line-height: 0;
     position: relative;
     .video-loader {
       position: absolute;
