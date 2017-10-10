@@ -18,7 +18,7 @@ export class VideoDetailsComponent {
         this.getChannelDetails(video.channel.id);
       }
     }
-  };
+  }
 
   constructor(private cm: Communication) { }
 

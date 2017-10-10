@@ -71,7 +71,7 @@ export class PlayerSettingsComponent {
   }
 
   initialRandomVideo(): void {
-    let randomNumber = Math.floor(Math.random() * this.videos.length);
+    const randomNumber = Math.floor(Math.random() * this.videos.length);
     this.videoService.changeCurrentVideo(randomNumber);
     this.videoElement.nativeElement.load();
     this.videoControls.stopped = true;
@@ -118,7 +118,7 @@ export class PlayerSettingsComponent {
         shuffleVideoArray = this.videos.filter(video => !video.playedInShuffle);
         if (shuffleVideoArray.length > 0) {
           randomNumber = Math.floor(Math.random() * shuffleVideoArray.length);
-          let indexInVideosArray = this.videos.indexOf(shuffleVideoArray[randomNumber]);
+          const indexInVideosArray = this.videos.indexOf(shuffleVideoArray[randomNumber]);
           this.videos[indexInVideosArray].playedInShuffle = true;
           this.endedEventHandler.emit(indexInVideosArray);
         } else if (this.isRepeatedPlaylist) {
@@ -142,7 +142,7 @@ export class PlayerSettingsComponent {
   }
 
   endedRepeatedPlaylistEventHandler(): void {
-    let index = this.videos.indexOf(this.currentVideo) + 1;
+    const index = this.videos.indexOf(this.currentVideo) + 1;
     if (index < this.videos.length) {
       this.videoService.changeCurrentVideo(index);
     } else {

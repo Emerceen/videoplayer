@@ -20,23 +20,23 @@ export class PlayerComponent implements OnInit {
       this.defineOnendedFunction();
       this.cdr.detectChanges();
     }
-  };
+  }
   @ViewChild('videoWrapper') set videoWrapperElement(element: ElementRef) {
     if (element && element.nativeElement) {
       this._videoWrapperElement = element;
       this.cdr.detectChanges();
     }
-  };
+  }
   @ViewChild('playerSettingsElement') playerSettingsElement: ElementRef;
   @ViewChild(PlayerControlsComponent) playerControlsComponent: PlayerControlsComponent;
 
   get videoElement(): { nativeElement: HTMLVideoElement } {
     return this._videoElement;
-  };
+  }
 
   get videoWrapperElement(): ElementRef {
     return this._videoWrapperElement;
-  };
+  }
 
   @Input() public currentVideo: Video;
   @Input() public videos: Array<Video>;
@@ -55,7 +55,7 @@ export class PlayerComponent implements OnInit {
 
   @HostListener('document:click', ['$event'])
   clickout(event: any): void {
-    let disableString = 'document-click-disable';
+    const disableString = 'document-click-disable';
     if (!this.playerSettingsElement.nativeElement.contains(event.target) && !event.target.className.includes(disableString)) {
       this.playerSettings = false;
     }
