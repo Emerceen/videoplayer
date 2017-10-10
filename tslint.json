@@ -84,7 +84,6 @@
     "templates-use-public": false,
     "no-access-missing-member": true,
     "invoke-injectable": true,
-
     "typedef": [true, "call-signature", "parameter", "member-variable-declaration"]
   }
 }
