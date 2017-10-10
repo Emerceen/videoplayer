@@ -1,0 +1,19 @@
+<div class="video-details">
+  <div class="title">
+    {{ video?.name }}
+  </div>
+  <div class="details-flex-box">
+    <div class="channel-wrapper">
+      <div class="channel-image">
+        <img [src]="video?.channel?.avatarUrl" [alt]='video?.channel?.name + "_avatar"'>
+      </div>
+      <span class="channel-title">
+        {{ video?.channel?.name }}
+      </span>
+    </div>
+
+    <div class="views">
+      {{ video?.views | numberSpacing }} {{ 'VIDEOS.VIEWS' | translate }}
+    </div>
+  </div>
+</div>

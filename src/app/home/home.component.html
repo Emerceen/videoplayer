@@ -1,0 +1,17 @@
+<div id="content">
+  <section id="main-container">
+    <app-player
+      [videos]="videos"
+      [currentVideo]="currentVideo">
+    </app-player>
+    <app-video-details class="main-box"
+      [currentVideo]="currentVideo">
+    </app-video-details>
+  </section>
+  <div class="main-box videos-sidebar">
+    <app-videos-sidebar
+      [videos]="videos"
+      [currentVideo]="currentVideo">
+    </app-videos-sidebar>
+  </div>
+</div>

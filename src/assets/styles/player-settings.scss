@@ -1,0 +1,29 @@
+.player-settings {
+  width: 250px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 5px 0px;
+  margin: 0 5px 50px;
+  .control-group {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 5px;
+    .label {
+      padding-left: 0;
+    }
+    .control {
+      label {
+        margin: 0 3px 0 0;
+        .lever {
+          margin: 0;
+        }
+      }
+    }
+  }
+  .control-group:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+}
+

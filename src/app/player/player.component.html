@@ -1,0 +1,45 @@
+<section *ngIf="currentVideo">
+  <div id="video-wrapper" [appHover]="controls" #videoWrapper>
+    <div id="player-wrapper" [ngClass]="{'full-screen': isFullScreen}">
+      <div class="video-loader" *ngIf="bufferingState">
+        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+      </div>
+      <video
+        id="main-video"
+        #mainVideo
+        [poster]="posterUrl">
+        <source [src]="currentVideo.safeUrl" [type]="currentVideo.type">
+        Your browser does not support the video tag.
+      </video>
+      <div id="video-settings" #playerSettingsElement>
+        <app-player-settings
+          [currentVideo]="currentVideo"
+          [playerSettings]="playerSettings"
+          [(videoControls)]="videoControls"
+          [videoElement]="videoElement"
+          [videos]="videos"
+          (setPlayedInShuffle)="setPlayedInShuffle($event)"
+          (endedEventHandler)="endedEventHandler($event)"
+          (callPlayVideo)="callPlayVideo()"
+          (callStopVideo)="callStopVideo()">
+        </app-player-settings>
+      </div>
+    </div>
+      <div *ngIf="videoElement && videoWrapperElement">
+        <app-player-controls
+          [controls]="controls"
+          [(videoControls)]="videoControls"
+          [(isFullScreen)]="isFullScreen"
+          [(playerSettings)]="playerSettings"
+          [videoElement]="videoElement"
+          [posterUrl]="posterUrl"
+          [videoWrapperElement]="videoWrapperElement">
+        </app-player-controls>
+      </div>
+    <div id="video-state">
+      <i *ngIf="videoControls.played && !videoControls.stopped" class="fa fa-play" aria-hidden="true"></i>
+      <i *ngIf="!videoControls.played && !videoControls.stopped" class="fa fa-pause" aria-hidden="true"></i>
+      <i *ngIf="videoControls.stopped" class="fa fa-stop" aria-hidden="true"></i>
+    </div>
+  </div>
+</section>

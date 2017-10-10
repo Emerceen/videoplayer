@@ -1,27 +1,58 @@
-import { TestBed, async } from '@angular/core/testing';
+import {
+  RouterTestingModule
+} from '@angular/router/testing';
+import {
+  async,
+  TestBed,
+  ComponentFixture
+} from '@angular/core/testing';
+import { provideRoutes, Routes, RouterModule } from '@angular/router';
+import { Component } from '@angular/core';
+
 import { AppComponent } from './app.component';
+
+import { TranslateService } from '@ngx-translate/core';
+
+@Component({
+  selector: 'app-test',
+  template: ''
+})
+class TestRouterComponent {
+}
+
+let comp: AppComponent;
+let fixture: ComponentFixture<AppComponent>;
+const translateServiceStub = {
+  use: (userLang) => userLang
+};
+
+const config: Routes = [
+  {
+    path: '', component: TestRouterComponent
+  }
+];
+
 describe('AppComponent', () => {
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
+        TestRouterComponent,
         AppComponent
       ],
-    }).compileComponents();
-  }));
-  it('should create the app', async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
-  }));
-  it(`should have as title 'app'`, async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('app');
-  }));
-  it('should render title in a h1 tag', async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to app!');
+      imports: [RouterTestingModule, RouterModule],
+      providers: [
+        provideRoutes(config),
+        { provide: TranslateService, useValue: translateServiceStub }
+      ]
+    });
+  });
+
+  it('should be defined', async(() => {
+    TestBed.compileComponents().then(() => {
+      fixture = TestBed.createComponent(AppComponent);
+      comp = fixture.componentInstance;
+
+      expect(comp).toBeDefined();
+    });
   }));
 });

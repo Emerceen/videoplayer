@@ -1,0 +1,69 @@
+$bar-height: 3px;
+$hover-bar-height: $bar-height + 2px;
+$main-red: rgb(243, 40, 33);
+$time-stamp-height: 13px;
+
+.progress-bar-wrapper {
+  position: absolute;
+  top: -10px;
+  width: 100%;
+  padding: 10px 0;
+  cursor: pointer;
+  .progress-bar {
+    position: absolute;
+    box-sizing: border-box;
+    width: 100%;
+    height: $bar-height;
+    background-color: rgba(255, 255, 255, 0.3);
+    display: flex;
+    box-shadow: none;
+    .percentage-bar {
+      height: $bar-height;
+      background-color: $main-red;
+    }
+    .time-stamp-wrapper {
+      display: none;
+      height: $time-stamp-height;
+      position: relative;
+      width: $time-stamp-height;
+      margin-top: -0.5 * ($time-stamp-height - $hover-bar-height);
+      margin-left: -0.5 * ($time-stamp-height - $hover-bar-height);
+      .time-stamp {
+        position: absolute;
+        left: 0;
+        height: $time-stamp-height;
+        line-height: $time-stamp-height;
+        width: $time-stamp-height;
+        color: $main-red;
+      }
+    }
+  }
+  .hover-bar {
+    position: absolute;
+    margin-top: -1px;
+    height: $hover-bar-height;
+    background-color: rgba(255, 255, 255, 0.6);
+  }
+  .buffered-bar {
+    position: absolute;
+    height: $bar-height;
+    background-color: rgba(255, 255, 255, 0.45);
+  }
+}
+
+.progress-bar-wrapper:hover {
+  .progress-bar {
+    margin-top: -1px;
+    height: $hover-bar-height;
+    .percentage-bar {
+      height: $hover-bar-height;
+    }
+    .time-stamp-wrapper {
+      display: block;
+    }
+  }
+  .buffered-bar {
+    margin-top: -1px;
+    height: $hover-bar-height;
+  }
+}

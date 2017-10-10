@@ -1,0 +1,48 @@
+{
+  "Videos": [
+    {
+      "Name": "VIDEO 1",
+      "Url": "http://testwebapplication.cba.pl/674127941.mp4",
+      "Type": "video/mp4",
+      "Channel": {
+        "Id": "00001",
+        "Name": "MrVideos"
+      },
+      "Poster": "http://i66.tinypic.com/24gu8o5.jpg",
+      "Views": 1000456
+    },
+    {
+      "Name": "VIDEO 2",
+      "Url": "http://testwebapplication.cba.pl/675076297.mp4",
+      "Type": "video/mp4",
+      "Channel": {
+        "Id": "00002",
+        "Name": "Adamooo"
+      },
+      "Poster": "http://i68.tinypic.com/106a5hz.jpg",
+      "Views": 503245
+    },
+    {
+      "Name": "VIDEO 3",
+      "Url": "http://testwebapplication.cba.pl/675076800.mp4",
+      "Type": "video/mp4",
+      "Channel": {
+        "Id": "00003",
+        "Name": "Loccco"
+      },
+      "Poster": "http://i67.tinypic.com/28taqza.jpg",
+      "Views": 100345
+    },
+    {
+      "Name": "VIDEO 4",
+      "Url": "http://testwebapplication.cba.pl/675077654.mp4",
+      "Type": "video/mp4",
+      "Channel": {
+        "Id": "00004",
+        "Name": "Ricco"
+      },
+      "Poster": "http://i66.tinypic.com/2gt6zd2.jpg",
+      "Views": 250903
+    }
+  ]
+}

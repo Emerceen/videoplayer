@@ -1,0 +1,9 @@
+$main-red: rgb(243, 40, 33);
+
+.switch label input[type=checkbox]:checked + .lever {
+  background-color: $main-red;
+}
+
+.switch label input[type=checkbox]:checked + .lever:after {
+  background-color: #fff;
+}

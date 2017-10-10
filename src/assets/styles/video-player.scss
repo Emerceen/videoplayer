@@ -1,0 +1,97 @@
+as-player {
+  margin: 10px 5px 0 5px;
+  line-height: 0;
+}
+
+#video-wrapper {
+  display: inline-block;
+  position: relative;
+  #player-wrapper {
+    line-height: 0;
+    position: relative;
+    .video-loader {
+      position: absolute;
+      top: calc(50% - 20px);
+      left: calc(50% - 20px);
+    }
+  }
+
+  #video-controls {
+    position: absolute;
+    color: #fff;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    padding: 0px 5px;
+    background: -webkit-linear-gradient(bottom, rgba(0, 0, 0, 0.7), rgba(255, 255, 255, 0));
+    opacity: 0;
+    transition: opacity 0.1s;
+    .controls-wrapper {
+      width: 100%;
+      margin: 20px 0 0 0;
+      position: relative;
+      .control-icons {
+        height: 40px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        i {
+          cursor: pointer;
+          padding: 0 9px;
+          font-size: 16px;
+          line-height: 40px;
+          text-shadow: 0px 0px 3px #757575;
+        }
+        i.vc-main {
+          padding: 0 15px;
+        }
+        i:last-child {
+          padding-right: 15px;
+        }
+        i.fa-cog {
+          margin-left: auto;
+          transition: 0.2s;
+        }
+        i.fa-cog:active {
+          transform: rotate(50deg);  
+        }
+      }
+    }
+  }
+
+  #video-controls.hover {
+    opacity: 1;
+  }
+
+  #video-state {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: #fff;
+  }
+
+  #main-video {
+    max-width: 640px;
+    object-fit: cover;
+    background: transparent url('http://img.ffffound.com/static-data/assets/6/77443320c6509d6b500e288695ee953502ecbd6d_m.gif') no-repeat 0 0;
+    background-size: cover;
+  }
+}
+
+@media all and (max-width: 768px) {
+  #main-video {
+    width: 100%;
+  }
+
+  #video-controls {
+    display: flex;
+    justify-content: center;
+    .control-icons {
+      i {
+        padding: 5px;
+        font-size: 2.5em;
+      }
+    }
+  }
+}
+

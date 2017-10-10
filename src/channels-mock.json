@@ -1,0 +1,24 @@
+{
+  "Channels": [
+    {
+      "Id": "00001",
+      "Name": "MrVideos",
+      "AvatarUrl": "https://burst.shopifycdn.com/photos/waterproof-bluetooth-speaker_925x.jpg"
+    },
+    {
+      "Id": "00002",
+      "Name": "Adamooo",
+      "AvatarUrl": "https://burst.shopifycdn.com/photos/writing-at-desk_925x.jpg"
+    },
+    {
+      "Id": "00003",
+      "Name": "Loccco",
+      "AvatarUrl": "https://burst.shopifycdn.com/photos/man-writing-in-notebook_925x.jpg"
+    },
+    {
+      "Id": "00004",
+      "Name": "Ricco",
+      "AvatarUrl": "https://burst.shopifycdn.com/photos/hipster-man_925x.jpg"
+    }
+  ]
+}
